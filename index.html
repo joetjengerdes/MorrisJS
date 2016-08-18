@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>Mühle</title>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+   <style>
+      #wrapper {
+         min-height: 100%;
+         width: 100%;
+      }
+
+      #tutorial {
+         display: block;
+         margin: auto;
+         border: 1px solid black;
+         background-image: url('assets/img/bg.jpg');
+         background-size: cover;
+      }
+   </style>
+
+   <script>
+      var circleSize = 10;
+      var spaceBetween = 100;
+      var lineWidth = 3;
+      var circleColor = "rgb(0,0,0)";
+
+      $(document).ready(function() {
+         var canvas = document.getElementById("tutorial");
+
+         canvas.height = 600;
+         canvas.width = 600;
+
+         var h = canvas.height;
+         var w = canvas.width;
+
+         spaceBetween = (h + w) / 12;
+         circleSize = (h + w) / 180;
+         lineWidth = (h + w) / 350;
+         if (circleSize < 1) {
+            circleSize = 1
+         };
+
+         var ctx = canvas.getContext("2d");
+         drawField(ctx, h, w);
+      });
+
+      function drawField(ctx, h, w) {
+         drawFieldPart(ctx, 0, 0, h, w);
+         drawFieldPart(ctx, spaceBetween, spaceBetween, h - spaceBetween, w - spaceBetween);
+         drawFieldPart(ctx, 2 * spaceBetween, 2 * spaceBetween, h - 2 * spaceBetween, w - 2 * spaceBetween);
+      }
+
+      function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {
+         drawCircle(ctx, wFrom + offset, hFrom + offset);
+         drawCircle(ctx, wTo - offset, hFrom + offset);
+         drawCircle(ctx, wFrom + offset, hTo - offset);
+         drawCircle(ctx, wTo - offset, hTo - offset);
+
+         //drawCircle(ctx, wFrom + offset, hFrom + offset);
+         drawCircle(ctx, (wTo + wFrom) / 2, hFrom + offset);
+         drawCircle(ctx, wFrom + offset, (hTo + hFrom) / 2);
+         drawCircle(ctx, (wTo + wFrom) / 2, hTo - offset);
+         drawCircle(ctx, wTo - offset, (hTo + hFrom) / 2);
+
+         // von oben links nach unten links
+         drawLine(ctx, wFrom + offset, hFrom + offset, wFrom + offset, hTo - offset);
+         // von oben links nach oben rechts
+         drawLine(ctx, wFrom + offset, hFrom + offset, wTo - offset, hFrom + offset);
+         // von oben rechts und nach unten rechts
+         drawLine(ctx, wTo - offset, hFrom + offset, wTo - offset, hTo - offset);
+         // von unten rechts nach unten links
+         drawLine(ctx, wFrom + offset, hTo - offset, wTo - offset, hTo - offset);
+      }
+
+      function drawCircle(ctx, posX, posY, size = circleSize) {
+         ctx.fillStyle = circleColor;
+         ctx.beginPath();
+         ctx.arc(posX, posY, circleSize, 0, 2 * Math.PI, false);
+         ctx.fill();
+         ctx.stroke();
+      }
+
+      function drawLine(ctx, xFrom, yFrom, xTo, yTo) {
+         ctx.beginPath();
+         ctx.moveTo(xFrom, yFrom);
+         ctx.lineTo(xTo, yTo);
+         ctx.lineWidth = lineWidth;
+         ctx.stroke();
+      }
+   </script>
+</head>
+
+<body onload>
+   <div id="wrapper">
+      <canvas id="tutorial" width="600" height="600"></canvas>
+   </div>
+</body>
+
+</html>
