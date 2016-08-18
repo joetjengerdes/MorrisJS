@@ -32,7 +32,8 @@
       var lineWidth = 3;
       var circleColor = "rgb(0,0,0)";
       var leftOffset = 0;
-
+	  var fields = [];
+	  
       $(document).ready(function() {
          var canvas = document.getElementById("tutorial");
 
@@ -41,6 +42,7 @@
 
          var h = canvas.height;
          var w = canvas.height;
+		 
 
          spaceBetween = (h + w) / 12;
          circleSize = (h + w) / 180;
@@ -52,6 +54,11 @@
 
          var ctx = canvas.getContext("2d");
          drawField(ctx, h, w);
+		 
+		var len = fields.length;
+		for(i=0; i<len; i++) {
+			fields[i].draw(ctx);
+		}
       });
 
       function drawField(ctx, h, w) {
@@ -61,17 +68,28 @@
       }
 
       function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {
-         drawCircle(ctx, leftOffset + wFrom + offset, hFrom + offset);
+         /*
+		 drawCircle(ctx, leftOffset + wFrom + offset, hFrom + offset);
          drawCircle(ctx, leftOffset + wTo - offset, hFrom + offset);
          drawCircle(ctx, leftOffset + wFrom + offset, hTo - offset);
-         drawCircle(ctx, leftOffset + wTo - offset, hTo - offset);
-
+          drawCircle(ctx, leftOffset + wTo - offset, hTo - offset); 
+		*/
          //drawCircle(ctx, wFrom + offset, hFrom + offset);
-         drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hFrom + offset);
+         //drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hFrom + offset);
          drawCircle(ctx, leftOffset + wFrom + offset, ((hTo + hFrom) / 2));
-         drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hTo - offset);
+         //drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hTo - offset);
          drawCircle(ctx, leftOffset + wTo - offset, ((hTo + hFrom) / 2));
+		 
+		 fields.push(new Field( leftOffset + wFrom + offset, hFrom + offset , circleSize));
+		 fields.push(new Field( leftOffset + wTo - offset, hFrom + offset, circleSize));
+         fields.push(new Field( leftOffset + wFrom + offset, hTo - offset, circleSize));
+         fields.push(new Field( leftOffset + wTo - offset, hTo - offset, circleSize));
 
+		 fields.push(new Field( leftOffset + ((wTo + wFrom) / 2), hFrom + offset, circleSize));
+         fields.push(new Field( leftOffset + wFrom + offset, ((hTo + hFrom) / 2), circleSize));
+         fields.push(new Field( leftOffset + ((wTo + wFrom) / 2), hTo - offset, circleSize));
+         fields.push(new Field( leftOffset + wTo - offset, ((hTo + hFrom) / 2), circleSize));
+		 
          // von oben links nach unten links
          drawLine(ctx, leftOffset + wFrom + offset, hFrom + offset, leftOffset + wFrom + offset, hTo - offset);
          // von oben links nach oben rechts
@@ -97,8 +115,35 @@
          ctx.lineWidth = lineWidth;
          ctx.stroke();
       }
-
-      var Player1 = require('assets/js/Player.js');
+	    
+	  
+	  function Field(x,y,circleSize) {
+		this.x = x ;
+		this.y = y ;
+		this.circleSize = circleSize;
+		this.fill = '#FFFFFF';
+		this.playerID = 0;
+	  }
+	  
+	  Field.prototype.draw = function(ctx) {
+		ctx.fillStyle = this.fill;
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, this.circleSize, 0, Math.PI*2, true);
+		ctx.closePath();
+		ctx.fill();
+	  }
+	  
+	  Field.prototype.contains = function(mx,my) {
+		var factor = 3;
+		if((this.x-this.circleSize*factor) < mx && (this.x+this.circleSize*factor)> mx){
+			if((this.y-this.circleSize*factor) <= my && (this.y+this.circleSize*factor)>= my ) {
+				return true;
+			}
+		}
+		return false;
+	  }
+	  
+	  
    </script>
 </head>
 
