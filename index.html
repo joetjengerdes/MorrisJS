@@ -6,8 +6,14 @@
    <title>Mühle</title>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
    <style>
+      body {
+         padding: 0;
+         margin: 0;
+         overflow: hidden;
+      }
+
       #wrapper {
-         min-height: 100%;
+         height: 100%;
          width: 100%;
       }
 
@@ -25,15 +31,16 @@
       var spaceBetween = 100;
       var lineWidth = 3;
       var circleColor = "rgb(0,0,0)";
+      var leftOffset = 0;
 
       $(document).ready(function() {
          var canvas = document.getElementById("tutorial");
 
-         canvas.height = 600;
-         canvas.width = 600;
+         canvas.width = document.body.clientWidth; //document.width is obsolete
+         canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
 
          var h = canvas.height;
-         var w = canvas.width;
+         var w = canvas.height;
 
          spaceBetween = (h + w) / 12;
          circleSize = (h + w) / 180;
@@ -41,6 +48,7 @@
          if (circleSize < 1) {
             circleSize = 1
          };
+         leftOffset = (canvas.width - h) / 2;
 
          var ctx = canvas.getContext("2d");
          drawField(ctx, h, w);
@@ -53,25 +61,25 @@
       }
 
       function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {
-         drawCircle(ctx, wFrom + offset, hFrom + offset);
-         drawCircle(ctx, wTo - offset, hFrom + offset);
-         drawCircle(ctx, wFrom + offset, hTo - offset);
-         drawCircle(ctx, wTo - offset, hTo - offset);
+         drawCircle(ctx, leftOffset + wFrom + offset, hFrom + offset);
+         drawCircle(ctx, leftOffset + wTo - offset, hFrom + offset);
+         drawCircle(ctx, leftOffset + wFrom + offset, hTo - offset);
+         drawCircle(ctx, leftOffset + wTo - offset, hTo - offset);
 
          //drawCircle(ctx, wFrom + offset, hFrom + offset);
-         drawCircle(ctx, (wTo + wFrom) / 2, hFrom + offset);
-         drawCircle(ctx, wFrom + offset, (hTo + hFrom) / 2);
-         drawCircle(ctx, (wTo + wFrom) / 2, hTo - offset);
-         drawCircle(ctx, wTo - offset, (hTo + hFrom) / 2);
+         drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hFrom + offset);
+         drawCircle(ctx, leftOffset + wFrom + offset, ((hTo + hFrom) / 2));
+         drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hTo - offset);
+         drawCircle(ctx, leftOffset + wTo - offset, ((hTo + hFrom) / 2));
 
          // von oben links nach unten links
-         drawLine(ctx, wFrom + offset, hFrom + offset, wFrom + offset, hTo - offset);
+         drawLine(ctx, leftOffset + wFrom + offset, hFrom + offset, leftOffset + wFrom + offset, hTo - offset);
          // von oben links nach oben rechts
-         drawLine(ctx, wFrom + offset, hFrom + offset, wTo - offset, hFrom + offset);
+         drawLine(ctx, leftOffset + wFrom + offset, hFrom + offset, leftOffset + wTo - offset, hFrom + offset);
          // von oben rechts und nach unten rechts
-         drawLine(ctx, wTo - offset, hFrom + offset, wTo - offset, hTo - offset);
+         drawLine(ctx, leftOffset + wTo - offset, hFrom + offset, leftOffset + wTo - offset, hTo - offset);
          // von unten rechts nach unten links
-         drawLine(ctx, wFrom + offset, hTo - offset, wTo - offset, hTo - offset);
+         drawLine(ctx, leftOffset + wFrom + offset, hTo - offset, leftOffset + wTo - offset, hTo - offset);
       }
 
       function drawCircle(ctx, posX, posY, size = circleSize) {
@@ -96,9 +104,9 @@
    <div id="wrapper">
       <canvas id="tutorial" width="600" height="600"></canvas>
    </div>
-   <audio autoplay="true">
+   <!--<audio autoplay="true">
       <source src="assets/music/bg.mp3" type="audio/mpeg" />
-   </audio>
+   </audio>-->
 </body>
 
 </html>
