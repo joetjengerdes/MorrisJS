@@ -27,11 +27,7 @@ function Game(gf, player1, player2) {
   this.createToken = function(x,y,pos) {
       var token = new PlayerToken(currentTurn, x, y);
       var obj = this.convertVertexPosToArrayPos(pos);
-      //console.log("arrayField x y z:" + x + " "+ y + " " +z+" pos "+pos);
-      gamefield.field[obj.z][obj.y][obj.x] = token;
-      var array = [[[]]];
-      array[0][0][0] = "HAHA";
-      console.log(array[0][0][0] );
+      this.gamefield.field[obj.z][obj.y][obj.x] = token;
   }
 
 //TODO: move this function
