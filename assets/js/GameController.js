@@ -43,10 +43,15 @@ function GameController(game) {
     } else {
       // do nothing: it's CPUs turn and user tried to do s.th.
       // TODO: remove test
-      drawController.drawVertex(Math.random() * 600, Math.random() * 600, "#00FF00")
-      game.changeTurn();
-    }
-
-
+          for(var i = 0; i< game.gamefield.vertices.length;i++) {
+                    var coord = game.convertVertexPosToArrayPos(i);
+                    console.log(game.gamefield.field);
+                    if(game.gamefield.field[coord.z][coord.y][coord.x] == 'undefinied') {
+                      game.createToken(vertices[i].x,vertices[i].y,i);
+                      drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00")
+                      game.changeTurn();
+                    }
+              }
+      }
   }
 }

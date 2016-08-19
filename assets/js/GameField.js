@@ -6,5 +6,5 @@ function GameField() {
   this.lineWidth = 5;
   this.leftOffset = 200; // Offset from left border to gamefield
   this.vertices = [];
-  this.field= [[[]]];
+  this.field= [3,3,3];
 }

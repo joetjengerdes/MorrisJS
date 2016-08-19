@@ -26,15 +26,28 @@ function Game(gf, player1, player2) {
 
   this.createToken = function(x,y,pos) {
       var token = new PlayerToken(currentTurn, x, y);
-      var z = Math.floor(pos / 8);
-      // empty field at x:2 y:2
-      if(pos%8 > 3) {
-        pos++;
-      }
-      var y = Math.floor(((pos) % 8) /3);
-      var x = Math.floor(((pos) % 8) % 3);
+      var obj = this.convertVertexPosToArrayPos(pos);
       //console.log("arrayField x y z:" + x + " "+ y + " " +z+" pos "+pos);
-      gamefield.field[z][y][x] = token;
+      gamefield.field[obj.z][obj.y][obj.x] = token;
+      var array = [[[]]];
+      array[0][0][0] = "HAHA";
+      console.log(array[0][0][0] );
+  }
+
+//TODO: move this function
+  this.convertVertexPosToArrayPos = function(pos) {
+    var z = Math.floor(pos / 8);
+    // empty field at x:2 y:2
+    if(pos%8 > 3) {
+      pos++;
+    }
+    var y = Math.floor(((pos) % 8) /3);
+    var x = Math.floor(((pos) % 8) % 3);
+    return {
+      x:x,
+      y:y,
+      z:z
+    }
   }
 
   this.start();
