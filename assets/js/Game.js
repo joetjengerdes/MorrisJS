@@ -26,6 +26,7 @@ function Game(gf, player1, player2) {
 
   this.createToken = function(x,y,pos) {
       var token = new PlayerToken(currentTurn, x, y);
+      token.vertexId = pos;
       var obj = this.convertVertexPosToArrayPos(pos);
       this.gamefield.field[obj.z][obj.y][obj.x] = token;
   }

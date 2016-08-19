@@ -3,6 +3,8 @@ function PlayerToken(pID,x,y) {
   var y;
   var size;
   var playerID = pID;
+  this.vertexId = -1;
+  
   this.move = function(x, y) {
     return;
   }

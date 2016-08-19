@@ -23,6 +23,27 @@ function DrawController(canvas, gf) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     gamefield.vertices = [];
     drawField();
+    drawTokens();
+  }
+
+  function drawTokens() {
+    var field = gamefield.field;
+    for(var z = 0; z < field.length; z++) {
+      for(var y = 0; y < field[0].length; y++) {
+        for(var x = 0; x < field[0][0].length; x++) {
+          var pToken = field[z][y][x];
+          if(pToken) {
+            console.log(pToken);
+            console.log(gamefield);
+            var verts = gamefield.vertices;
+
+            var v = verts[pToken.vertexId];
+            console.log(this);
+            this.drawVertex(v.x, v.y, '#123456');
+          }
+        }
+      }
+    }
   }
 
   function drawField() {
