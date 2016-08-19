@@ -4,6 +4,8 @@ function Vertex(x,y,circleSize) {
   this.circleSize = circleSize;
   this.fill = '#000000';
   this.playerID = 0;
+  // position of the Vertex
+  this.postiion = -1;
 
   this.contains = function(mx, my) {
      var factor = 4;

@@ -25,18 +25,25 @@ function GameController(game) {
     // it's the human players turn
     if(game.isHumansTurn()) {
       if(game.mode == 0) {
-        var token = new PlayerToken(x, y);
-        drawController.drawVertex(x, y, "#FF0000");
+        var vertices = game.gamefield.vertices;
+
+        for(var i = 0; i< vertices.length;i++) {
+          if(vertices[i].contains(x,y)) {
+            game.createToken(vertices[i].x,vertices[i].y,i);
+            drawController.drawVertex(vertices[i].x, vertices[i].y, "#FF0000");
+            game.changeTurn();
+            console.log("VERTEX INDEX: " + i)
+          }
+        }
       }
 
-      game.changeTurn();
 
-      // TODO: remove test
-      drawController.drawVertex(Math.random() * 600, Math.random() * 600, "#00FF00")
-      game.changeTurn();
 
     } else {
       // do nothing: it's CPUs turn and user tried to do s.th.
+      // TODO: remove test
+      drawController.drawVertex(Math.random() * 600, Math.random() * 600, "#00FF00")
+      game.changeTurn();
     }
 
 

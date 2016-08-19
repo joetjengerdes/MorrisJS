@@ -1,8 +1,8 @@
-function PlayerToken(x,y) {
+function PlayerToken(pID,x,y) {
   var x;
   var y;
   var size;
-
+  var playerID = pID;
   this.move = function(x, y) {
     return;
   }

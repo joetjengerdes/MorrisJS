@@ -36,9 +36,10 @@
          canvas.width = document.body.clientWidth; //document.width is obsolete
          canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
 
+         var gamefield = new GameField();
          var p1 = new Player('test');
          //console.log(p1.isVisible());
-         var game = new Game(p1);
+         var game = new Game(gamefield,p1);
          game.start();
 
          var eventController = new EventController(canvas);
@@ -46,7 +47,6 @@
          eventController.setGameController(controller);
 
 
-         var gamefield = new GameField();
          var drawControler = new DrawController(canvas, gamefield);
 
          eventController.setDrawController(drawControler);
