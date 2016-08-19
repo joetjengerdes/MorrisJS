@@ -42,8 +42,6 @@
          var game = new Game(gamefield,p1);
          game.start();
 
-         var gamefield = new GameField();
-
          var eventController = new EventController(canvas, gamefield);
          var controller = new GameController(game);
          eventController.setGameController(controller);

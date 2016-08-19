@@ -26,7 +26,6 @@ function GameController(game) {
     if(game.isHumansTurn()) {
       if(game.mode == 0) {
         var vertices = game.gamefield.vertices;
-
         for(var i = 0; i< vertices.length;i++) {
           if(vertices[i].contains(x,y)) {
             game.createToken(vertices[i].x,vertices[i].y,i);
