@@ -68,16 +68,15 @@ function DrawController(canvas, gf) {
      console.log(circleSize);
      var lineWidth = gamefield.lineWidth;
 
-
+     // vertices from top left to bottom right
      gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hFrom + offset, circleSize));
-     gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hFrom + offset, circleSize));
-     gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hTo - offset, circleSize));
-     gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hTo - offset, circleSize));
-
      gamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hFrom + offset, circleSize));
+     gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hFrom + offset, circleSize));
      gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, ((hTo + hFrom) / 2), circleSize));
-     gamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hTo - offset, circleSize));
      gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, ((hTo + hFrom) / 2), circleSize));
+     gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hTo - offset, circleSize)); // 6
+     gamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hTo - offset, circleSize));
+     gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hTo - offset, circleSize)); // 8
 
      // von oben links nach unten links
      drawLine(ctx, leftOffset + wFrom + offset, hFrom + offset, leftOffset + wFrom + offset, hTo - offset);
