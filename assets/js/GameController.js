@@ -31,7 +31,6 @@ function GameController(game) {
             game.createToken(vertices[i].x,vertices[i].y,i);
             drawController.drawVertex(vertices[i].x, vertices[i].y, "#FF0000");
             game.changeTurn();
-            console.log("VERTEX INDEX: " + i)
           }
         }
       }

@@ -5,7 +5,7 @@ function DrawController(canvas, gf) {
 
   function initDrawController() {
     Vertex.prototype.draw = function(ctx, x, y, color) {
-       ctx.fillStyle = this.fill;
+       ctx.fillStyle = color;
        ctx.beginPath();
        ctx.arc(this.x, this.y, this.circleSize, 0, Math.PI * 2, true);
        ctx.closePath();

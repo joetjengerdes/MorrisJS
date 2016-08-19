@@ -1,6 +1,6 @@
-function Game(gamefield, player1, player2) {
+function Game(gf, player1, player2) {
   this.mode = 0; // 0 end, 1 = start placing, 2 = normal play
-  this.gamefield = gamefield;
+  this.gamefield = gf;
   var player1 = player1;
   var player2 = player2 || new Player("CPU");
   var currentTurn = null;
@@ -25,11 +25,14 @@ function Game(gamefield, player1, player2) {
   this.createToken = function(x,y,pos) {
       var token = new PlayerToken(currentTurn, x, y);
       var z = Math.floor(pos / 8);
-      var y = Math.floor(((pos+1) % 8) /3);
-      var x = Math.floor(((pos+1) % 8) % 3);
-      console.log("arrayField x y z:" + x + " "+ y + " " +z);
-
-    //  gamefield.field[x][y][z] =
+      // empty field at x:2 y:2
+      if(pos%8 > 3) {
+        pos++;
+      }
+      var y = Math.floor(((pos) % 8) /3);
+      var x = Math.floor(((pos) % 8) % 3);
+      //console.log("arrayField x y z:" + x + " "+ y + " " +z+" pos "+pos);
+      gamefield.field[z][y][x] = token;
   }
 
   this.start();
