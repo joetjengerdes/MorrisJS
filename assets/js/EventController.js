@@ -3,6 +3,9 @@ function EventController(canvas, gamefield) {
 	var gameController = null;
 	var DrawController = null;
 	var sizeCalculationService = new SizeCalculationService(canvas, gamefield);
+	// timeout used for resizing, so calculation
+	// is not done by every frame change
+	var resizeTimeout = null;
 
 	this.setGameController = function(controller) {
 		gameController = controller;
@@ -35,9 +38,16 @@ function EventController(canvas, gamefield) {
 		});
 
 		window.onresize = function() {
-			sizeCalculationService.calculate();
-			drawController.redraw();
+			if (resizeTimeout != null) {
+        clearTimeout(resizeTimeout);
+			}
+			resizeTimeout = setTimeout(function(){
+				sizeCalculationService.calculate();
+				drawController.redraw();
+    	}, 200);
 		}
+		// do first calculation
+		sizeCalculationService.calculate();
 	}
 
 	//return relative position to canvas
