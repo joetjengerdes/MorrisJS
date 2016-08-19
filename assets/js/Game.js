@@ -10,6 +10,7 @@ function Game(gf, player1, player2) {
   this.start = function() {
     player1.initPlayer();
     player2.initPlayer();
+    player2.cpu = 1;
     this.gamemode = 0;
     currentTurn = player1;
   }

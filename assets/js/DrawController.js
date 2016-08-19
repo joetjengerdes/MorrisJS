@@ -66,7 +66,6 @@ function DrawController(canvas, gf) {
      //
      var leftOffset = gamefield.leftOffset;
      var circleSize = Math.round(gamefield.circleSize);
-     console.log(circleSize);
      var lineWidth = gamefield.lineWidth;
 
 

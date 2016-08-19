@@ -4,8 +4,6 @@
 <head>
    <meta charset="utf-8">
    <title>Mühle-Spiel</title>
-   <script src="assets/js/jquery.min.js"></script>
-   <script src="assets/js/jquery.arctext.js"></script>
    <script src="assets/js/PlayerToken.js"></script>
    <script src="assets/js/Player.js"></script>
    <script src="assets/js/Game.js"></script>
@@ -39,7 +37,7 @@
          var gamefield = new GameField();
          var p1 = new Player('test');
          //console.log(p1.isVisible());
-         var game = new Game(gamefield,p1);
+         var game = new Game(gamefield, p1);
          game.start();
 
          var eventController = new EventController(canvas, gamefield);
