@@ -42,7 +42,7 @@ function GameController(game) {
 
 
     } else {
-      /*// do nothing: it's CPUs turn and user tried to do s.th.
+      // do nothing: it's CPUs turn and user tried to do s.th.
       // TODO: remove test
       var vertices = game.gamefield.vertices;
           for(var i = 0; i< vertices.length;i++) {
@@ -54,8 +54,7 @@ function GameController(game) {
                       game.changeTurn();
                       break;
                     }
-              }*/
-              game.changeTurn();
+              }
       }
   }
 }
