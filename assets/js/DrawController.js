@@ -2,6 +2,7 @@ function DrawController(canvas, gf) {
   this.canvas = canvas;
   var gamefield = gf;
   var ctx = canvas.getContext("2d");
+  var self = this;
 
   function initDrawController() {
     Vertex.prototype.draw = function(ctx, x, y) {
@@ -33,13 +34,10 @@ function DrawController(canvas, gf) {
         for(var x = 0; x < field[0][0].length; x++) {
           var pToken = field[z][y][x];
           if(pToken) {
-            console.log(pToken);
-            console.log(gamefield);
             var verts = gamefield.vertices;
 
             var v = verts[pToken.vertexId];
-            console.log(this);
-            this.drawVertex(v.x, v.y, '#123456');
+            self.drawVertex(v.x, v.y, '#123456');
           }
         }
       }
