@@ -4,6 +4,7 @@ function Game(gamefield, player1, player2) {
   var player1 = player1;
   var player2 = player2 || new Player("CPU");
   var currentTurn = null;
+  this.tokensPlaced = 0;
 
 
   this.start = function() {

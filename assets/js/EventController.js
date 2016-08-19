@@ -1,11 +1,12 @@
 function EventController(canvas, gamefield) {
 	var canvas = canvas;
 	var gameController = null;
-	var DrawController = null;
+	var drawController = null;
 	var sizeCalculationService = new SizeCalculationService(canvas, gamefield);
 	// timeout used for resizing, so calculation
 	// is not done by every frame change
 	var resizeTimeout = null;
+	var mouseMoveTimeout = null;
 
 	this.setGameController = function(controller) {
 		gameController = controller;
@@ -46,6 +47,25 @@ function EventController(canvas, gamefield) {
 				drawController.redraw();
     	}, 200);
 		}
+
+		canvas.addEventListener('mousemove', function(e) {
+			if(mouseMoveTimeout != null) {
+				clearTimeout(mouseMoveTimeout);
+			}
+			mouseMoveTimeout = setTimeout(function() {
+				var mouse = getMouse(e);
+				drawController.redraw();
+				// TODO: mark selection
+				for(var i = 0; i < gamefield.vertices.length; i++) {
+					var v = gamefield.vertices[i];
+					if(v.contains(mouse.x, mouse.y)) {
+							drawController.drawVertex(v.x, v.y, 'rgba(0,0,0,0.2)');
+					}
+				}
+
+			}, 5);
+
+		});
 		// do first calculation
 		sizeCalculationService.calculate();
 	}

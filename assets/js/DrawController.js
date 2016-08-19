@@ -4,7 +4,7 @@ function DrawController(canvas, gf) {
   var ctx = canvas.getContext("2d");
 
   function initDrawController() {
-    Vertex.prototype.draw = function(ctx, x, y, color) {
+    Vertex.prototype.draw = function(ctx, x, y) {
        ctx.fillStyle = this.fill;
        ctx.beginPath();
        ctx.arc(this.x, this.y, this.circleSize, 0, Math.PI * 2, true);
@@ -15,7 +15,8 @@ function DrawController(canvas, gf) {
 
   this.drawVertex = function(x,y, color) {
     var v = new Vertex(x, y, gamefield.circleSize * 2.5);
-    v.draw(ctx, x, y, color);
+    v.fill = color;
+    v.draw(ctx, x, y);
   }
 
   this.redraw = function() {

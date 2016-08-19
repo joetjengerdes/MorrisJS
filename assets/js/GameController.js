@@ -25,6 +25,9 @@ function GameController(game) {
     // it's the human players turn
     if(game.isHumansTurn()) {
       if(game.mode == 0) {
+        if(game.tokensPlaced >= 18) {
+          game.mode = 1;
+        }
         var vertices = game.gamefield.vertices;
         for(var i = 0; i< vertices.length;i++) {
           if(vertices[i].contains(x,y)) {
