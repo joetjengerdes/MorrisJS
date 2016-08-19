@@ -32,7 +32,7 @@
       var lineWidth = 3;
       var circleColor = "rgb(0,0,0)";
       var leftOffset = 0;
-	  var edges = [];
+      var edges = [];
 
       $(document).ready(function() {
          var canvas = document.getElementById("tutorial");
@@ -55,136 +55,68 @@
          var ctx = canvas.getContext("2d");
          drawField(ctx, h, w);
 
-		var len = edges.length;
-		for(i=0; i<len; i++) {
-			edges[i].draw(ctx);
-		}
+         var len = edges.length;
+         for (i = 0; i < len; i++) {
+            edges[i].draw(ctx);
+         }
 
 
-    canvas.addEventListener('click', function(e) {
-  	var mouse = getMouse(e);
-  	var x = mouse.x;
-  	var y = mouse.y;
+         canvas.addEventListener('click', function(e) {
+            var mouse = getMouse(e);
+            var x = mouse.x;
+            var y = mouse.y;
 
-    for(i=0; i<len; i++) {
-      if(edges[i].contains(x,y)) {
-        //alert("EDGE: "+edges[i].x + " " + edges[i].y);
-        var e = new Edge( edges[i].x, edges[i].y , circleSize*4)
-        e.fill= 'rgb(255,0,0)';
-        e.draw(ctx);
-      }
-    }
+            for (i = 0; i < len; i++) {
+               if (edges[i].contains(x, y)) {
+                  //alert("EDGE: "+edges[i].x + " " + edges[i].y);
+                  var e = new Edge(edges[i].x, edges[i].y, circleSize * 4)
+                  e.fill = 'rgb(255,0,0)';
+                  e.draw(ctx);
+               }
+            }
 
 
-  	});
+         });
 
-  	//return relative position to canvas
-  	function getMouse(evt) {
-          var rect = canvas.getBoundingClientRect();
-          return {
-            x: evt.clientX - rect.left,
-            y: evt.clientY - rect.top
-          };
-        }
+         //return relative position to canvas
+         function getMouse(evt) {
+            var rect = canvas.getBoundingClientRect();
+            return {
+               x: evt.clientX - rect.left,
+               y: evt.clientY - rect.top
+            };
+         }
 
 
       });
 
-      function drawField(ctx, h, w) {
-         drawFieldPart(ctx, 0, 0, h, w);
-         drawFieldPart(ctx, spaceBetween, spaceBetween, h - spaceBetween, w - spaceBetween);
-         drawFieldPart(ctx, 2 * spaceBetween, 2 * spaceBetween, h - 2 * spaceBetween, w - 2 * spaceBetween);
 
-         // von links bis mitte
-         drawLine(ctx, leftOffset + 0 + 50, ((h + 0) / 2), leftOffset + spaceBetween*2 + 50,  ((h + 0) / 2));
-         // von rechts bis mitte
-         drawLine(ctx, leftOffset + w - 50, ((h + 0) / 2), leftOffset + w - spaceBetween*2 - 50,  ((h + 0) / 2));
 
-         // von oben bis mitte
-         drawLine(ctx, leftOffset + (w  / 2), 50, leftOffset + (w / 2), spaceBetween*2 + 50);
-         // von unten bis mitte
-         drawLine(ctx, leftOffset + (w / 2), h - 50 , leftOffset + (w / 2),  h - 50 - spaceBetween*2);
+      function Edge(x, y, circleSize) {
+         this.x = x;
+         this.y = y;
+         this.circleSize = circleSize;
+         this.fill = '#000000';
+         this.playerID = 0;
       }
 
-      function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {
-         /*
-		 drawCircle(ctx, leftOffset + wFrom + offset, hFrom + offset);
-         drawCircle(ctx, leftOffset + wTo - offset, hFrom + offset);
-         drawCircle(ctx, leftOffset + wFrom + offset, hTo - offset);
-          drawCircle(ctx, leftOffset + wTo - offset, hTo - offset);
-		*/
-         //drawCircle(ctx, wFrom + offset, hFrom + offset);
-         //drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hFrom + offset);
-         //drawCircle(ctx, leftOffset + wFrom + offset, ((hTo + hFrom) / 2));
-         //drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hTo - offset);
-         //drawCircle(ctx, leftOffset + wTo - offset, ((hTo + hFrom) / 2));
-
-         edges.push(new Edge( leftOffset + wFrom + offset, hFrom + offset , circleSize));
-         edges.push(new Edge( leftOffset + wTo - offset, hFrom + offset, circleSize));
-         edges.push(new Edge( leftOffset + wFrom + offset, hTo - offset, circleSize));
-         edges.push(new Edge( leftOffset + wTo - offset, hTo - offset, circleSize));
-
-	       edges.push(new Edge( leftOffset + ((wTo + wFrom) / 2), hFrom + offset, circleSize));
-         edges.push(new Edge( leftOffset + wFrom + offset, ((hTo + hFrom) / 2), circleSize));
-         edges.push(new Edge( leftOffset + ((wTo + wFrom) / 2), hTo - offset, circleSize));
-         edges.push(new Edge( leftOffset + wTo - offset, ((hTo + hFrom) / 2), circleSize));
-
-         // von oben links nach unten links
-         drawLine(ctx, leftOffset + wFrom + offset, hFrom + offset, leftOffset + wFrom + offset, hTo - offset);
-         // von oben links nach oben rechts
-         drawLine(ctx, leftOffset + wFrom + offset, hFrom + offset, leftOffset + wTo - offset, hFrom + offset);
-         // von oben rechts und nach unten rechts
-         drawLine(ctx, leftOffset + wTo - offset, hFrom + offset, leftOffset + wTo - offset, hTo - offset);
-         // von unten rechts nach unten links
-         drawLine(ctx, leftOffset + wFrom + offset, hTo - offset, leftOffset + wTo - offset, hTo - offset);
-
-
-      }
-
-      function drawCircle(ctx, posX, posY, size = circleSize) {
-         ctx.fillStyle = circleColor;
+      Edge.prototype.draw = function(ctx) {
+         ctx.fillStyle = this.fill;
          ctx.beginPath();
-         ctx.arc(posX, posY, circleSize, 0, 2 * Math.PI, false);
+         ctx.arc(this.x, this.y, this.circleSize, 0, Math.PI * 2, true);
+         ctx.closePath();
          ctx.fill();
-         ctx.stroke();
       }
 
-      function drawLine(ctx, xFrom, yFrom, xTo, yTo) {
-         ctx.beginPath();
-         ctx.moveTo(xFrom, yFrom);
-         ctx.lineTo(xTo, yTo);
-         ctx.lineWidth = lineWidth;
-         ctx.stroke();
+      Edge.prototype.contains = function(mx, my) {
+         var factor = 4;
+         if ((this.x - this.circleSize * factor) < mx && (this.x + this.circleSize * factor) > mx) {
+            if ((this.y - this.circleSize * factor) <= my && (this.y + this.circleSize * factor) >= my) {
+               return true;
+            }
+         }
+         return false;
       }
-
-
-	  function Edge(x,y,circleSize) {
-		this.x = x ;
-		this.y = y ;
-		this.circleSize = circleSize;
-		this.fill = '#000000';
-		this.playerID = 0;
-	  }
-
-	  Edge.prototype.draw = function(ctx) {
-		ctx.fillStyle = this.fill;
-		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.circleSize, 0, Math.PI*2, true);
-		ctx.closePath();
-		ctx.fill();
-	  }
-
-	  Edge.prototype.contains = function(mx,my) {
-		var factor = 4;
-		if((this.x-this.circleSize*factor) < mx && (this.x+this.circleSize*factor)> mx){
-			if((this.y-this.circleSize*factor) <= my && (this.y+this.circleSize*factor)>= my ) {
-				return true;
-			}
-		}
-		return false;
-	  }
-
-
    </script>
 </head>
 

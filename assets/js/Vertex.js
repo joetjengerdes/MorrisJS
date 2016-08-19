@@ -1,4 +1,4 @@
-function Edge(x,y,circleSize) {
+function Vertex(x,y,circleSize) {
   this.x = x ;
   this.y = y ;
   this.circleSize = circleSize;

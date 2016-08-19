@@ -1,6 +1,8 @@
-function EventController(canvas) {
+function EventController(canvas, gamefield) {
 	var canvas = canvas;
 	var gameController = null;
+	var DrawController = null;
+	var sizeCalculationService = new SizeCalculationService(canvas, gamefield);
 
 	this.setGameController = function(controller) {
 		gameController = controller;
@@ -10,6 +12,14 @@ function EventController(canvas) {
 		return gameController;
 	}
 
+	this.setDrawController = function(drawc) {
+		drawController = drawc;
+	}
+
+	this.getDrawController = function() {
+		return drawController;
+	}
+
 	function initController() {
 		canvas.addEventListener('selectstart', function(e) {
 			 e.preventDefault();
@@ -17,13 +27,17 @@ function EventController(canvas) {
 		}, false);
 
 		canvas.addEventListener('mouseup', function(e) {
-		var mouse = getMouse(e);
-		var x = mouse.x;
-		var y = mouse.y;
+			var mouse = getMouse(e);
+			var x = mouse.x;
+			var y = mouse.y;
 
-		gameController.doAction(mouse.x, mouse.y);
-
+			gameController.doAction(mouse.x, mouse.y);
 		});
+
+		window.onresize = function() {
+			sizeCalculationService.calculate();
+			drawController.redraw();
+		}
 	}
 
 	//return relative position to canvas

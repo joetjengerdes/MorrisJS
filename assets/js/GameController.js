@@ -26,13 +26,13 @@ function GameController(game) {
     if(game.isHumansTurn()) {
       if(game.mode == 0) {
         var token = new PlayerToken(x, y);
-        drawController.drawEdge(x, y, "#FF0000");
+        drawController.drawVertex(x, y, "#FF0000");
       }
 
       game.changeTurn();
 
       // TODO: remove test
-      drawController.drawEdge(Math.random() * 600, Math.random() * 600, "#00FF00")
+      drawController.drawVertex(Math.random() * 600, Math.random() * 600, "#00FF00")
       game.changeTurn();
 
     } else {

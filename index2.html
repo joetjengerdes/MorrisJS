@@ -10,98 +10,13 @@
    <script src="assets/js/Player.js"></script>
    <script src="assets/js/Game.js"></script>
    <script src="assets/js/GameField.js"></script>
-   <script src="assets/js/Edge.js"></script>
+   <script src="assets/js/Vertex.js"></script>
    <script src="assets/js/EventController.js"></script>
    <script src="assets/js/GameController.js"></script>
    <script src="assets/js/DrawController.js"></script>
+   <script src="assets/js/services/SizeCalculationService.js"></script>
    <link href="assets/css/style.css" rel="stylesheet" type="text/css">
    <link href="http://fonts.googleapis.com/css?family=Montserrat|Sail|Concert+One" rel="stylesheet" type="text/css">
-
-   <script>
-      var circleSize = 10;
-      var spaceBetween = 100;
-      var lineWidth = 3;
-      var circleColor = "rgb(0,0,0)";
-      var leftOffset = 0;
-
-      $(document).ready(function() {
-         var canvas = document.getElementById("game");
-
-         canvas.width = document.body.clientWidth; //document.width is obsolete
-         canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
-
-         var h = canvas.height;
-         var w = canvas.height;
-
-         spaceBetween = (h + w) / 12;
-         circleSize = (h + w) / 180;
-         lineWidth = (h + w) / 350;
-         if (circleSize < 1) {
-            circleSize = 1
-         };
-         leftOffset = (canvas.width - h) / 2;
-
-         var ctx = canvas.getContext("2d");
-         drawField(ctx, h, w);
-
-         var p1 = new Player('test');
-         //console.log(p1.isVisible());
-         var game = new Game(p1);
-         game.start();
-
-         var eventController = new EventController(canvas);
-         var controller = new GameController(game);
-         eventController.setGameController(controller);
-         var drawControler = new DrawController(canvas);
-         controller.setDrawController(drawControler);
-         //controller.init();
-
-      });
-
-      function drawField(ctx, h, w) {
-         drawFieldPart(ctx, 0, 0, h, w);
-         drawFieldPart(ctx, spaceBetween, spaceBetween, h - spaceBetween, w - spaceBetween);
-         drawFieldPart(ctx, 2 * spaceBetween, 2 * spaceBetween, h - 2 * spaceBetween, w - 2 * spaceBetween);
-      }
-
-      function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {
-         drawCircle(ctx, leftOffset + wFrom + offset, hFrom + offset);
-         drawCircle(ctx, leftOffset + wTo - offset, hFrom + offset);
-         drawCircle(ctx, leftOffset + wFrom + offset, hTo - offset);
-         drawCircle(ctx, leftOffset + wTo - offset, hTo - offset);
-
-         //drawCircle(ctx, wFrom + offset, hFrom + offset);
-         drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hFrom + offset);
-         drawCircle(ctx, leftOffset + wFrom + offset, ((hTo + hFrom) / 2));
-         drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hTo - offset);
-         drawCircle(ctx, leftOffset + wTo - offset, ((hTo + hFrom) / 2));
-
-         // von oben links nach unten links
-         drawLine(ctx, leftOffset + wFrom + offset, hFrom + offset, leftOffset + wFrom + offset, hTo - offset);
-         // von oben links nach oben rechts
-         drawLine(ctx, leftOffset + wFrom + offset, hFrom + offset, leftOffset + wTo - offset, hFrom + offset);
-         // von oben rechts und nach unten rechts
-         drawLine(ctx, leftOffset + wTo - offset, hFrom + offset, leftOffset + wTo - offset, hTo - offset);
-         // von unten rechts nach unten links
-         drawLine(ctx, leftOffset + wFrom + offset, hTo - offset, leftOffset + wTo - offset, hTo - offset);
-      }
-
-      function drawCircle(ctx, posX, posY, size = circleSize) {
-         ctx.fillStyle = circleColor;
-         ctx.beginPath();
-         ctx.arc(posX, posY, circleSize, 0, 2 * Math.PI, false);
-         ctx.fill();
-         ctx.stroke();
-      }
-
-      function drawLine(ctx, xFrom, yFrom, xTo, yTo) {
-         ctx.beginPath();
-         ctx.moveTo(xFrom, yFrom);
-         ctx.lineTo(xTo, yTo);
-         ctx.lineWidth = lineWidth;
-         ctx.stroke();
-      }
-   </script>
 </head>
 
 <body onload>
@@ -113,6 +28,34 @@
    <!--<audio autoplay="true">
       <source src="assets/music/bg.mp3" type="audio/mpeg" />
    </audio>-->
+
+   <script>
+      (function() {
+         var canvas = document.getElementById("game");
+
+         canvas.width = document.body.clientWidth; //document.width is obsolete
+         canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
+
+         var p1 = new Player('test');
+         //console.log(p1.isVisible());
+         var game = new Game(p1);
+         game.start();
+
+         var eventController = new EventController(canvas);
+         var controller = new GameController(game);
+         eventController.setGameController(controller);
+
+
+         var gamefield = new GameField();
+         var drawControler = new DrawController(canvas, gamefield);
+
+         eventController.setDrawController(drawControler);
+
+         controller.setDrawController(drawControler);
+
+         //controller.init();
+      })();
+   </script>
 </body>
 
 </html>
