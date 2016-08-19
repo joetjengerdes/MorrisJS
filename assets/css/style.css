@@ -1,0 +1,24 @@
+body {
+   padding: 0;
+   margin: 0;
+   overflow: hidden;
+}
+
+div#wrapper {
+   height: 100%;
+   width: 100%;
+}
+
+#game {
+   display: block;
+   margin: auto;
+   border: 1px solid black;
+   background-image: url('../img/bg.jpg');
+   background-size: cover;
+}
+
+#game h1 {
+  background: white;
+  padding: 4em;
+  text-align: center;
+}

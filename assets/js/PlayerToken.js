@@ -1,7 +1,7 @@
 function PlayerToken(x,y) {
-  this.x;
-  this.y;
-  this.size;
+  var x;
+  var y;
+  var size;
 
   this.move = function(x, y) {
     return;

@@ -1,22 +1,45 @@
-function GameController(canvas, game) {
+function GameController(game) {
   this.valid = false;
   this.game = game;
-  this.selection = null;
-  this.canvas = canvas;
   var controller = this;
+  var eventController = null;
+  var drawController = null;
 
+  this.setDrawController = function(drawController_) {
+    drawController = drawController_;
+  }
 
-  this.doAction = function(mouse) {
+  this.getDrawController = function() {
+    return drawController;
+  }
+
+  this.setEventController = function(eventController) {
+    this.eventController = eventController;
+  }
+
+  this.getEventController = function() {
+    return eventController;
+  }
+
+  this.doAction = function(x,y) {
     // it's the human players turn
     if(game.isHumansTurn()) {
       if(game.mode == 0) {
-        var token = new PlayerToken(mouse.x, mouse.y);
-        var ctx = canvas.getContext("2d");
-        controller.draw(ctx, mouse.x, mouse.y, 10);
+        var token = new PlayerToken(x, y);
+        drawController.drawEdge(x, y, "#FF0000");
       }
 
       game.changeTurn();
+
+      // TODO: remove test
+      drawController.drawEdge(Math.random() * 600, Math.random() * 600, "#00FF00")
+      game.changeTurn();
+
+    } else {
+      // do nothing: it's CPUs turn and user tried to do s.th.
     }
+
+
   }
 
   this.draw = function(ctx, posX, posY, size) {
@@ -27,7 +50,7 @@ function GameController(canvas, game) {
      ctx.stroke();
   }
 
-  this.initGame = function() {
+  /*this.initGame = function() {
     canvas.addEventListener('mousedown', function(e) {
       var mouse = controller.getMouse(e);
       controller.doAction(mouse);
@@ -59,5 +82,5 @@ function GameController(canvas, game) {
     return mouseClick;
   }
 
-  this.initGame();
+  this.initGame();*/
 }

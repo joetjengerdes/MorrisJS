@@ -4,33 +4,18 @@
 <head>
    <meta charset="utf-8">
    <title>Mühle-Spiel</title>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+   <script src="assets/js/jquery.min.js"></script>
    <script src="assets/js/jquery.arctext.js"></script>
    <script src="assets/js/PlayerToken.js"></script>
    <script src="assets/js/Player.js"></script>
    <script src="assets/js/Game.js"></script>
+   <script src="assets/js/GameField.js"></script>
+   <script src="assets/js/Edge.js"></script>
+   <script src="assets/js/EventController.js"></script>
    <script src="assets/js/GameController.js"></script>
+   <script src="assets/js/DrawController.js"></script>
+   <link href="assets/css/style.css" rel="stylesheet" type="text/css">
    <link href="http://fonts.googleapis.com/css?family=Montserrat|Sail|Concert+One" rel="stylesheet" type="text/css">
-   <style>
-      body {
-         padding: 0;
-         margin: 0;
-         overflow: hidden;
-      }
-
-      #wrapper {
-         height: 100%;
-         width: 100%;
-      }
-
-      #tutorial {
-         display: block;
-         margin: auto;
-         border: 1px solid black;
-         background-image: url('assets/img/bg.jpg');
-         background-size: cover;
-      }
-   </style>
 
    <script>
       var circleSize = 10;
@@ -40,7 +25,7 @@
       var leftOffset = 0;
 
       $(document).ready(function() {
-         var canvas = document.getElementById("tutorial");
+         var canvas = document.getElementById("game");
 
          canvas.width = document.body.clientWidth; //document.width is obsolete
          canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
@@ -64,7 +49,11 @@
          var game = new Game(p1);
          game.start();
 
-         var controller = new GameController(canvas, game);
+         var eventController = new EventController(canvas);
+         var controller = new GameController(game);
+         eventController.setGameController(controller);
+         var drawControler = new DrawController(canvas);
+         controller.setDrawController(drawControler);
          //controller.init();
 
       });
@@ -117,7 +106,9 @@
 
 <body onload>
    <div id="wrapper">
-      <canvas id="tutorial" width="600" height="600" tabindex="1"></canvas>
+      <canvas id="game" width="600" height="600" tabindex="1">
+         <h1>To play this game Javascript must be activated!</h1>
+      </canvas>
    </div>
    <!--<audio autoplay="true">
       <source src="assets/music/bg.mp3" type="audio/mpeg" />
