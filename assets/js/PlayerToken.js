@@ -1,10 +1,10 @@
-function PlayerToken(pID,x,y) {
+function PlayerToken(pID,x,y, p) {
   var x;
   var y;
   var size;
-  var playerID = pID;
+  var player = p;
   this.vertexId = -1;
-  
+
   this.move = function(x, y) {
     return;
   }
@@ -15,5 +15,9 @@ function PlayerToken(pID,x,y) {
 
   this.isVisible = function() {
     return this.x === 'undefinied' || this.y === 'undefinied';
+  }
+
+  this.getColor = function() {
+    return player.color;
   }
 }

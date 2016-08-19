@@ -11,6 +11,7 @@ function Game(gf, player1, player2) {
     player1.initPlayer();
     player2.initPlayer();
     player2.cpu = 1;
+    player2.color = "#00FF00";
     this.gamemode = 0;
     currentTurn = player1;
   }
@@ -25,7 +26,7 @@ function Game(gf, player1, player2) {
   }
 
   this.createToken = function(x,y,pos) {
-      var token = new PlayerToken(currentTurn, x, y);
+      var token = new PlayerToken(currentTurn, x, y, currentTurn);
       token.vertexId = pos;
       var obj = this.convertVertexPosToArrayPos(pos);
       this.gamefield.field[obj.z][obj.y][obj.x] = token;

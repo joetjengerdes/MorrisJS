@@ -37,7 +37,7 @@ function DrawController(canvas, gf) {
             var verts = gamefield.vertices;
 
             var v = verts[pToken.vertexId];
-            self.drawVertex(v.x, v.y, '#123456');
+            self.drawVertex(v.x, v.y, pToken.getColor());
           }
         }
       }
