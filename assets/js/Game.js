@@ -39,8 +39,8 @@ function Game(gf, player1, player2) {
     if(pos%8 > 3) {
       pos++;
     }
-    var y = Math.floor(((pos) % 8) /3);
-    var x = Math.floor(((pos) % 8) % 3);
+    var y = Math.floor(((pos) % 9) /3);
+    var x = Math.floor(((pos) % 9) % 3);
     return {
       x:x,
       y:y,
