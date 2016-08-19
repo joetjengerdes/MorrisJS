@@ -1,8 +1,7 @@
-function DrawController(canvas, gamefield) {
+function DrawController(canvas, gf) {
   this.canvas = canvas;
-  this.gamefield = gamefield;
+  var gamefield = gf;
   var ctx = canvas.getContext("2d");
-  var sizeCalculationService = new SizeCalculationService(canvas);
 
   function initDrawController() {
     Vertex.prototype.draw = function(ctx, x, y, color) {
@@ -15,12 +14,13 @@ function DrawController(canvas, gamefield) {
   }
 
   this.drawVertex = function(x,y, color) {
-    var v = new Vertex(x, y, gamefield.circleSize * 4)
+    var v = new Vertex(x, y, gamefield.circleSize * 2.5);
     v.draw(ctx, x, y, color);
   }
 
   this.redraw = function() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    gamefield.vertices = [];
     drawField();
   }
 
@@ -64,7 +64,8 @@ function DrawController(canvas, gamefield) {
      //drawCircle(ctx, leftOffset + wTo - offset, ((hTo + hFrom) / 2));
      //
      var leftOffset = gamefield.leftOffset;
-     var circleSize = gamefield.circleSize;
+     var circleSize = Math.round(gamefield.circleSize);
+     console.log(circleSize);
      var lineWidth = gamefield.lineWidth;
 
 
@@ -107,6 +108,7 @@ function DrawController(canvas, gamefield) {
   }
 
   initDrawController();
-  drawField();
+
+  this.redraw();
 
 }

@@ -8,7 +8,7 @@ function Vertex(x,y,circleSize) {
   this.postiion = -1;
 
   this.contains = function(mx, my) {
-     var factor = 4;
+     var factor = 2.5;
      if ((this.x - this.circleSize * factor) < mx && (this.x + this.circleSize * factor) > mx) {
         if ((this.y - this.circleSize * factor) <= my && (this.y + this.circleSize * factor) >= my) {
            return true;
