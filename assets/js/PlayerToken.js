@@ -20,4 +20,8 @@ function PlayerToken(pID, x, y, p) {
     this.getColor = function() {
         return player.color;
     }
+
+    this.getPlayer = function() {
+      return player;
+    }
 }

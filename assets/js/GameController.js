@@ -23,14 +23,15 @@ function GameController(game) {
 
     this.doAction = function(x, y) {
         if (game.isPlacingPhase()) {
+          console.log("DOACTION!");
             // it's the player1 turn, on human-cpu game this represents the
             // human player
-            if (game.isPlayerOneTurn()) {
+            if (game.isPlacingPhase()) {
                 console.log("Is placing PHASE: " + game.isPlacingPhase());
-                if (game.isPlacingPhase()) {
+                if (game.isPlayerOneTurn()) {
                     var vertices = game.gamefield.vertices;
                     for (var i = 0; i < vertices.length; i++) {
-                        if (vertices[i].contains(x, y) && !gamefield.isTokenOnField(i)) {
+                        if (vertices[i].contains(x, y) && !game.gameProblemSolver.isTokenOnField(i)) {
                             game.createToken(vertices[i].x, vertices[i].y, i);
                             drawController.redraw();
                             game.changeTurn();
@@ -45,7 +46,7 @@ function GameController(game) {
                     for (var i = 0; i < vertices.length; i++) {
                         //var coord = game.convertVertexPosToArrayPos(i);
                         //console.log(coord);
-                        if (!gamefield.isTokenOnField(i)) {
+                        if (!game.gameProblemSolver.isTokenOnField(i)) {
                             //console.log(game.gamefield.field[coord.z][coord.y][coord.x]);
                             game.createToken(vertices[i].x, vertices[i].y, i);
                             drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00")

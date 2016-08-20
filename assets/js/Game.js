@@ -6,7 +6,7 @@ function Game(p1, p2) {
     var currentTurn = null;
     var tokensPlaced = 0;
     const MAX_TOKEN_TO_PLACE = 18;
-    var gameProblemSolver = new GameProblemSolver(this);
+    this.gameProblemSolver = new GameProblemSolver(this);
 
     /**
      * This function starts a new game, everything
@@ -67,7 +67,7 @@ function Game(p1, p2) {
         token.vertexId = pos;
         var obj = this.convertVertexPosToArrayPos(pos);
         this.gamefield.field[obj.z][obj.y][obj.x] = token;
-        if (gameProblemSolver.hasMorris(token)) {
+        if (this.gameProblemSolver.hasMorris(token)) {
             console.log("MILL!WUHU!");
             //TODO: remove opponents token!
         }
