@@ -1,4 +1,4 @@
-function Player(playerName, game, color) {
+function Player(playerName, color) {
   this.cpu = 0; // 0 for human, 1 for cpus
   this.playerName = playerName;
   this.token = [];
@@ -7,4 +7,5 @@ function Player(playerName, game, color) {
   this.initPlayer = function() {
     this.token = [];
   }
+
 }
