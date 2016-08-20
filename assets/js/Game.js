@@ -1,6 +1,6 @@
 function Game(p1, p2) {
   var mode = 1; // 0 end, 1 = start placing, 2 = normal play
-  this.gamefield = null;
+  this.gamefield = new GameField();
   var player1 = p1;
   var player2 = p2 || new Player("CPU");
   var currentTurn = null;
@@ -19,7 +19,7 @@ function Game(p1, p2) {
     player2.cpu = 1;
     player2.color = "#00FF00";
     this.gamemode = 0;
-    this.gamefield = new GameField();
+    this.gamefield.setToDefault();
     if(currentTurn == null || currentTurn == player2) {
       currentTurn = player1;
     }

@@ -22,11 +22,10 @@ function GameController(game) {
   }
 
   this.doAction = function(x,y) {
+    if(game.isPlacingPhase()) {
     // it's the player1 turn, on human-cpu game this represents the
     // human player
     if(game.isPlayerOneTurn()) {
-      console.log(game.isPlacingPhase());
-      if(game.isPlacingPhase()) {
         var vertices = game.gamefield.vertices;
         for(var i = 0; i< vertices.length;i++) {
           if(vertices[i].contains(x,y) && !isTokenOnField(i)) {
@@ -35,11 +34,8 @@ function GameController(game) {
             game.changeTurn();
             break;
           }
-        }
+
       }
-
-
-
     } else {
       // do nothing: it's CPUs turn and user tried to do s.th.
       // TODO: remove test
@@ -56,6 +52,7 @@ function GameController(game) {
                   }
             }
       }
+    }
   }
 
   function isTokenOnField(vertIndex) {
