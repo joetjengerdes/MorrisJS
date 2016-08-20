@@ -66,6 +66,7 @@ function Game(p1, p2) {
         var token = new PlayerToken(currentTurn, x, y, currentTurn);
         token.vertexId = pos;
         var obj = this.convertVertexPosToArrayPos(pos);
+        console.log("POSITION: Z Y X :" + obj.z + " | " + obj.y + " | " + obj.x);
         this.gamefield.field[obj.z][obj.y][obj.x] = token;
         if (this.gameProblemSolver.hasMorris(token)) {
             console.log("MILL!WUHU!");
@@ -75,13 +76,15 @@ function Game(p1, p2) {
 
     //TODO: move this function
     this.convertVertexPosToArrayPos = function(pos) {
-        var z = Math.floor(pos / 8);
+      var total = 8;
+        var z = Math.floor(pos / total);
         // empty field at x:2 y:2
-        if (pos % 8 > 3) {
+        if (pos % total > 3) {
             pos++;
+            total = 9;
         }
-        var y = Math.floor(((pos) % 9) / 3);
-        var x = Math.floor(((pos) % 9) % 3);
+        var y = Math.floor(((pos) % total) / 3);
+        var x = Math.floor(((pos) % total) % 3);
         return {
             x: x,
             y: y,

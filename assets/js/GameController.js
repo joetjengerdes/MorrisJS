@@ -23,7 +23,6 @@ function GameController(game) {
 
     this.doAction = function(x, y) {
         if (game.isPlacingPhase()) {
-          console.log("DOACTION!");
             // it's the player1 turn, on human-cpu game this represents the
             // human player
             if (game.isPlacingPhase()) {
