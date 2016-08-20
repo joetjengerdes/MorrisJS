@@ -1,5 +1,6 @@
 function Game(p1, p2) {
     var mode = 1; // 0 end, 1 = start placing, 2 = normal play
+    this.removeFlag = 0; // TODO: can we do this with mode?
     this.gamefield = new GameField();
     var player1 = p1;
     var player2 = p2 || new Player("CPU");
@@ -62,21 +63,47 @@ function Game(p1, p2) {
         currentTurn = currentTurn === player1 ? player2 : player1;
     }
 
+    /**
+     * This function creates a new Token places it at the clicked position on the field.
+     * If a morris is found, it will set the removeFlag to 1.
+     *
+     * @param  {int} x   coord of the mouseclick
+     * @param  {int} y   coord of the mouseclick
+     * @param  {int} pos position of the Vertex/vertexId
+     */
     this.createToken = function(x, y, pos) {
         var token = new PlayerToken(currentTurn, x, y, currentTurn);
         token.vertexId = pos;
         var obj = this.convertVertexPosToArrayPos(pos);
-        console.log("POSITION: Z Y X :" + obj.z + " | " + obj.y + " | " + obj.x);
+        //console.log("POSITION: Z Y X :" + obj.z + " | " + obj.y + " | " + obj.x);
         this.gamefield.field[obj.z][obj.y][obj.x] = token;
         if (this.gameProblemSolver.hasMorris(token)) {
             console.log("MILL!WUHU!");
-            //TODO: remove opponents token!
+            this.removeFlag = 1;
         }
+    }
+
+    /**
+     * Removes a Token by vertexId. And sets the removeFlag to 0.
+     *
+     * @param  {int} pos position of the Vertex/vertexId n
+     * @return {Boolean} success
+     */
+    this.removeToken = function(pos) {
+        var obj = this.convertVertexPosToArrayPos(pos);
+        var token = this.gamefield.field[obj.z][obj.y][obj.x];
+
+        if (token.getPlayer() !== currentTurn) {
+            this.gamefield.field[obj.z][obj.y][obj.x] = null;
+            this.removeFlag = 0;
+            return true;
+        }
+        return false;
     }
 
     //TODO: move this function
     this.convertVertexPosToArrayPos = function(pos) {
-      var total = 8;
+        var total = 8;
         var z = Math.floor(pos / total);
         // empty field at x:2 y:2
         if (pos % total > 3) {

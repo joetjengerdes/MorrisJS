@@ -22,41 +22,65 @@ function GameController(game) {
     }
 
     this.doAction = function(x, y) {
-        if (game.isPlacingPhase()) {
-            // it's the player1 turn, on human-cpu game this represents the
-            // human player
+        if (game.removeFlag == 0) {
             if (game.isPlacingPhase()) {
-                console.log("Is placing PHASE: " + game.isPlacingPhase());
-                if (game.isPlayerOneTurn()) {
-                    var vertices = game.gamefield.vertices;
-                    for (var i = 0; i < vertices.length; i++) {
-                        if (vertices[i].contains(x, y) && !game.gameProblemSolver.isTokenOnField(i)) {
-                            game.createToken(vertices[i].x, vertices[i].y, i);
-                            drawController.redraw();
-                            game.changeTurn();
-                            break;
-                        }
+                // it's the player1 turn, on human-cpu game this represents the
+                // human player
+                if (game.isPlacingPhase()) {
+                    console.log("Is placing PHASE: " + game.isPlacingPhase());
+                    if (game.isPlayerOneTurn()) {
+                        var vertices = game.gamefield.vertices;
+                        for (var i = 0; i < vertices.length; i++) {
+                            if (vertices[i].contains(x, y) && !game.gameProblemSolver.isTokenOnField(i)) {
+                                game.createToken(vertices[i].x, vertices[i].y, i);
+                                drawController.redraw();
 
-                    }
-                } else {
-                    // do nothing: it's CPUs turn and user tried to do s.th.
-                    // TODO: remove test
-                    var vertices = game.gamefield.vertices;
-                    for (var i = 0; i < vertices.length; i++) {
-                        //var coord = game.convertVertexPosToArrayPos(i);
-                        //console.log(coord);
-                        if (!game.gameProblemSolver.isTokenOnField(i)) {
-                            //console.log(game.gamefield.field[coord.z][coord.y][coord.x]);
-                            game.createToken(vertices[i].x, vertices[i].y, i);
-                            drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00")
-                            game.changeTurn();
-                            break;
+                                if (game.removeFlag == 0) {
+                                    game.changeTurn();
+                                }
+                                break;
+                            }
+                        }
+                    } else {
+                        // do nothing: it's CPUs turn and user tried to do s.th.
+                        // TODO: remove test
+                        var vertices = game.gamefield.vertices;
+                        for (var i = 0; i < vertices.length; i++) {
+                            //var coord = game.convertVertexPosToArrayPos(i);
+                            //console.log(coord);
+                            if (!game.gameProblemSolver.isTokenOnField(i)) {
+                                //console.log(game.gamefield.field[coord.z][coord.y][coord.x]);
+                                game.createToken(vertices[i].x, vertices[i].y, i);
+                                drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
+
+                                if (game.removeFlag == 1) {
+                                    var vertices = game.gamefield.vertices;
+                                    for (var i = 0; i < vertices.length; i++) {
+                                        if (game.gameProblemSolver.isTokenOnField(i) && game.removeToken(i)) {
+                                            drawController.redraw();
+                                            break;
+                                        }
+                                    }
+                                }
+                                game.changeTurn();
+                                break;
+                            }
                         }
                     }
                 }
             }
+        } else {
+            var vertices = game.gamefield.vertices;
+            for (var i = 0; i < vertices.length; i++) {
+                if (vertices[i].contains(x, y) && game.gameProblemSolver.isTokenOnField(i)) {
+                    if (game.removeToken(i)) {
+                        console.log("REMOVE");
+                        game.changeTurn();
+                        drawController.redraw();
+                        break;
+                    }
+                }
+            }
         }
-      }
-
-
     }
+}
