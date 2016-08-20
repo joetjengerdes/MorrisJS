@@ -34,22 +34,22 @@
          canvas.width = document.body.clientWidth; //document.width is obsolete
          canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
 
-         var gamefield = new GameField();
          var p1 = new Player('test');
          //console.log(p1.isVisible());
-         var game = new Game(gamefield, p1);
-         game.start();
+         var game = new Game(p1);
 
-         var eventController = new EventController(canvas, gamefield);
+         var eventController = new EventController(canvas, game.gamefield);
          var controller = new GameController(game);
          eventController.setGameController(controller);
 
 
-         var drawControler = new DrawController(canvas, gamefield);
+         var drawControler = new DrawController(canvas, game.gamefield);
 
          eventController.setDrawController(drawControler);
 
          controller.setDrawController(drawControler);
+
+         //game.newGame();
 
          //controller.init();
       })();

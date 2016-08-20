@@ -1,27 +1,64 @@
-function Game(gf, player1, player2) {
-  this.mode = 0; // 0 end, 1 = start placing, 2 = normal play
-  this.gamefield = gf;
-  var player1 = player1;
-  var player2 = player2 || new Player("CPU");
+function Game(p1, p2) {
+  var mode = 1; // 0 end, 1 = start placing, 2 = normal play
+  this.gamefield = null;
+  var player1 = p1;
+  var player2 = p2 || new Player("CPU");
   var currentTurn = null;
-  this.tokensPlaced = 0;
+  var tokensPlaced = 0;
+  const MAX_TOKEN_TO_PLACE = 18;
 
-
-  this.start = function() {
+  /**
+   * This function starts a new game, everything
+   * is set to default. On a new game the starting
+   * player will change. By first start player1
+   * is selected as the starting player.
+   */
+  this.newGame = function() {
     player1.initPlayer();
     player2.initPlayer();
     player2.cpu = 1;
     player2.color = "#00FF00";
     this.gamemode = 0;
-    currentTurn = player1;
+    this.gamefield = new GameField();
+    if(currentTurn == null || currentTurn == player2) {
+      currentTurn = player1;
+    }
+    else {
+      currentTurn = player2;
+    }
   }
 
-  this.isHumansTurn = function() {
+  /**
+   * This function returns if the current phase
+   * of the game is the phase where players are
+   * placing their tokens
+   * @return {Boolean} true if it's the placing phase, otherwise false
+   */
+  this.isPlacingPhase = function() {
+    return mode == 1;
+  }
+
+  /**
+   * This function return if player1 is the next player
+   * @return {Boolean} true if it's player1's turn, false if it's player2's
+   */
+  this.isPlayerOneTurn = function() {
     //console.log(currentTurn);
     return currentTurn !== 'undefinied' && currentTurn === player1;
   }
 
+  /**
+   * This function is called if a player ends his turn (and the next player
+   * is able to play). If the current phase the placing phase, the tokensPlaced
+   * count will count up to determine if the next phase of the game starts.
+   */
   this.changeTurn = function() {
+    if(mode == 1) {
+      tokensPlaced++;
+      if(tokensPlaced >= MAX_TOKEN_TO_PLACE) {
+        mode = 2;
+      }
+    }
     currentTurn = currentTurn === player1 ? player2 : player1;
   }
 
@@ -48,6 +85,6 @@ function Game(gf, player1, player2) {
     }
   }
 
-  this.start();
+  this.newGame();
 
 }

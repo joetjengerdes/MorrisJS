@@ -22,15 +22,14 @@ function GameController(game) {
   }
 
   this.doAction = function(x,y) {
-    // it's the human players turn
-    if(game.isHumansTurn()) {
-      if(game.mode == 0) {
-        if(game.tokensPlaced >= 18) {
-          game.mode = 1;
-        }
+    // it's the player1 turn, on human-cpu game this represents the
+    // human player
+    if(game.isPlayerOneTurn()) {
+      console.log(game.isPlacingPhase());
+      if(game.isPlacingPhase()) {
         var vertices = game.gamefield.vertices;
         for(var i = 0; i< vertices.length;i++) {
-          if(vertices[i].contains(x,y)) {
+          if(vertices[i].contains(x,y) && !isTokenOnField(i)) {
             game.createToken(vertices[i].x,vertices[i].y,i);
             drawController.redraw();
             game.changeTurn();
@@ -46,15 +45,24 @@ function GameController(game) {
       // TODO: remove test
       var vertices = game.gamefield.vertices;
           for(var i = 0; i< vertices.length;i++) {
-                    var coord = game.convertVertexPosToArrayPos(i);
-                    if(!game.gamefield.field[coord.z][coord.y][coord.x]) {
-                      console.log(game.gamefield.field[coord.z][coord.y][coord.x]);
-                      game.createToken(vertices[i].x,vertices[i].y,i);
-                      drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00")
-                      game.changeTurn();
-                      break;
-                    }
-              }
+                    //var coord = game.convertVertexPosToArrayPos(i);
+                    //console.log(coord);
+                  if(!isTokenOnField(i)) {
+                    //console.log(game.gamefield.field[coord.z][coord.y][coord.x]);
+                    game.createToken(vertices[i].x,vertices[i].y,i);
+                    drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00")
+                    game.changeTurn();
+                    break;
+                  }
+            }
       }
+  }
+
+  function isTokenOnField(vertIndex) {
+    var coord = game.convertVertexPosToArrayPos(vertIndex);
+    if(game.gamefield.field[coord.z][coord.y][coord.x]) {
+      return true;
+    }
+    return false;
   }
 }
