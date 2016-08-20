@@ -41,4 +41,12 @@ function GameProblemSolver(game) {
         return false;
     }
 
+    this.isTokenOnField = function(vertIndex) {
+        var coord = game.convertVertexPosToArrayPos(vertIndex);
+        if (game.gamefield.field[coord.z][coord.y][coord.x]) {
+            return true;
+        }
+        return false;
+    }
+
 }

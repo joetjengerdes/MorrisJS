@@ -30,7 +30,7 @@ function GameController(game) {
                 if (game.isPlacingPhase()) {
                     var vertices = game.gamefield.vertices;
                     for (var i = 0; i < vertices.length; i++) {
-                        if (vertices[i].contains(x, y) && !isTokenOnField(i)) {
+                        if (vertices[i].contains(x, y) && !gamefield.isTokenOnField(i)) {
                             game.createToken(vertices[i].x, vertices[i].y, i);
                             drawController.redraw();
                             game.changeTurn();
@@ -45,7 +45,7 @@ function GameController(game) {
                     for (var i = 0; i < vertices.length; i++) {
                         //var coord = game.convertVertexPosToArrayPos(i);
                         //console.log(coord);
-                        if (!isTokenOnField(i)) {
+                        if (!gamefield.isTokenOnField(i)) {
                             //console.log(game.gamefield.field[coord.z][coord.y][coord.x]);
                             game.createToken(vertices[i].x, vertices[i].y, i);
                             drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00")
@@ -56,12 +56,7 @@ function GameController(game) {
                 }
             }
         }
+      }
 
-        function isTokenOnField(vertIndex) {
-            var coord = game.convertVertexPosToArrayPos(vertIndex);
-            if (game.gamefield.field[coord.z][coord.y][coord.x]) {
-                return true;
-            }
-            return false;
-        }
+
     }
