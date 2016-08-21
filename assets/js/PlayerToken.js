@@ -4,6 +4,7 @@ function PlayerToken(pID, x, y, p) {
     var size;
     var player = p;
     this.vertexId = -1;
+    this.selected = 1;
 
     this.move = function(x, y) {
         return;
@@ -22,6 +23,6 @@ function PlayerToken(pID, x, y, p) {
     }
 
     this.getPlayer = function() {
-      return player;
+        return player;
     }
 }

@@ -3,6 +3,7 @@ function DrawController(canvas, gf) {
     var gamefield = gf;
     var ctx = canvas.getContext("2d");
     var self = this;
+    var redrawAll = false;
 
     function initDrawController() {
         Vertex.prototype.draw = function(ctx, x, y) {
@@ -20,9 +21,12 @@ function DrawController(canvas, gf) {
         v.draw(ctx, x, y);
     }
 
-    this.redraw = function() {
+    this.redraw = function(redrawA = false) {
+        redrawAll = redrawA;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        gamefield.vertices = [];
+        if (redrawAll) {
+            gamefield.vertices = [];
+        }
         drawField();
         drawTokens();
     }
@@ -87,16 +91,18 @@ function DrawController(canvas, gf) {
         var circleSize = Math.round(gamefield.circleSize);
         var lineWidth = gamefield.lineWidth;
 
-
-        // vertices from top left to bottom right
-        gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hFrom + offset, circleSize));
-        gamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hFrom + offset, circleSize));
-        gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hFrom + offset, circleSize));
-        gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, ((hTo + hFrom) / 2), circleSize));
-        gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, ((hTo + hFrom) / 2), circleSize));
-        gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hTo - offset, circleSize));
-        gamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hTo - offset, circleSize));
-        gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hTo - offset, circleSize));
+        console.log(redrawAll);
+        if (redrawAll) {
+            // vertices from top left to bottom right
+            gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hFrom + offset, circleSize));
+            gamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hFrom + offset, circleSize));
+            gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hFrom + offset, circleSize));
+            gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, ((hTo + hFrom) / 2), circleSize));
+            gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, ((hTo + hFrom) / 2), circleSize));
+            gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hTo - offset, circleSize));
+            gamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hTo - offset, circleSize));
+            gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hTo - offset, circleSize));
+        }
 
         // von oben links nach unten links
         drawLine(ctx, leftOffset + wFrom + offset, hFrom + offset, leftOffset + wFrom + offset, hTo - offset);
@@ -128,6 +134,6 @@ function DrawController(canvas, gf) {
 
     initDrawController();
 
-    this.redraw();
+    this.redraw(true);
 
 }
