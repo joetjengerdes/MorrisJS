@@ -54,7 +54,7 @@ function EventController(canvas, gamefield) {
             }
             mouseMoveTimeout = setTimeout(function() {
                 var mouse = getMouse(e);
-                drawController.redraw();
+                drawController.redraw(true);
                 // TODO: mark selection
                 for (var i = 0; i < gamefield.vertices.length; i++) {
                     var v = gamefield.vertices[i];
