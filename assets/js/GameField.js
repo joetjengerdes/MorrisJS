@@ -17,5 +17,10 @@ function GameField() {
         this.vertices = [];
     }
 
+    this.clone = function() {
+        return this.slice(0);
+    }
+
+
     this.setToDefault();
 }
