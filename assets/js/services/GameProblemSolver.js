@@ -2,6 +2,13 @@ function GameProblemSolver(game) {
     var game = game;
 
 
+
+    /**
+     * hasMorris - checks if the token is withing a morris.
+     *
+     * @param  {PlayerToken} token description
+     * @return {Boolean}       is there a morris
+     */
     this.hasMorris = function(token) {
         var field = game.gamefield.field;
         var vertexId = token.vertexId;
@@ -29,6 +36,15 @@ function GameProblemSolver(game) {
         return false;
     }
 
+
+    /**
+     * hasSamePlayer - checks if the token have the same owner.
+     *
+     * @param  {PlayerToken} firstToken  description
+     * @param  {PlayerToken} secondToken description
+     * @param  {PlayerToken} thirdToken  description
+     * @return {Boolean}            {true} if the token have the same  owner. {false} else.
+     */
     function hasSamePlayer(firstToken, secondToken, thirdToken) {
         if (firstToken && secondToken && thirdToken) {
             console.log(firstToken.getPlayer());
@@ -40,6 +56,52 @@ function GameProblemSolver(game) {
             }
         }
         return false;
+    }
+
+    /**
+     * getNumberOfToken - count the token of the specified player
+     *
+     * @param  {Player} player description
+     * @return {int}        number of Token
+     */
+    this.getNumberOfToken = function(player) {
+        var num = 0;
+        for (var z = 0; z < field.length; z++) {
+            for (var y = 0; y < field[0].length; y++) {
+                for (var x = 0; x < field[0][0].length; x++) {
+                    var token = field[z][y][x];
+                    if (token && (token.getPlayer() === player)) {
+                        num++;
+                    }
+                }
+            }
+        }
+        return num;
+    }
+
+    /**
+     * canMakeMoves - Can a player move a token
+     *
+     * @param  {Player} player description
+     * @return {Boolean}        description
+     */
+    this.canMakeMoves = function(player) {
+        for (var z = 0; z < field.length; z++) {
+            for (var y = 0; y < field[0].length; y++) {
+                for (var x = 0; x < field[0][0].length; x++) {
+                    var token = field[z][y][x];
+                    if (token && (token.getPlayer() === player)) {
+                        if (problemSolver.canMoveUp(z, y, x) ||
+                            problemSolver.canMoveDown(z, y, x) ||
+                            problemSolver.canMoveRight(z, y, x) ||
+                            problemSolver.canMoveLeft(z, y, x)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     this.isTokenOnField = function(vertIndex) {
