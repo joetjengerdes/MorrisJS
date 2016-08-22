@@ -12,7 +12,7 @@ function GameProblemSolver(game) {
         var vertexId = token.vertexId;
 
         // TODO: rausnehmen nach dem testen
-        console.log("CurrenPlayers Moves: " + this.numberOfMoves(game.getCurrentPlayer()), game.gamefield.field);
+        console.log("CurrenPlayers Moves: " + this.numberOfMoves(game.getCurrentPlayer(), game.gamefield.field));
         console.log("OpponentPlayers Moves: " + this.numberOfMoves(game.getOpponentPlayer(), game.gamefield.field));
 
         var coords = game.convertVertexPosToArrayPos(vertexId);
@@ -112,10 +112,10 @@ function GameProblemSolver(game) {
                 for (var x = 0; x < field[0][0].length; x++) {
                     var token = field[z][y][x];
                     if (token && (token.getPlayer() === player)) {
-                        if (this.canMoveUp(z, y, x)) num++;
-                        if (this.canMoveDown(z, y, x)) num++;
-                        if (this.canMoveRight(z, y, x)) num++;
-                        if (this.canMoveLeft(z, y, x)) num++;
+                        if (this.canMoveUp(z, y, x, field)) num++;
+                        if (this.canMoveDown(z, y, x, field)) num++;
+                        if (this.canMoveRight(z, y, x, field)) num++;
+                        if (this.canMoveLeft(z, y, x, field)) num++;
                     }
                 }
             }
@@ -406,28 +406,44 @@ function GameProblemSolver(game) {
     }
 
     this.canMoveUp = function(z, y, x, field) {
-        if (y > 0 && !filed[z][y - 1][x]) {
+        if (x == 1) {
+            if ((z > 0) && !field[z - 1][y][x]) {
+                return true;
+            }
+        } else if ((y > 0) && !field[z][y - 1][x]) {
             return true;
         }
         return false;
     }
 
-    this.canMoveDown = function(z, y, x) {
-        if (y < 2 && !filed[z][y + 1][x]) {
+    this.canMoveDown = function(z, y, x, field) {
+        if (x == 1) {
+            if ((z < 2) && !field[z + 1][y][x]) {
+                return true;
+            }
+        } else if ((y < 2) && !field[z][y + 1][x]) {
             return true;
         }
         return false;
     }
 
-    this.canMoveRight = function(z, y, x) {
-        if (x < 2 && !filed[z][y][x + 1]) {
+    this.canMoveRight = function(z, y, x, field) {
+        if (y == 1) {
+            if ((z < 2) && !field[z + 1][y][x]) {
+                return true;
+            }
+        } else if ((x < 2) && !field[z][y][x + 1]) {
             return true;
         }
         return false;
     }
 
-    this.canMoveLeft = function(z, y, x) {
-        if (x > 0 && !filed[z][y][x - 1]) {
+    this.canMoveLeft = function(z, y, x, field) {
+        if (y == 1) {
+            if ((z > 0) && !field[z - 1][y][x]) {
+                return true;
+            }
+        } else if ((x > 0) && !field[z][y][x - 1]) {
             return true;
         }
         return false;
