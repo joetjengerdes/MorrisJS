@@ -41,11 +41,16 @@
    </div>
 
    <script>
-      var musicOn = true;
+      var musicOn;
 
       (function() {
 
+         musicOn = readCookie("musicOn");
+
+         console.log(musicOn);
          doMusicControls();
+
+
 
          var canvas = document.getElementById("game");
 
@@ -79,6 +84,13 @@
       function doMusicControls() {
          var musicSwitch = document.getElementById("myonoffswitch");
          var songplayer = document.getElementById("songplayer");
+
+         console.log(musicOn);
+         if (!musicOn) {
+            songplayer.pause();
+            musicSwitch.checked = false;
+         }
+
          musicSwitch.addEventListener('change', function(e) {
             musicOn = !musicOn;
             if (musicOn) {
@@ -86,8 +98,27 @@
             } else {
                songplayer.pause();
             }
+            writeCookie("musicOn", musicOn);
          });
       };
+
+      function readCookie(key) {
+         if (document.cookie) {
+            var start = document.cookie.indexOf(key + "=") + key.length + 1;
+            var end = document.cookie.indexOf(",");
+            if (end == -1) {
+               end = document.cookie.length;
+            }
+            return document.cookie.substring(start, end) == "true" ? true : false;
+         }
+         return true;
+      }
+
+      function writeCookie(key, value) {
+         var expireDate = new Date(new Date() + 1000 * 60 * 60 * 24 * 365);
+         document.cookie = key + "=" + value + ", expires=" +
+            expireDate.toGMTString() + "; path=/";
+      }
    </script>
 </body>
 
