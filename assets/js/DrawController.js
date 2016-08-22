@@ -41,7 +41,23 @@ function DrawController(canvas, gf) {
                         var verts = gamefield.vertices;
 
                         var v = verts[pToken.vertexId];
-                        self.drawVertex(v.x, v.y, pToken.getColor());
+
+                        //console.log(pToken.selected);
+                        //console.log(pToken.getColor());
+                        // draw selected token
+                        if (pToken.selected) {
+                            // TODO: fix hardcoded colors
+                            if (pToken.getColor() == "hsla(120, 100%, 50%, 1)") {
+                                self.drawVertex(v.x, v.y, "hsla(120, 100%, 70%, 1)");
+                            } else {
+                                self.drawVertex(v.x, v.y, "hsla(0, 100%, 70%, 1)")
+                            }
+
+                        }
+                        // draw not selected token
+                        else {
+                            self.drawVertex(v.x, v.y, pToken.getColor());
+                        }
                     }
                 }
             }
@@ -91,7 +107,7 @@ function DrawController(canvas, gf) {
         var circleSize = Math.round(gamefield.circleSize);
         var lineWidth = gamefield.lineWidth;
 
-        console.log(redrawAll);
+        //console.log(redrawAll);
         if (redrawAll) {
             // vertices from top left to bottom right
             gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hFrom + offset, circleSize));

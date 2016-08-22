@@ -19,7 +19,7 @@ function Game(p1, p2) {
         player1.initPlayer();
         player2.initPlayer();
         player2.cpu = 1;
-        player2.color = "#00FF00";
+        player2.color = "hsla(120, 100%, 50%, 1)";
         this.gamemode = 0;
         this.gamefield.setToDefault();
         if (currentTurn == null || currentTurn == player2) {
@@ -37,6 +37,14 @@ function Game(p1, p2) {
      */
     this.isPlacingPhase = function() {
         return mode == 1;
+    }
+
+    /**
+     * This function returns if the game already ended
+     * @return {Boolean} true if it's ended, otherwise false
+     */
+    this.hasEnded = function() {
+        return mode == 0;
     }
 
     /**
@@ -90,6 +98,7 @@ function Game(p1, p2) {
      * @return {Boolean} success
      */
     this.removeToken = function(pos) {
+        console.log(pos);
         var obj = this.convertVertexPosToArrayPos(pos);
         var token = this.gamefield.field[obj.z][obj.y][obj.x];
 
