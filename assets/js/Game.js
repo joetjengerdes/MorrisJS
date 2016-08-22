@@ -116,13 +116,31 @@ function Game(p1, p2) {
     this.convertVertexPosToArrayPos = function(pos) {
         var total = 8;
         var z = Math.floor(pos / total);
-        // empty field at x:2 y:2
-        if (pos % total > 3) {
-            pos++;
-            total = 9;
+
+
+        var x0 = [0, 3, 5];
+        var x1 = [1, 6];
+
+        var tmp = pos % total;
+
+        var x, y;
+        //console.log(x0.indexOf(tmp));
+        if (x0.indexOf(tmp) >= 0) {
+            x = 0;
+        } else if (x1.indexOf(tmp) >= 0) {
+            x = 1;
+        } else {
+            x = 2;
         }
-        var y = Math.floor(((pos) % total) / 3);
-        var x = Math.floor(((pos) % total) % 3);
+
+        if (tmp <= 2) {
+            y = 0;
+        } else if (tmp <= 4) {
+            y = 1;
+        } else {
+            y = 2;
+        }
+
         return {
             x: x,
             y: y,

@@ -10,7 +10,7 @@ function GameStatusBar() {
 
     this.setText = function(newText) {
         text = newText;
-        console.log(newText);
+        //console.log(newText);
         //console.log(listener);
         if (textChangedListener) {
             textChangedListener.statusBarTextChanged();

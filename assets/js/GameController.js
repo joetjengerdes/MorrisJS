@@ -30,14 +30,13 @@ function GameController(game, stbar) {
             if (game.isPlacingPhase()) {
                 // it's the player1 turn, on human-cpu game this represents the
                 // human player
-                console.log("Is placing PHASE: " + game.isPlacingPhase());
+                //console.log("Is placing PHASE: " + game.isPlacingPhase());
 
                 gameStatusBar.setText("Place a stone!");
 
                 if (game.isPlayerOneTurn()) {
                     var index = getVerticeIndexOfCoords(x, y);
-                    console.log(index);
-                    console.log(game.gameProblemSolver.isTokenOnField(index));
+
                     if (index != -1 && !game.gameProblemSolver.isTokenOnField(index)) {
                         game.createToken(index);
 
