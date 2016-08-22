@@ -166,6 +166,7 @@ function DrawController(canvas, gf, stbar) {
         ctx.stroke();
     }
 
+
     function drawLine(ctx, xFrom, yFrom, xTo, yTo) {
         ctx.beginPath();
         ctx.moveTo(xFrom, yFrom);

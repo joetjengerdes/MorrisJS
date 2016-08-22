@@ -25,12 +25,28 @@
          <h1>To play this game Javascript must be activated!</h1>
       </canvas>
    </div>
-   <audio autoplay="true">
+   <audio id="songplayer" autoplay="true">
       <source src="assets/music/bg.mp3" type="audio/mpeg" />
    </audio>
 
+   <div class="music">
+      <label>Music</label>
+      <div id="music-switch" class="onoffswitch">
+         <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+         <label class="onoffswitch-label" for="myonoffswitch">
+            <span class="onoffswitch-inner"></span>
+            <span class="onoffswitch-switch"></span>
+         </label>
+      </div>
+   </div>
+
    <script>
+      var musicOn = true;
+
       (function() {
+
+         doMusicControls();
+
          var canvas = document.getElementById("game");
 
          canvas.width = document.body.clientWidth; //document.width is obsolete
@@ -58,7 +74,20 @@
          //game.newGame();
 
          //controller.init();
-      })();
+      })()
+
+      function doMusicControls() {
+         var musicSwitch = document.getElementById("myonoffswitch");
+         var songplayer = document.getElementById("songplayer");
+         musicSwitch.addEventListener('change', function(e) {
+            musicOn = !musicOn;
+            if (musicOn) {
+               songplayer.play();
+            } else {
+               songplayer.pause();
+            }
+         });
+      };
    </script>
 </body>
 
