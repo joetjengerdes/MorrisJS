@@ -4,6 +4,8 @@ function GameController(game) {
     var controller = this;
     var eventController = null;
     var drawController = null;
+    // flag if a player selected a token
+    var playerSelectedToken = false;
 
     this.setDrawController = function(drawController_) {
         drawController = drawController_;
@@ -31,9 +33,7 @@ function GameController(game) {
                     var index = getVerticeIndexOfCoords(x, y);
 
                     if (index != -1 && !game.gameProblemSolver.isTokenOnField(index)) {
-                        game.createToken(game.gamefield.vertices[index].x,
-                            game.gamefield.vertices[index].y, index);
-                        drawController.redraw();
+                        game.createToken(index);
 
                         if (game.removeFlag == 0) {
                             game.changeTurn();
@@ -49,14 +49,13 @@ function GameController(game) {
                         //console.log(coord);
                         if (!game.gameProblemSolver.isTokenOnField(i)) {
                             //console.log(game.gamefield.field[coord.z][coord.y][coord.x]);
-                            game.createToken(vertices[i].x, vertices[i].y, i);
-                            drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
+                            game.createToken(i);
+                            //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
 
                             if (game.removeFlag == 1) {
                                 var vertices = game.gamefield.vertices;
                                 for (var i = 0; i < vertices.length; i++) {
                                     if (game.gameProblemSolver.isTokenOnField(i) && game.removeToken(i)) {
-                                        drawController.redraw();
                                         break;
                                     }
                                 }
@@ -69,28 +68,49 @@ function GameController(game) {
             } else if (game.hasEnded()) {
 
             } else { // gamemod: normal play
+                var index = getVerticeIndexOfCoords(x, y);
+                // select or reselect a token
+                if (index != -1 && game.gameProblemSolver.isTokenOnField(index)) {
+                    // player tried to select the enemies token
+                    var token = getTokenOfField(index);
+                    if (token.getPlayer() !== game.getCurrentPlayer()) return;
+                    selectToken(token);
+                }
+                // player clicked on a free spot, so he wants to move the selected
+                else {
+                    // player did not select any token to move
+                    if (!playerSelectedToken) return;
+
+                    unselectAllOtherToken();
+                }
+
+
+
                 console.log("normal play");
+
                 if (game.isPlayerOneTurn()) {
                     var index = getVerticeIndexOfCoords(x, y);
+                    console.log(index);
                     if (index != -1 && game.gameProblemSolver.isTokenOnField(index)) {
-                        token.selected = true;
+
                     }
                 }
             }
         } else {
             console.log("remove" + x + " " + y);
             var index = getVerticeIndexOfCoords(x, y);
+
             console.log(index);
             if (index != -1 && game.gameProblemSolver.isTokenOnField(index)) {
                 console.log(index);
                 if (game.removeToken(index)) {
                     console.log("REMOVE");
                     game.changeTurn();
-                    drawController.redraw();
                     //break;
                 }
             }
         }
+        drawController.redraw();
     }
 
     function getVerticeIndexOfCoords(x, y) {
@@ -101,5 +121,33 @@ function GameController(game) {
             }
         }
         return -1;
+    }
+
+    function getTokenOfField(vertIndex) {
+        var coord = game.convertVertexPosToArrayPos(vertIndex);
+        return game.gamefield.field[coord.z][coord.y][coord.x];
+    }
+
+    function selectToken(token) {
+        // a player had selected a token before, so all token needs to be set
+        // to not selected again
+        if (playerSelectedToken) {
+            unselectAllOtherToken();
+        }
+        token.selected = true;
+        playerSelectedToken = true;
+    }
+
+    function unselectAllOtherToken() {
+        playerSelectedToken = false;
+        for (var z = 0; z < 3; z++) {
+            for (var y = 0; y < 3; y++) {
+                for (var x = 0; x < 3; x++) {
+                    if (game.gamefield.field[z][y][x]) {
+                        game.gamefield.field[z][y][x].selected = false;
+                    }
+                }
+            }
+        }
     }
 }

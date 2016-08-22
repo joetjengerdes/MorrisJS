@@ -364,20 +364,19 @@ function GameProblemSolver(game) {
 
 
 
-}
-tion(z, y, x) {
-    if (x < 2 && !filed[z][y][x + 1]) {
-        return true;
+    this.blation = function(z, y, x) {
+        if (x < 2 && !filed[z][y][x + 1]) {
+            return true;
+        }
+        return false;
     }
-    return false;
-}
 
-this.canMoveLeft = function(z, y, x) {
-    if (x > 0 && !filed[z][y][x - 1]) {
-        return true;
+    this.canMoveLeft = function(z, y, x) {
+        if (x > 0 && !filed[z][y][x - 1]) {
+            return true;
+        }
+        return false;
     }
-    return false;
-}
 
 
 

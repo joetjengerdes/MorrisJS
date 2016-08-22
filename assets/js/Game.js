@@ -56,6 +56,10 @@ function Game(p1, p2) {
         return currentTurn !== 'undefinied' && currentTurn === player1;
     }
 
+    this.getCurrentPlayer = function() {
+        return currentTurn;
+    }
+
     /**
      * This function is called if a player ends his turn (and the next player
      * is able to play). If the current phase the placing phase, the tokensPlaced
@@ -75,12 +79,10 @@ function Game(p1, p2) {
      * This function creates a new Token places it at the clicked position on the field.
      * If a morris is found, it will set the removeFlag to 1.
      *
-     * @param  {int} x   coord of the mouseclick
-     * @param  {int} y   coord of the mouseclick
      * @param  {int} pos position of the Vertex/vertexId
      */
-    this.createToken = function(x, y, pos) {
-        var token = new PlayerToken(currentTurn, x, y, currentTurn);
+    this.createToken = function(pos) {
+        var token = new PlayerToken(currentTurn, currentTurn);
         token.vertexId = pos;
         var obj = this.convertVertexPosToArrayPos(pos);
         //console.log("POSITION: Z Y X :" + obj.z + " | " + obj.y + " | " + obj.x);
