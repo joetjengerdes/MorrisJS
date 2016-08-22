@@ -36,7 +36,8 @@ function GameController(game, stbar) {
 
                 if (game.isPlayerOneTurn()) {
                     var index = getVerticeIndexOfCoords(x, y);
-
+                    console.log(index);
+                    console.log(game.gameProblemSolver.isTokenOnField(index));
                     if (index != -1 && !game.gameProblemSolver.isTokenOnField(index)) {
                         game.createToken(index);
 
