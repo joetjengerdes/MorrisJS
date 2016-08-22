@@ -7,6 +7,8 @@ function EventController(canvas, gamefield) {
     // is not done by every frame change
     var resizeTimeout = null;
     var mouseMoveTimeout = null;
+    this.cursorInRange = false;
+    var self = this;
 
     this.setGameController = function(controller) {
         gameController = controller;
@@ -54,12 +56,30 @@ function EventController(canvas, gamefield) {
             }
             mouseMoveTimeout = setTimeout(function() {
                 var mouse = getMouse(e);
-                drawController.redraw(true);
-                // TODO: mark selection
+
+                //console.log(self.cursorInRange);
+
+                var beforeCursorinRange = self.cursorInRange;
+                var markedVertex = null;
+
                 for (var i = 0; i < gamefield.vertices.length; i++) {
                     var v = gamefield.vertices[i];
                     if (v.contains(mouse.x, mouse.y)) {
-                        drawController.drawVertex(v.x, v.y, 'rgba(0,0,0,0.2)');
+                        markedVertex = v;
+                        self.cursorInRange = true;
+                    }
+                }
+
+                //console.log(markedVertex);
+                if (markedVertex != null) {
+                    if (!beforeCursorinRange) {
+                        drawController.redraw(true);
+                        drawController.drawVertex(markedVertex.x, markedVertex.y, 'rgba(0,0,0,0.2)');
+                    }
+                } else {
+                    if (beforeCursorinRange) {
+                        self.cursorInRange = false;
+                        drawController.redraw(true);
                     }
                 }
 
