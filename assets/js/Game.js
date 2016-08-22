@@ -117,29 +117,13 @@ function Game(p1, p2) {
         var total = 8;
         var z = Math.floor(pos / total);
 
-
-        var x0 = [0, 3, 5];
-        var x1 = [1, 6];
-
-        var tmp = pos % total;
-
-        var x, y;
-        //console.log(x0.indexOf(tmp));
-        if (x0.indexOf(tmp) >= 0) {
-            x = 0;
-        } else if (x1.indexOf(tmp) >= 0) {
-            x = 1;
-        } else {
-            x = 2;
+        var diff = pos % total;
+        if (diff > 3) {
+            diff++;
         }
 
-        if (tmp <= 2) {
-            y = 0;
-        } else if (tmp <= 4) {
-            y = 1;
-        } else {
-            y = 2;
-        }
+        var x = diff % 3;
+        var y = Math.floor(diff / 3);
 
         return {
             x: x,
