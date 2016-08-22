@@ -1,8 +1,6 @@
 function GameProblemSolver(game) {
     var game = game;
 
-
-
     /**
      * hasMorris - checks if the token is withing a morris.
      *
@@ -12,6 +10,10 @@ function GameProblemSolver(game) {
     this.hasMorris = function(token) {
         var field = game.gamefield.field;
         var vertexId = token.vertexId;
+
+        // TODO: rausnehmen nach dem testen
+        console.log("CurrenPlayers Moves: " + this.numberOfMoves(game.getCurrentPlayer()), game.gamefield.field);
+        console.log("OpponentPlayers Moves: " + this.numberOfMoves(game.getOpponentPlayer(), game.gamefield.field));
 
         var coords = game.convertVertexPosToArrayPos(vertexId);
 
@@ -65,6 +67,7 @@ function GameProblemSolver(game) {
      * @return {int}        number of Token
      */
     this.getNumberOfToken = function(player) {
+        var field = game.gamefield.field;
         var num = 0;
         for (var z = 0; z < field.length; z++) {
             for (var y = 0; y < field[0].length; y++) {
@@ -109,10 +112,10 @@ function GameProblemSolver(game) {
                 for (var x = 0; x < field[0][0].length; x++) {
                     var token = field[z][y][x];
                     if (token && (token.getPlayer() === player)) {
-                        if (problemSolver.canMoveUp(z, y, x)) num++;
-                        if (problemSolver.canMoveDown(z, y, x)) num++;
-                        if (problemSolver.canMoveRight(z, y, x)) num++;
-                        if (problemSolver.canMoveLeft(z, y, x)) num++;
+                        if (this.canMoveUp(z, y, x)) num++;
+                        if (this.canMoveDown(z, y, x)) num++;
+                        if (this.canMoveRight(z, y, x)) num++;
+                        if (this.canMoveLeft(z, y, x)) num++;
                     }
                 }
             }
@@ -234,6 +237,10 @@ function GameProblemSolver(game) {
         var z10 = true;
         var z21 = true;
         var z12 = true;
+        var z01Undef = false;
+        var z10Undef = false;
+        var z21Undef = false;
+        var z12Undef = false;
         for (var z = 0; z < field.length; z++) {
             var left = true;
             var top = true;
@@ -245,86 +252,148 @@ function GameProblemSolver(game) {
             var rightUndef = false;
 
             for (var i = 0; i < field[0][0].length; i++) {
-                var token = clonedField[z][i][0];
-                // undefinded token
-                if (!token) {
-                    // first time undefinded
-                    if (!leftUndef) {
-                        left = false;
-                    } else {
-                        leftUndef = true;
-                        // y is in the middle
-                        if (i == 1) {
-                            // z is in the middle. check z0 and z1.
-                            if (z == 1) {
-                                token = clonedField[z + 1][i][0];
-                                if (!token || (token.getPlayer() !== player)) {
-                                    token = clonedField[z - 1][i][0];
-                                    if (!token || (token.getPlayer() !== player)) {
-                                        left = false;
-                                    }
-                                }
-                            } else { // check z- (z-1)
-                                token = clonedField[z - (z - 1)][i][0];
-                                if (!token || (token.getPlayer() !== player)) {
-                                    left = false;
-                                }
-                            }
-                        } else { // just check x1
-                            token = clonedField[z][i][1];
-                            if (!token || (token.getPlayer() !== player)) {
-                                left = false;
-                            }
-                        }
-                    }
-                } else if (token.getPlayer() !== player) {
-                    left = false;
-                }
 
-                //TODO: für alle machen...
-                token = clonedField[z][0][i];
-                if (!token || (token.getPlayer() !== player)) {
-                    top = false;
-                }
-                token = clonedField[z][2][i];
-                if (!token || (token.getPlayer() !== player)) {
-                    bottom = false;
-                }
-                token = clonedField[z][i][2];
-                if (!token || (token.getPlayer() !== player)) {
-                    right = false;
-                }
+                var flags = checkNeighbours(token, checkNeighboursY, z, i, 0, leftUndef)
+                left = flags[0];
+                leftUndef = flags[1];
+
+                flags = checkNeighbours(token, checkNeighboursY, z, i, 2, rightUndef)
+                right = flags[0];
+                rightUndef = flags[1];
+
+                flags = checkNeighbours(token, checkNeighboursX, z, 0, i, topUndef)
+                top = flags[0];
+                topUndef = flags[1];
+
+                flags = checkNeighbours(token, checkNeighboursX, z, 2, i, bottomUndef)
+                bottom = flags[0];
+                bottomUndef = flags[1];
 
             }
-            if (left) num++;
-            if (top) num++;
-            if (bottom) num++;
-            if (right) num++;
+            // one token have to be undefinded for a open morris
+            if (left && leftUndef) num++;
+            if (right && rightUndef) num++;
+            if (top && topUndef) num++;
+            if (bottom && bottomUndef) num++;
 
-            token = clonedField[z][0][1];
-            if (!token || (token.getPlayer() !== player)) {
-                z01 = false;
-            }
-            token = clonedField[z][1][0];
-            if (!token || (token.getPlayer() !== player)) {
-                z10 = false;
-            }
-            token = clonedField[z][2][1];
-            if (!token || (token.getPlayer() !== player)) {
-                z21 = false;
-            }
-            token = clonedField[z][1][2];
-            if (!token || (token.getPlayer() !== player)) {
-                z12 = false;
-            }
+            // Morris of the z-axis
+            flags = checkNeighbours(token, checkNeighboursZ, z, 0, 1, z01Undef)
+            z01 = flags[0];
+            z01Undef = flags[1];
+
+
+            flags = checkNeighbours(token, checkNeighboursZ, z, 1, 0, z10Undef)
+            z10 = flags[0];
+            z10Undef = flags[1];
+
+            flags = checkNeighbours(token, checkNeighboursZ, z, 2, 1, z21Undef)
+            z21 = flags[0];
+            z21Undef = flags[1];
+
+            flags = checkNeighbours(token, checkNeighboursZ, z, 1, 2, z12Undef)
+            z12 = flags[0];
+            z12Undef = flags[1];
         }
-        if (z01) num++;
-        if (z10) num++;
-        if (z21) num++;
-        if (z12) num++;
+        if (z01 && z01Undef) num++;
+        if (z10 && z10Undef) num++;
+        if (z21 && z21Undef) num++;
+        if (z12 && z12Undef) num++;
         return num;
     }
 
+    function checkNeighbours(token, callback, z, y, x, undefinedFlag) {
+        var token = clonedField[z][y][x];
+        var openMorrisFlag = true;;
+        if (!token) {
+            // first time undefined
+            if (undefinedFlag) {
+                openMorrisFlag = false;
+            } else {
+                undefinedFlag = true;
+                openMorrisFlag = callback(z, 0, 1);
+            }
+        } else if (token.getPlayer() !== player) {
+            openMorrisFlag = false;
+        }
+        return [openMorrisFlag, undefinedFlag];
+    }
+
+    function checkNeighboursX(z, y, x) {
+        // x is in the middle
+        if (x == 1) {
+            // z is in the middle. check z0 and z1.
+            if (z == 1) {
+                var token = clonedField[z + 1][y][x];
+                if (!token || (token.getPlayer() !== player)) {
+                    token = clonedField[z - 1][y][x];
+                    if (!token || (token.getPlayer() !== player)) {
+                        return false;
+                    }
+                }
+            } else { // check z- (z-1)
+                var token = clonedField[z - (z - 1)][y][x];
+                if (!token || (token.getPlayer() !== player)) {
+                    return false;
+                }
+            }
+        } else { // just check y1
+            var token = clonedField[z][1][x];
+            if (!token || (token.getPlayer() !== player)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function checkNeighboursY(z, y, x) {
+        //is y in the middle
+        if (y == 1) {
+            // z is in the middle. check z0 and z1.
+            if (z == 1) {
+                token = clonedField[z + 1][y][x];
+                if (!token || (token.getPlayer() !== player)) {
+                    token = clonedField[z - 1][y][x];
+                    if (!token || (token.getPlayer() !== player)) {
+                        return false;
+                    }
+                }
+            } else { // check z- (z-1)
+                token = clonedField[z - (z - 1)][y][x];
+                if (!token || (token.getPlayer() !== player)) {
+                    return false;
+                }
+            }
+        } else { // just check x1
+            token = clonedField[z][i][1];
+            if (!token || (token.getPlayer() !== player)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function checkNeighboursZ(z, y, x) {
+        //is y
+        if (y == 1) {
+            token = clonedField[z][y + 1][x];
+            if (!token || (token.getPlayer() !== player)) {
+                token = clonedField[z][y - 1][x];
+                if (!token || (token.getPlayer() !== player)) {
+                    return false;
+                }
+            }
+
+        } else if (x == 1) { // is x
+            token = clonedField[z][y][x + 1];
+            if (!token || (token.getPlayer() !== player)) {
+                token = clonedField[z][y][x - 1];
+                if (!token || (token.getPlayer() !== player)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     this.isTokenOnField = function(vertIndex) {
         var coord = game.convertVertexPosToArrayPos(vertIndex);

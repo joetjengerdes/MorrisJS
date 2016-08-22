@@ -60,6 +60,10 @@ function Game(p1, p2) {
         return currentTurn;
     }
 
+    this.getOpponentPlayer = function() {
+        return currentTurn === player1 ? player2 : player1;
+    }
+
     /**
      * This function is called if a player ends his turn (and the next player
      * is able to play). If the current phase the placing phase, the tokensPlaced
