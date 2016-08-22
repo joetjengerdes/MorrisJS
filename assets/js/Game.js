@@ -82,10 +82,12 @@ function Game(p1, p2) {
      * @param  {int} pos position of the Vertex/vertexId
      */
     this.createToken = function(pos) {
-        var token = new PlayerToken(currentTurn, currentTurn);
+        var token = new PlayerToken(currentTurn);
         token.vertexId = pos;
         var obj = this.convertVertexPosToArrayPos(pos);
-        //console.log("POSITION: Z Y X :" + obj.z + " | " + obj.y + " | " + obj.x);
+        console.log("POSITION: Z Y X :" + obj.z + " | " + obj.y + " | " + obj.x);
+        console.log(this.gamefield);
+        console.log(this.gamefield.field);
         this.gamefield.field[obj.z][obj.y][obj.x] = token;
         if (this.gameProblemSolver.hasMorris(token)) {
             console.log("MILL!WUHU!");
@@ -110,6 +112,17 @@ function Game(p1, p2) {
             return true;
         }
         return false;
+    }
+
+    this.moveToken = function(posFrom, posTo) {
+        console.log(posFrom);
+        console.log(posTo);
+        console.log(this.createToken);
+        //playerSelectedToken.vertexId
+        var objFrom = this.convertVertexPosToArrayPos(posFrom);
+        this.gamefield.field[objFrom.z][objFrom.y][objFrom.x] = null;
+
+        this.createToken(posTo);
     }
 
     //TODO: move this function
