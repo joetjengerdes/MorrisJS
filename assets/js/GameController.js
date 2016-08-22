@@ -5,7 +5,7 @@ function GameController(game, stbar) {
     var eventController = null;
     var drawController = null;
     // flag if a player selected a token
-    var playerSelectedToken = false;
+    var playerSelectedToken = null;
 
     var gameStatusBar = stbar;
 
@@ -87,7 +87,7 @@ function GameController(game, stbar) {
                     // player did not select any token to move
                     if (!playerSelectedToken) return;
 
-                    // TODO: do the movement here
+                    doMovement(x, y);
                     unselectAllOtherToken();
                 }
 
@@ -149,11 +149,11 @@ function GameController(game, stbar) {
             unselectAllOtherToken();
         }
         token.selected = true;
-        playerSelectedToken = true;
+        playerSelectedToken = token;
     }
 
     function unselectAllOtherToken() {
-        playerSelectedToken = false;
+        playerSelectedToken = null;
         for (var z = 0; z < 3; z++) {
             for (var y = 0; y < 3; y++) {
                 for (var x = 0; x < 3; x++) {
@@ -163,5 +163,10 @@ function GameController(game, stbar) {
                 }
             }
         }
+    }
+
+    function doMovement(x, y) {
+        game.moveToken(playerSelectedToken.vertexId,
+            getVerticeIndexOfCoords(x, y));
     }
 }

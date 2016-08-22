@@ -1,4 +1,4 @@
-function PlayerToken(pID, p) {
+function PlayerToken(p) {
     var size;
     var player = p;
     this.vertexId = -1;
