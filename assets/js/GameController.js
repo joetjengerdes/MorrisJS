@@ -1,4 +1,4 @@
-function GameController(game) {
+function GameController(game, stbar) {
     this.valid = false;
     this.game = game;
     var controller = this;
@@ -6,6 +6,8 @@ function GameController(game) {
     var drawController = null;
     // flag if a player selected a token
     var playerSelectedToken = false;
+
+    var gameStatusBar = stbar;
 
     this.setDrawController = function(drawController_) {
         drawController = drawController_;
@@ -29,6 +31,9 @@ function GameController(game) {
                 // it's the player1 turn, on human-cpu game this represents the
                 // human player
                 console.log("Is placing PHASE: " + game.isPlacingPhase());
+
+                gameStatusBar.setText("Place a stone!");
+
                 if (game.isPlayerOneTurn()) {
                     var index = getVerticeIndexOfCoords(x, y);
 
@@ -68,6 +73,7 @@ function GameController(game) {
             } else if (game.hasEnded()) {
 
             } else { // gamemod: normal play
+                gameStatusBar.setText("Select a token to move")
                 var index = getVerticeIndexOfCoords(x, y);
                 // select or reselect a token
                 if (index != -1 && game.gameProblemSolver.isTokenOnField(index)) {
@@ -81,6 +87,7 @@ function GameController(game) {
                     // player did not select any token to move
                     if (!playerSelectedToken) return;
 
+                    // TODO: do the movement here
                     unselectAllOtherToken();
                 }
 
@@ -97,6 +104,8 @@ function GameController(game) {
                 }
             }
         } else {
+            gameStatusBar.setText("Remove a stone!");
+
             console.log("remove" + x + " " + y);
             var index = getVerticeIndexOfCoords(x, y);
 
@@ -106,8 +115,13 @@ function GameController(game) {
                 if (game.removeToken(index)) {
                     console.log("REMOVE");
                     game.changeTurn();
+                    gameStatusBar.setText("Token removed!");
                     //break;
+                } else {
+                    gameStatusBar.setText("You cannot remove your own token!");
                 }
+            } else {
+                gameStatusBar.setText("There's no token on this field");
             }
         }
         drawController.redraw();

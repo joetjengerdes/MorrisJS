@@ -9,6 +9,7 @@
    <script src="assets/js/Game.js"></script>
    <script src="assets/js/GameField.js"></script>
    <script src="assets/js/Vertex.js"></script>
+   <script src="assets/js/GameStatusBar.js"></script>
    <script src="assets/js/EventController.js"></script>
    <script src="assets/js/GameController.js"></script>
    <script src="assets/js/DrawController.js"></script>
@@ -39,12 +40,14 @@
          //console.log(p1.isVisible());
          var game = new Game(p1);
 
+         var gameStatusBar = new GameStatusBar();
+
          var eventController = new EventController(canvas, game.gamefield);
-         var controller = new GameController(game);
+         var controller = new GameController(game, gameStatusBar);
          eventController.setGameController(controller);
 
 
-         var drawControler = new DrawController(canvas, game.gamefield);
+         var drawControler = new DrawController(canvas, game.gamefield, gameStatusBar);
 
          eventController.setDrawController(drawControler);
 

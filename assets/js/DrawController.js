@@ -1,11 +1,14 @@
-function DrawController(canvas, gf) {
+function DrawController(canvas, gf, stbar) {
     this.canvas = canvas;
     var gamefield = gf;
     var ctx = canvas.getContext("2d");
     var self = this;
     var redrawAll = false;
+    var gameStatusBar = stbar;
 
     function initDrawController() {
+        gameStatusBar.setTextChangedListener(self);
+
         Vertex.prototype.draw = function(ctx, x, y) {
             ctx.fillStyle = this.fill;
             ctx.beginPath();
@@ -29,6 +32,11 @@ function DrawController(canvas, gf) {
         }
         drawField();
         drawTokens();
+        drawStatusBar();
+    }
+
+    this.statusBarTextChanged = function() {
+        drawStatusBar();
     }
 
     function drawTokens() {
@@ -88,6 +96,24 @@ function DrawController(canvas, gf) {
             gamefield.vertices[i].draw(ctx);
             //console.log(gamefield.vertices[i].draw);
         }
+    }
+
+    function drawStatusBar() {
+        //console.log(gameStatusBar);
+        ctx.beginPath();
+        ctx.rect(0, canvas.height - gameStatusBar.height, canvas.width, canvas.height - gameStatusBar.height);
+        ctx.fillStyle = gameStatusBar.backgroundColor;
+        ctx.fill();
+        ctx.closePath();
+        drawStatusBarText();
+    }
+
+    function drawStatusBarText() {
+        ctx.beginPath();
+        ctx.font = "\"" + gameStatusBar.fontSize + " " + gameStatusBar.fontFamily + "\"";
+        ctx.fillStyle = gameStatusBar.fontColor;
+        ctx.fillText(gameStatusBar.getText(), gamefield.leftOffset, canvas.height - (gameStatusBar.height / 3));
+        ctx.closePath();
     }
 
     function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {

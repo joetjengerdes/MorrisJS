@@ -21,6 +21,5 @@ function GameField() {
         return this.slice(0);
     }
 
-
     this.setToDefault();
 }
