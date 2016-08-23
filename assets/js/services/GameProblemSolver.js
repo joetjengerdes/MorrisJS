@@ -103,7 +103,7 @@ function GameProblemSolver(game) {
      * @param {PlayerToken[][][]}
      * @return {int}        number of moves
      */
-    this.numberOfMoves = function(player, mField) {
+    this.numberOfMoves = function(player, field) {
         if (!field) {
             mField = mGame.gamefield.field;
         }
@@ -395,7 +395,7 @@ function GameProblemSolver(game) {
 
     this.isTokenOnField = function(vertIndex) {
         var coord = mGame.convertVertexPosToArrayPos(vertIndex);
-        //console.log(coord);
+        console.log("COORDS" + coord);
 
         if (mField[coord.z][coord.y][coord.x]) {
             return true;

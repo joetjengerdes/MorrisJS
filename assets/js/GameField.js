@@ -6,14 +6,12 @@ function GameField() {
     this.lineWidth = 5;
     this.leftOffset = 200; // Offset from left border to gamefield
     this.vertices = [];
-    this.field;
+    this.field = new Array(3);
 
     this.setToDefault = function() {
-        this.field = [
-            [new Array(3), new Array(3), new Array(3)],
-            [new Array(3), new Array(3), new Array(3)],
-            [new Array(3), new Array(3), new Array(3)]
-        ];
+        this.field[0] = [new Array(3), new Array(3), new Array(3)];
+        this.field[1] = [new Array(3), new Array(3), new Array(3)];
+        this.field[2] = [new Array(3), new Array(3), new Array(3)];
         this.vertices = [];
     }
 
@@ -26,5 +24,5 @@ function GameField() {
         return clone;
     }
 
-    this.setToDefault();
+    //    this.setToDefault();
 }
