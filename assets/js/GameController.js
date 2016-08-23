@@ -44,34 +44,11 @@ function GameController(game, stbar) {
 
                         if (mGame.getRemoveFlag() == 0) {
                             mGame.changeTurn();
+                            doTurnCPU();
                         }
                     }
 
-                } else {
-                    // do nothing: it's CPUs turn and user tried to do s.th.
-                    // TODO: remove test
-                    var vertices = mGame.getGamefield().getVertices();
-                    for (var i = 0; i < vertices.length; i++) {
-                        //var coord = mGame.convertVertexPosToArrayPos(i);
-                        //console.log(coord);
-                        if (!mGame.getGameProblemSolver().isTokenOnField(i)) {
-                            //console.log(mGame.getGamefield().field[coord.z][coord.y][coord.x]);
-                            mGame.createToken(i, true);
-                            //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
 
-                            if (mGame.getRemoveFlag() == 1) {
-                                var vertices = mGame.getGamefield().getVertices();
-                                for (var i = 0; i < vertices.length; i++) {
-                                    if (mGame.getGameProblemSolver().isTokenOnField(i) && mGame.removeToken(i)) {
-                                        break;
-                                    }
-                                }
-                                return;
-                            }
-                            mGame.changeTurn();
-                            break;
-                        }
-                    }
                 }
             } else if (mGame.hasEnded()) {
                 mGameStatusBar.setText("Game ended!");
@@ -93,19 +70,9 @@ function GameController(game, stbar) {
                     console.log("move!");
                     doMovement(x, y);
                     unselectAllOtherToken();
+                    doTurnCPU();
                 }
 
-
-
-                console.log("normal play");
-
-                if (mGame.isPlayerOneTurn()) {
-                    var index = getVerticeIndexOfCoords(x, y);
-                    console.log(index);
-                    if (index != -1 && mGame.getGameProblemSolver().isTokenOnField(index)) {
-
-                    }
-                }
             }
         } else {
             mGameStatusBar.setText("Remove a stone!");
@@ -118,6 +85,7 @@ function GameController(game, stbar) {
                 console.log(index);
                 if (mGame.removeToken(index)) {
                     mGameStatusBar.setText("Token removed!");
+                    doTurnCPU();
                     //break;
                 } else {
                     mGameStatusBar.setText("You cannot remove your own token!");
@@ -127,6 +95,46 @@ function GameController(game, stbar) {
             }
         }
         mDrawController.redraw();
+    }
+
+    function doTurnCPU() {
+        // do nothing: it's CPUs turn and user tried to do s.th.
+        // TODO: remove test
+        if (mGame.isPlacingPhase()) {
+            var vertices = mGame.getGamefield().getVertices();
+            for (var i = 0; i < vertices.length; i++) {
+                //var coord = mGame.convertVertexPosToArrayPos(i);
+                //console.log(coord);
+                if (!mGame.getGameProblemSolver().isTokenOnField(i)) {
+                    //console.log(mGame.getGamefield().field[coord.z][coord.y][coord.x]);
+                    mGame.createToken(i, true);
+                    //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
+
+                    if (mGame.getRemoveFlag() == 1) {
+                        var vertices = mGame.getGamefield().getVertices();
+                        for (var i = 0; i < vertices.length; i++) {
+                            if (mGame.getGameProblemSolver().isTokenOnField(i) && mGame.removeToken(i)) {
+                                break;
+                            }
+                        }
+                        return;
+                    }
+                    mGame.changeTurn();
+                    break;
+                }
+            }
+        } else {
+            var vertices = mGame.getGamefield().getVertices();
+            var gameProblemSolver = mGame.getGameProblemSolver();
+            for (var i = 0; i < vertices.length; i++) {
+                var moves = gameProblemSolver.getPossibleMoves(i);
+                if (moves.length > 0) {
+                    console.log("AUFRUG MOVE CPU");
+                    mGame.moveToken(i, moves[0]);
+                    break;
+                }
+            }
+        }
     }
 
     function getVerticeIndexOfCoords(x, y) {
