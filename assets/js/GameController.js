@@ -20,7 +20,7 @@ function GameController(game, stbar) {
     }
 
     this.setEventController = function(eventController) {
-        this.eventController = eventController;
+        mEventController = eventController;
     }
 
     this.getEventController = function() {
@@ -50,7 +50,7 @@ function GameController(game, stbar) {
                 } else {
                     // do nothing: it's CPUs turn and user tried to do s.th.
                     // TODO: remove test
-                    var vertices = mGame.getGamefield().vertices;
+                    var vertices = mGame.getGamefield().getVertices();
                     for (var i = 0; i < vertices.length; i++) {
                         //var coord = mGame.convertVertexPosToArrayPos(i);
                         //console.log(coord);
@@ -60,7 +60,7 @@ function GameController(game, stbar) {
                             //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
 
                             if (mGame.getRemoveFlag() == 1) {
-                                var vertices = mGame.getGamefield().vertices;
+                                var vertices = mGame.getGamefield().getVertices();
                                 for (var i = 0; i < vertices.length; i++) {
                                     if (mGame.getGameProblemSolver().isTokenOnField(i) && mGame.removeToken(i)) {
                                         break;
@@ -130,7 +130,7 @@ function GameController(game, stbar) {
     }
 
     function getVerticeIndexOfCoords(x, y) {
-        var vertices = mGame.getGamefield().vertices;
+        var vertices = mGame.getGamefield().getVertices();
         for (var i = 0; i < vertices.length; i++) {
             if (vertices[i].contains(x, y)) {
                 return i;
@@ -141,7 +141,7 @@ function GameController(game, stbar) {
 
     function getTokenOfField(vertIndex) {
         var coord = mGame.convertVertexPosToArrayPos(vertIndex);
-        return mGame.getGamefield().field[coord.z][coord.y][coord.x];
+        return mGame.getGamefield().getField()[coord.z][coord.y][coord.x];
     }
 
     function selectToken(token) {
@@ -159,8 +159,8 @@ function GameController(game, stbar) {
         for (var z = 0; z < 3; z++) {
             for (var y = 0; y < 3; y++) {
                 for (var x = 0; x < 3; x++) {
-                    if (mGame.getGamefield().field[z][y][x]) {
-                        mGame.getGamefield().field[z][y][x].selected = false;
+                    if (mGame.getGamefield().getField()[z][y][x]) {
+                        mGame.getGamefield().getField()[z][y][x].selected = false;
                     }
                 }
             }

@@ -61,8 +61,8 @@ function EventController(canvas, gamefield) {
                 var beforeCursorinRange = mCursorInRange;
                 var markedVertex = null;
 
-                for (var i = 0; i < gamefield.vertices.length; i++) {
-                    var v = gamefield.vertices[i];
+                for (var i = 0; i < gamefield.getVertices().length; i++) {
+                    var v = gamefield.getVertices()[i];
                     if (v.contains(mouse.x, mouse.y)) {
                         markedVertex = v;
                         mCursorInRange = true;

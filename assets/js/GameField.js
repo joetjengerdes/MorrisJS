@@ -1,18 +1,78 @@
 function GameField() {
-    this.width = 600;
-    this.height = 600;
-    this.spaceBetween = 100;
-    this.circleSize = 5;
-    this.lineWidth = 5;
-    this.leftOffset = 200; // Offset from left border to gamefield
-    this.vertices = [];
-    this.field = new Array(3);
+    var mWidth = 600;
+    var mHeight = 600;
+    var mSpaceBetween = 100;
+    var mCircleSize = 5;
+    var mLineWidth = 5;
+    var mLeftOffset = 200; // Offset from left border to gamefield
+    var mVertices = [];
+    var mField = new Array(3);
+
+    this.getVertices = function() {
+        return mVertices;
+    }
+
+    this.getField = function() {
+        return mField;
+    }
+
+    this.getWidth = function() {
+        return mWidth;
+    }
+
+    this.getHeight = function() {
+        return mHeight;
+    }
+
+    this.getSpaceBetween = function() {
+        return mSpaceBetween;
+    }
+
+    this.getCircleSize = function() {
+        return mCircleSize;
+    }
+
+    this.getLineWidth = function() {
+        return mLineWidth;
+    }
+
+    this.getLeftOffset = function() {
+        return mLeftOffset;
+    }
+
+    this.setWidth = function(val) {
+        mWidth = val;
+    }
+
+    this.setHeight = function(val) {
+        mHeight = val;
+    }
+
+    this.setSpaceBetween = function(val) {
+        mSpaceBetween = val;
+    }
+
+    this.setCircleSize = function(val) {
+        mCircleSize = val;
+    }
+
+    this.setLineWidth = function(val) {
+        mLineWidth = val;
+    }
+
+    this.setLeftOffset = function(val) {
+        mLeftOffset = val;
+    }
+
+    this.setVertices = function(val) {
+        mVertices = val;
+    }
 
     this.setToDefault = function() {
-        this.field[0] = [new Array(3), new Array(3), new Array(3)];
-        this.field[1] = [new Array(3), new Array(3), new Array(3)];
-        this.field[2] = [new Array(3), new Array(3), new Array(3)];
-        this.vertices = [];
+        mField[0] = [new Array(3), new Array(3), new Array(3)];
+        mField[1] = [new Array(3), new Array(3), new Array(3)];
+        mField[2] = [new Array(3), new Array(3), new Array(3)];
+        mVertices = [];
     }
 
     this.cloneField = function() {

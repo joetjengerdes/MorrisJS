@@ -1,6 +1,6 @@
 function GameProblemSolver(game) {
     var mGame = game;
-    var mField = game.getGamefield().field;
+    var mField = game.getGamefield().getField();
     /**
      * hasMorris - checks if the token is withing a morris.
      *
@@ -132,7 +132,7 @@ function GameProblemSolver(game) {
      */
     this.numberOfMoves = function(player, field) {
         if (!field) {
-            mField = mGame.getGamefield().field;
+            mField = mGame.getGamefield().getField();
         }
         var num = 0;
         for (var z = 0; z < mField.length; z++) {
@@ -442,7 +442,7 @@ function GameProblemSolver(game) {
         var x = coords.x;
         var y = coords.y;
         var z = coords.z;
-        var field = mGame.getGamefield().field;
+        var field = mGame.getGamefield().getField();
 
         var moves = [];
 

@@ -1,10 +1,10 @@
 function ArtificialIntelligenceService(game) {
-    var game = game;
-    var moves = [];
-    var field = game.gamefield.clone().field;
+    var mGame = game;
+    var mMoves = [];
+    var mField = mGame.getGamefield().cloneField();
 
     function evaluate() {
-        // TODO: 
+        // TODO:
     }
 
 
@@ -15,13 +15,13 @@ function ArtificialIntelligenceService(game) {
      */
     function initMoves() {
 
-        var gamefield = game.gamefield;
-        if (game.isPlacingPhase()) {
-            var vertices = gamefield.vertices;
-            var problemSolver = game.gameProblemSolver;
+        var gamefield = mGame.getGamefield();
+        if (mGame.isPlacingPhase()) {
+            var vertices = gamefield.getVertices();
+            var problemSolver = mGame.getGameProblemSolver();
             for (var z; z < vertices.length; z++) {
                 if (problemSolver.isTokenOnField(z)) {
-                    var obj = game.convertVertexPosToArrayPos(z);
+                    var obj = mGame.convertVertexPosToArrayPos(z);
                     move.push({
                         src: null,
                         dst: obj
@@ -29,13 +29,13 @@ function ArtificialIntelligenceService(game) {
                 }
             }
         } else {
-            for (var z = 0; z < field.length; z++) {
-                for (var y = 0; y < field[0].length; y++) {
-                    for (var x = 0; x < field[0][0].length; x++) {
-                        var token = field[z][y][x];
-                        if (token && (token.getPlayer() === game.currentTurn)) {
+            for (var z = 0; z < mField.length; z++) {
+                for (var y = 0; y < mField[0].length; y++) {
+                    for (var x = 0; x < mField[0][0].length; x++) {
+                        var token = mField[z][y][x];
+                        if (token && (token.getPlayer() === mGame.getCurrentTurn())) {
                             if (problemSolver.canMoveUp(z, y, x)) {
-                                moves.push({
+                                mMoves.push({
                                     src: {
                                         x: x,
                                         y: y,
@@ -49,7 +49,7 @@ function ArtificialIntelligenceService(game) {
                                 });
                             }
                             if (problemSolver.canMoveDown(z, y, x)) {
-                                moves.push({
+                                mMoves.push({
                                     src: {
                                         x: x,
                                         y: y,
@@ -63,7 +63,7 @@ function ArtificialIntelligenceService(game) {
                                 });
                             }
                             if (problemSolver.canMoveRight(z, y, x)) {
-                                moves.push({
+                                mMoves.push({
                                     src: {
                                         x: x,
                                         y: y,
@@ -77,7 +77,7 @@ function ArtificialIntelligenceService(game) {
                                 });
                             }
                             if (problemSolver.canMoveLeft(z, y, x)) {
-                                moves.push({
+                                mMoves.push({
                                     src: {
                                         x: x,
                                         y: y,
@@ -99,23 +99,23 @@ function ArtificialIntelligenceService(game) {
 
     function doNextMove(move) {
         if (move.src) {
-            field[move.src.z][move.src.y][move.src.x] = null;
+            mField[move.src.z][move.src.y][move.src.x] = null;
         }
         if (move.dst) {
             // is not visible. x,y is not neccessary
-            var token = new PlayerToken(game.currentTurn, null, null, game.currentTurn);
-            field[move.dst.z][move.dst.y][move.dst.x] = token;
+            var token = new PlayerToken(mGame.getCurrentTurn(), null, null, mGame.getCurrentTurn());
+            mField[move.dst.z][move.dst.y][move.dst.x] = token;
         }
     }
 
     function undoMove(move) {
-        if (mpve.src) {
+        if (move.src) {
             // is not visible. x,y is not neccessary
-            var token = new PlayerToken(game.currentTurn, null, null, game.currentTurn);
-            field[move.src.z][move.src.y][move.src.x] = token;
+            var token = new PlayerToken(mGame.getCurrentTurn(), null, null, mGame.getCurrentTurn());
+            mField[move.src.z][move.src.y][move.src.x] = token;
         }
         if (move.dst) {
-            field[move.dst.z][move.dst.y][move.dst.x] = null;
+            mField[move.dst.z][move.dst.y][move.dst.x] = null;
         }
     }
 
@@ -126,7 +126,7 @@ function ArtificialIntelligenceService(game) {
         var PVfound = false;
         var max = Number.MIN_VALUE;
         initMoves();
-        while (moves.length > 0) {
+        while (mMoves.length > 0) {
             var currentMove = move.pop();
             doNextMove(currentMove);
             if (PVfound) {

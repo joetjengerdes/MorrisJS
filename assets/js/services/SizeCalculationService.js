@@ -4,7 +4,7 @@ function SizeCalculationService(canvas, gf) {
 
     this.calculate = function() {
 
-        mCanvas.width = document.body.clientWidth; //document.width is obsolete
+        mCanvas.width = document.body.clientWidth; //document.getWidth() is obsolete
         mCanvas.height = Math.max(window.innerHeight, document.body.clientHeight);
 
         var mCanvasHeight = Math.min(window.innerHeight, document.body.clientHeight);
@@ -13,20 +13,20 @@ function SizeCalculationService(canvas, gf) {
         if (mCanvasHeight <= mCanvas.width) {
             size = mCanvasHeight;
         } else {
-            size = mCanvas.width;
+            size = mCanvas.getWidth();
         }
 
-        mGamefield.height = size;
-        mGamefield.width = size;
+        mGamefield.setHeight(size);
+        mGamefield.setWidth(size);
 
-        mGamefield.spaceBetween = (2 * size) / 15;
-        mGamefield.circleSize = (2 * size) / 120;
+        mGamefield.setSpaceBetween((2 * size) / 15);
+        mGamefield.setCircleSize((2 * size) / 120);
 
-        mGamefield.lineWidth = (2 * size) / 350;
-        if (mGamefield.circleSize < 1) {
-            mGamefield.circleSize = 1
+        mGamefield.setLineWidth((2 * size) / 350);
+        if (mGamefield.getCircleSize() < 1) {
+            mGamefield.setCircleSize(1);
         };
-        mGamefield.leftOffset = (mCanvas.width - size) / 2;
+        mGamefield.setLeftOffset((mCanvas.width - size) / 2);
     }
 
 }

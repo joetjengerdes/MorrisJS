@@ -112,7 +112,7 @@ function Game(player1, player2) {
         token.setVertexIndex(pos);
         var obj = this.convertVertexPosToArrayPos(pos);
 
-        mGamefield.field[obj.z][obj.y][obj.x] = token;
+        mGamefield.getField()[obj.z][obj.y][obj.x] = token;
         if (mGameProblemSolver.hasMorris(token)) {
             console.log("MILL!WUHU!");
             mRemoveFlag = 1;
@@ -131,7 +131,7 @@ function Game(player1, player2) {
     this.removeToken = function(pos) {
 
         var obj = this.convertVertexPosToArrayPos(pos);
-        var token = mGamefield.field[obj.z][obj.y][obj.x];
+        var token = mGamefield.getField()[obj.z][obj.y][obj.x];
 
         // player selected his own token to remove: not allowed
         if (token.getPlayer() === mCurrenTurn) return false;
@@ -150,7 +150,7 @@ function Game(player1, player2) {
         }
 
         // remove the stone
-        mGamefield.field[obj.z][obj.y][obj.x] = null;
+        mGamefield.getField()[obj.z][obj.y][obj.x] = null;
         mRemoveFlag = 0;
         enemy.lostToken();
         // check if this remove causes the end of the game
@@ -177,11 +177,11 @@ function Game(player1, player2) {
         var objTo = this.convertVertexPosToArrayPos(posTo);
         var objFrom = this.convertVertexPosToArrayPos(posFrom);
 
-        var field = mGamefield.field;
+        var field = mGamefield.getField();
 
         if (field[objFrom.z][objFrom.y][objFrom.x].getPlayer() === mCurrenTurn &&
             !(field[objTo.z][objTo.y][objTo.x])) {
-            mGamefield.field[objFrom.z][objFrom.y][objFrom.x] = null;
+            mGamefield.getField()[objFrom.z][objFrom.y][objFrom.x] = null;
             this.createToken(posTo);
         }
     }
