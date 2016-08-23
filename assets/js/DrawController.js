@@ -133,7 +133,6 @@ function DrawController(canvas, gf, stbar) {
         var circleSize = Math.round(gamefield.circleSize);
         var lineWidth = gamefield.lineWidth;
 
-        //console.log(redrawAll);
         if (redrawAll) {
             // vertices from top left to bottom right
             gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hFrom + offset, circleSize));
