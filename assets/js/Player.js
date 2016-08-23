@@ -1,17 +1,35 @@
-function Player(playerName, color) {
-    this.cpu = 0; // 0 for human, 1 for cpus
-    this.playerName = playerName;
-    this.token = [];
-    this.color = "hsla(0, 100%, 50%, 1)";
+function Player(playerName) {
+    var mCpu = 0; // 0 for human, 1 for cpus
+    var mPlayerName = playerName;
+    var mColor = "hsla(0, 100%, 50%, 1)";
     // counter for the tokens the player currently has on the field
     var mTokenCount = 0;
     var mGame;
 
-    /**
-     * Initializes the player for a new game
-     */
-    this.initPlayer = function() {
-        this.token = [];
+
+
+    this.resetTokenCount = function() {
+        mTokenCount = 0;
+    }
+
+    this.getPlayerName = function() {
+        return mPlayerName;
+    }
+
+    this.isCPU = function() {
+        return mCpu == 1;
+    }
+
+    this.setCpu = function() {
+        mCpu = 1;
+    }
+
+    this.setColor = function(color) {
+        mColor = color;
+    }
+
+    this.getColor = function() {
+        return mColor;
     }
 
     /**

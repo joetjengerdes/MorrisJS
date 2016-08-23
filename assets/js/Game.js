@@ -34,11 +34,11 @@ function Game(player1, player2) {
      * is selected as the starting player.
      */
     this.newGame = function() {
-        mPlayer1.initPlayer();
         mPlayer1.setGame(this);
-        mPlayer2.initPlayer();
-        mPlayer2.cpu = 1;
-        mPlayer2.color = "hsla(120, 100%, 50%, 1)";
+        mPlayer1.resetTokenCount();
+        mPlayer2.resetTokenCount();
+        mPlayer2.setCpu();
+        mPlayer2.setColor("hsla(120, 100%, 50%, 1)");
         mPlayer2.setGame(this);
         mMode = 1;
         mGamefield.setToDefault();

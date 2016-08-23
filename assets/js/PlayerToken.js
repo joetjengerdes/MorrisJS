@@ -4,7 +4,7 @@ function PlayerToken(p) {
     var mSelected = false;
 
     this.getColor = function() {
-        return mPlayer.color;
+        return mPlayer.getColor();
     }
 
     this.getPlayer = function() {
