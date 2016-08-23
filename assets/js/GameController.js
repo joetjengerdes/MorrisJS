@@ -98,43 +98,46 @@ function GameController(game, stbar) {
     }
 
     function doTurnCPU() {
-        // do nothing: it's CPUs turn and user tried to do s.th.
-        // TODO: remove test
-        if (mGame.isPlacingPhase()) {
-            var vertices = mGame.getGamefield().getVertices();
-            for (var i = 0; i < vertices.length; i++) {
-                //var coord = mGame.convertVertexPosToArrayPos(i);
-                //console.log(coord);
-                if (!mGame.getGameProblemSolver().isTokenOnField(i)) {
-                    //console.log(mGame.getGamefield().field[coord.z][coord.y][coord.x]);
-                    mGame.createToken(i, true);
-                    //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
+        setTimeout(function() {
+            // do nothing: it's CPUs turn and user tried to do s.th.
+            // TODO: remove test
+            if (mGame.isPlacingPhase()) {
+                var vertices = mGame.getGamefield().getVertices();
+                for (var i = 0; i < vertices.length; i++) {
+                    //var coord = mGame.convertVertexPosToArrayPos(i);
+                    //console.log(coord);
+                    if (!mGame.getGameProblemSolver().isTokenOnField(i)) {
+                        //console.log(mGame.getGamefield().field[coord.z][coord.y][coord.x]);
+                        mGame.createToken(i, true);
+                        //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
 
-                    if (mGame.getRemoveFlag() == 1) {
-                        var vertices = mGame.getGamefield().getVertices();
-                        for (var i = 0; i < vertices.length; i++) {
-                            if (mGame.getGameProblemSolver().isTokenOnField(i) && mGame.removeToken(i)) {
-                                break;
+                        if (mGame.getRemoveFlag() == 1) {
+                            var vertices = mGame.getGamefield().getVertices();
+                            for (var i = 0; i < vertices.length; i++) {
+                                if (mGame.getGameProblemSolver().isTokenOnField(i) && mGame.removeToken(i)) {
+                                    break;
+                                }
                             }
+                            return;
                         }
-                        return;
+                        mGame.changeTurn();
+                        break;
                     }
-                    mGame.changeTurn();
-                    break;
+                }
+            } else {
+                var vertices = mGame.getGamefield().getVertices();
+                var gameProblemSolver = mGame.getGameProblemSolver();
+                for (var i = 0; i < vertices.length; i++) {
+                    var moves = gameProblemSolver.getPossibleMoves(i);
+                    if (moves.length > 0) {
+                        console.log("AUFRUG MOVE CPU");
+                        mGame.moveToken(i, moves[0]);
+                        break;
+                    }
                 }
             }
-        } else {
-            var vertices = mGame.getGamefield().getVertices();
-            var gameProblemSolver = mGame.getGameProblemSolver();
-            for (var i = 0; i < vertices.length; i++) {
-                var moves = gameProblemSolver.getPossibleMoves(i);
-                if (moves.length > 0) {
-                    console.log("AUFRUG MOVE CPU");
-                    mGame.moveToken(i, moves[0]);
-                    break;
-                }
-            }
-        }
+            mDrawController.redraw();
+        }, 300);
     }
 
     function getVerticeIndexOfCoords(x, y) {

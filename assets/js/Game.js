@@ -185,6 +185,7 @@ function Game(player1, player2) {
             !(field[objTo.z][objTo.y][objTo.x])) {
             mGamefield.getField()[objFrom.z][objFrom.y][objFrom.x] = null;
             this.createToken(posTo);
+            // TODO: remove wird nicht beachtet
             this.changeTurn();
         }
     }
