@@ -26,7 +26,7 @@ function GameController(game, stbar) {
     }
 
     this.doAction = function(x, y) {
-        if (game.removeFlag == 0) {
+        if (game.getRemoveFlag() == 0) {
             if (game.isPlacingPhase()) {
                 // it's the player1 turn, on human-cpu game this represents the
                 // human player
@@ -37,10 +37,10 @@ function GameController(game, stbar) {
                 if (game.isPlayerOneTurn()) {
                     var index = getVerticeIndexOfCoords(x, y);
 
-                    if (index != -1 && !game.gameProblemSolver.isTokenOnField(index)) {
+                    if (index != -1 && !game.getGameProblemSolver().isTokenOnField(index)) {
                         game.createToken(index, true);
 
-                        if (game.removeFlag == 0) {
+                        if (game.getRemoveFlag() == 0) {
                             game.changeTurn();
                         }
                     }
@@ -48,19 +48,19 @@ function GameController(game, stbar) {
                 } else {
                     // do nothing: it's CPUs turn and user tried to do s.th.
                     // TODO: remove test
-                    var vertices = game.gamefield.vertices;
+                    var vertices = game.getGamefield().vertices;
                     for (var i = 0; i < vertices.length; i++) {
                         //var coord = game.convertVertexPosToArrayPos(i);
                         //console.log(coord);
-                        if (!game.gameProblemSolver.isTokenOnField(i)) {
-                            //console.log(game.gamefield.field[coord.z][coord.y][coord.x]);
+                        if (!game.getGameProblemSolver().isTokenOnField(i)) {
+                            //console.log(game.getGamefield().field[coord.z][coord.y][coord.x]);
                             game.createToken(i, true);
                             //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
 
-                            if (game.removeFlag == 1) {
-                                var vertices = game.gamefield.vertices;
+                            if (game.getRemoveFlag() == 1) {
+                                var vertices = game.getGamefield().vertices;
                                 for (var i = 0; i < vertices.length; i++) {
-                                    if (game.gameProblemSolver.isTokenOnField(i) && game.removeToken(i)) {
+                                    if (game.getGameProblemSolver().isTokenOnField(i) && game.removeToken(i)) {
                                         break;
                                     }
                                 }
@@ -76,7 +76,7 @@ function GameController(game, stbar) {
                 gameStatusBar.setText("Select a token to move")
                 var index = getVerticeIndexOfCoords(x, y);
                 // select or reselect a token
-                if (index != -1 && game.gameProblemSolver.isTokenOnField(index)) {
+                if (index != -1 && game.getGameProblemSolver().isTokenOnField(index)) {
                     // player tried to select the enemies token
                     var token = getTokenOfField(index);
                     if (token.getPlayer() !== game.getCurrentPlayer()) return;
@@ -98,7 +98,7 @@ function GameController(game, stbar) {
                 if (game.isPlayerOneTurn()) {
                     var index = getVerticeIndexOfCoords(x, y);
                     console.log(index);
-                    if (index != -1 && game.gameProblemSolver.isTokenOnField(index)) {
+                    if (index != -1 && game.getGameProblemSolver().isTokenOnField(index)) {
 
                     }
                 }
@@ -110,7 +110,7 @@ function GameController(game, stbar) {
             var index = getVerticeIndexOfCoords(x, y);
 
             console.log(index);
-            if (index != -1 && game.gameProblemSolver.isTokenOnField(index)) {
+            if (index != -1 && game.getGameProblemSolver().isTokenOnField(index)) {
                 console.log(index);
                 if (game.removeToken(index)) {
                     console.log("REMOVE");
@@ -128,7 +128,7 @@ function GameController(game, stbar) {
     }
 
     function getVerticeIndexOfCoords(x, y) {
-        var vertices = game.gamefield.vertices;
+        var vertices = game.getGamefield().vertices;
         for (var i = 0; i < vertices.length; i++) {
             if (vertices[i].contains(x, y)) {
                 return i;
@@ -139,7 +139,7 @@ function GameController(game, stbar) {
 
     function getTokenOfField(vertIndex) {
         var coord = game.convertVertexPosToArrayPos(vertIndex);
-        return game.gamefield.field[coord.z][coord.y][coord.x];
+        return game.getGamefield().field[coord.z][coord.y][coord.x];
     }
 
     function selectToken(token) {
@@ -157,8 +157,8 @@ function GameController(game, stbar) {
         for (var z = 0; z < 3; z++) {
             for (var y = 0; y < 3; y++) {
                 for (var x = 0; x < 3; x++) {
-                    if (game.gamefield.field[z][y][x]) {
-                        game.gamefield.field[z][y][x].selected = false;
+                    if (game.getGamefield().field[z][y][x]) {
+                        game.getGamefield().field[z][y][x].selected = false;
                     }
                 }
             }

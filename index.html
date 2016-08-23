@@ -2,124 +2,124 @@
 <html>
 
 <head>
-   <meta charset="utf-8">
-   <title>Mühle-Spiel</title>
-   <script src="assets/js/PlayerToken.js"></script>
-   <script src="assets/js/Player.js"></script>
-   <script src="assets/js/Game.js"></script>
-   <script src="assets/js/GameField.js"></script>
-   <script src="assets/js/Vertex.js"></script>
-   <script src="assets/js/GameStatusBar.js"></script>
-   <script src="assets/js/EventController.js"></script>
-   <script src="assets/js/GameController.js"></script>
-   <script src="assets/js/DrawController.js"></script>
-   <script src="assets/js/services/SizeCalculationService.js"></script>
-   <script src="assets/js/services/GameProblemSolver.js"></script>
-   <link href="assets/css/style.css" rel="stylesheet" type="text/css">
-   <link href="//fonts.googleapis.com/css?family=Montserrat|Sail|Concert+One" rel="stylesheet" type="text/css">
+    <meta charset="utf-8">
+    <title>Mühle-Spiel</title>
+    <script src="assets/js/PlayerToken.js"></script>
+    <script src="assets/js/Player.js"></script>
+    <script src="assets/js/Game.js"></script>
+    <script src="assets/js/GameField.js"></script>
+    <script src="assets/js/Vertex.js"></script>
+    <script src="assets/js/GameStatusBar.js"></script>
+    <script src="assets/js/EventController.js"></script>
+    <script src="assets/js/GameController.js"></script>
+    <script src="assets/js/DrawController.js"></script>
+    <script src="assets/js/services/SizeCalculationService.js"></script>
+    <script src="assets/js/services/GameProblemSolver.js"></script>
+    <link href="assets/css/style.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Montserrat|Sail|Concert+One" rel="stylesheet" type="text/css">
 </head>
 
 <body onload>
-   <div id="wrapper">
-      <canvas id="game" width="600" height="600" tabindex="1">
-         <h1>To play this game Javascript must be activated!</h1>
-      </canvas>
-   </div>
-   <audio id="songplayer" autoplay="true">
-      <source src="assets/music/bg.mp3" type="audio/mpeg" />
-   </audio>
+    <div id="wrapper">
+        <canvas id="game" width="600" height="600" tabindex="1">
+            <h1>To play this game Javascript must be activated!</h1>
+        </canvas>
+    </div>
+    <audio id="songplayer" autoplay="true">
+        <source src="assets/music/bg.mp3" type="audio/mpeg" />
+    </audio>
 
-   <div class="music">
-      <label>Music</label>
-      <div id="music-switch" class="onoffswitch">
-         <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-         <label class="onoffswitch-label" for="myonoffswitch">
-            <span class="onoffswitch-inner"></span>
-            <span class="onoffswitch-switch"></span>
-         </label>
-      </div>
-   </div>
+    <div class="music">
+        <label>Music</label>
+        <div id="music-switch" class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+            <label class="onoffswitch-label" for="myonoffswitch">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+    </div>
 
-   <script>
-      var musicOn;
+    <script>
+        var musicOn;
 
-      (function() {
+        (function() {
 
-         musicOn = readCookie("musicOn");
+            musicOn = readCookie("musicOn");
 
-         console.log(musicOn);
-         doMusicControls();
-
-
-
-         var canvas = document.getElementById("game");
-
-         canvas.width = document.body.clientWidth; //document.width is obsolete
-         canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
-
-         var p1 = new Player('test');
-         //console.log(p1.isVisible());
-         var game = new Game(p1);
-
-         var gameStatusBar = new GameStatusBar();
-
-         var eventController = new EventController(canvas, game.gamefield);
-         var controller = new GameController(game, gameStatusBar);
-         eventController.setGameController(controller);
+            console.log(musicOn);
+            doMusicControls();
 
 
-         var drawControler = new DrawController(canvas, game.gamefield, gameStatusBar);
 
-         eventController.setDrawController(drawControler);
+            var canvas = document.getElementById("game");
 
-         controller.setDrawController(drawControler);
+            canvas.width = document.body.clientWidth; //document.width is obsolete
+            canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
 
-         // this is the second start, first is done in Game.js. second
-         // start causes the 2nd player to start
-         //game.newGame();
+            var p1 = new Player('Mr. Test');
+            //console.log(p1.isVisible());
+            var game = new Game(p1);
 
-         //controller.init();
-      })()
+            var gameStatusBar = new GameStatusBar();
 
-      function doMusicControls() {
-         var musicSwitch = document.getElementById("myonoffswitch");
-         var songplayer = document.getElementById("songplayer");
+            var eventController = new EventController(canvas, game.getGamefield());
+            var controller = new GameController(game, gameStatusBar);
+            eventController.setGameController(controller);
 
-         console.log(musicOn);
-         if (!musicOn) {
-            songplayer.pause();
-            musicSwitch.checked = false;
-         }
 
-         musicSwitch.addEventListener('change', function(e) {
-            musicOn = !musicOn;
-            if (musicOn) {
-               songplayer.play();
-            } else {
-               songplayer.pause();
+            var drawControler = new DrawController(canvas, game.getGamefield(), gameStatusBar);
+
+            eventController.setDrawController(drawControler);
+
+            controller.setDrawController(drawControler);
+
+            // this is the second start, first is done in Game.js. second
+            // start causes the 2nd player to start
+            //game.newGame();
+
+            //controller.init();
+        })()
+
+        function doMusicControls() {
+            var musicSwitch = document.getElementById("myonoffswitch");
+            var songplayer = document.getElementById("songplayer");
+
+            console.log(musicOn);
+            if (!musicOn) {
+                songplayer.pause();
+                musicSwitch.checked = false;
             }
-            writeCookie("musicOn", musicOn);
-         });
-      };
 
-      function readCookie(key) {
-         if (document.cookie) {
-            var start = document.cookie.indexOf(key + "=") + key.length + 1;
-            var end = document.cookie.indexOf(",");
-            if (end == -1) {
-               end = document.cookie.length;
+            musicSwitch.addEventListener('change', function(e) {
+                musicOn = !musicOn;
+                if (musicOn) {
+                    songplayer.play();
+                } else {
+                    songplayer.pause();
+                }
+                writeCookie("musicOn", musicOn);
+            });
+        };
+
+        function readCookie(key) {
+            if (document.cookie) {
+                var start = document.cookie.indexOf(key + "=") + key.length + 1;
+                var end = document.cookie.indexOf(",");
+                if (end == -1) {
+                    end = document.cookie.length;
+                }
+                return document.cookie.substring(start, end) == "true" ? true : false;
             }
-            return document.cookie.substring(start, end) == "true" ? true : false;
-         }
-         return true;
-      }
+            return true;
+        }
 
-      function writeCookie(key, value) {
-         var expireDate = new Date(new Date() + 1000 * 60 * 60 * 24 * 365);
-         document.cookie = key + "=" + value + ", expires=" +
-            expireDate.toGMTString() + "; path=/";
-      }
-   </script>
+        function writeCookie(key, value) {
+            var expireDate = new Date(new Date() + 1000 * 60 * 60 * 24 * 365);
+            document.cookie = key + "=" + value + ", expires=" +
+                expireDate.toGMTString() + "; path=/";
+        }
+    </script>
 </body>
 
 </html>

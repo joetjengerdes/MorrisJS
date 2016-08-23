@@ -1,13 +1,31 @@
-function Game(p1, p2) {
-    var mode = 1; // 0 end, 1 = start placing, 2 = normal play
-    this.removeFlag = 0; // TODO: can we do this with mode?
-    this.gamefield = new GameField();
-    var player1 = p1;
-    var player2 = p2 || new Player("CPU");
-    var currentTurn = null;
-    var tokensPlaced = 0;
+function Game(player1, player2) {
+    var mMode = 1; // 0 end, 1 = start placing, 2 = normal play
+    var mRemoveFlag = 0;
+    var mGamefield;
+    var mPlayer1;
+    var mPlayer2;
+    var mCurrenTurn = null;
+    var mTokensPlaced = 0;
+    var mGameProblemSolver;
     const MAX_TOKEN_TO_PLACE = 18;
-    this.gameProblemSolver = new GameProblemSolver(this);
+
+
+
+    /**
+     * initGame - This function initializes a the game object and sets member.
+     *
+     * @param  {Player} p1 description
+     * @param  {Player} p2 description
+     */
+    this.initGame = function(p1, p2) {
+        mPlayer1 = p1;
+        mPlayer2 = p2 || new Player("CPU");
+
+        mGamefield = new GameField();
+        mGameProblemSolver = new GameProblemSolver(this);
+        this.newGame();
+    }
+
 
     /**
      * This function starts a new game, everything
@@ -16,18 +34,18 @@ function Game(p1, p2) {
      * is selected as the starting player.
      */
     this.newGame = function() {
-        player1.initPlayer();
-        player1.setGame(this);
-        player2.initPlayer();
-        player2.cpu = 1;
-        player2.color = "hsla(120, 100%, 50%, 1)";
-        player2.setGame(this);
-        this.gamemode = 0;
-        this.gamefield.setToDefault();
-        if (currentTurn == null || currentTurn == player2) {
-            currentTurn = player1;
+        mPlayer1.initPlayer();
+        mPlayer1.setGame(this);
+        mPlayer2.initPlayer();
+        mPlayer2.cpu = 1;
+        mPlayer2.color = "hsla(120, 100%, 50%, 1)";
+        mPlayer2.setGame(this);
+        mMode = 1;
+        mGamefield.setToDefault();
+        if (mCurrenTurn == null || mCurrenTurn == mPlayer2) {
+            mCurrenTurn = mPlayer1;
         } else {
-            currentTurn = player2;
+            mCurrenTurn = mPlayer2;
         }
     }
 
@@ -38,7 +56,7 @@ function Game(p1, p2) {
      * @return {Boolean} true if it's the placing phase, otherwise false
      */
     this.isPlacingPhase = function() {
-        return mode == 1;
+        return mMode == 1;
     }
 
     /**
@@ -46,7 +64,7 @@ function Game(p1, p2) {
      * @return {Boolean} true if it's ended, otherwise false
      */
     this.hasEnded = function() {
-        return mode == 0;
+        return mMode == 0;
     }
 
     /**
@@ -55,15 +73,15 @@ function Game(p1, p2) {
      */
     this.isPlayerOneTurn = function() {
         //console.log(currentTurn);
-        return currentTurn !== 'undefinied' && currentTurn === player1;
+        return mCurrenTurn !== 'undefinied' && mCurrenTurn === mPlayer1;
     }
 
     this.getCurrentPlayer = function() {
-        return currentTurn;
+        return mCurrenTurn;
     }
 
     this.getOpponentPlayer = function() {
-        return currentTurn === player1 ? player2 : player1;
+        return mCurrenTurn === mPlayer1 ? mPlayer2 : mPlayer1;
     }
 
     /**
@@ -72,13 +90,13 @@ function Game(p1, p2) {
      * count will count up to determine if the next phase of the game starts.
      */
     this.changeTurn = function() {
-        if (mode == 1) {
-            tokensPlaced++;
-            if (tokensPlaced >= MAX_TOKEN_TO_PLACE) {
-                mode = 2;
+        if (mMode == 1) {
+            mTokensPlaced++;
+            if (mTokensPlaced >= MAX_TOKEN_TO_PLACE) {
+                mMode = 2;
             }
         }
-        currentTurn = currentTurn === player1 ? player2 : player1;
+        mCurrenTurn = mCurrenTurn === mPlayer1 ? mPlayer2 : mPlayer1;
     }
 
     /**
@@ -90,19 +108,17 @@ function Game(p1, p2) {
      * because it has been moved. Default is false.p
      */
     this.createToken = function(pos, placed = false) {
-        var token = new PlayerToken(currentTurn);
+        var token = new PlayerToken(mCurrenTurn);
         token.vertexId = pos;
         var obj = this.convertVertexPosToArrayPos(pos);
-        console.log("POSITION: Z Y X :" + obj.z + " | " + obj.y + " | " + obj.x);
-        console.log(this.gamefield);
-        console.log(this.gamefield.field);
-        this.gamefield.field[obj.z][obj.y][obj.x] = token;
-        if (this.gameProblemSolver.hasMorris(token)) {
+
+        mGamefield.field[obj.z][obj.y][obj.x] = token;
+        if (mGameProblemSolver.hasMorris(token)) {
             console.log("MILL!WUHU!");
-            this.removeFlag = 1;
+            mRemoveFlag = 1;
         }
         if (placed) {
-            currentTurn.placeToken();
+            mCurrenTurn.placeToken();
         }
     }
 
@@ -115,11 +131,11 @@ function Game(p1, p2) {
     this.removeToken = function(pos) {
         console.log(pos);
         var obj = this.convertVertexPosToArrayPos(pos);
-        var token = this.gamefield.field[obj.z][obj.y][obj.x];
+        var token = mGamefield.field[obj.z][obj.y][obj.x];
 
-        if (token.getPlayer() !== currentTurn) {
-            this.gamefield.field[obj.z][obj.y][obj.x] = null;
-            this.removeFlag = 0;
+        if (token.getPlayer() !== mCurrenTurn) {
+            mGamefield.field[obj.z][obj.y][obj.x] = null;
+            mRemoveFlag = 0;
             var enemy = token.getPlayer();
             enemy.lostToken();
             if (enemy.hasLost()) {
@@ -139,18 +155,18 @@ function Game(p1, p2) {
      */
     this.moveToken = function(posFrom, posTo) {
         // player cannot move the token to the selected field
-        if (!currentTurn.canJump() && this.gameProblemSolver.getPossibleMoves(posFrom).indexOf(posTo) < 0) {
+        if (!currentTurn.canJump() && mGameProblemSolver.getPossibleMoves(posFrom).indexOf(posTo) < 0) {
             return;
         }
 
         var objTo = this.convertVertexPosToArrayPos(posTo);
         var objFrom = this.convertVertexPosToArrayPos(posFrom);
 
-        var field = this.gamefield.field;
+        var field = mGamefield.field;
 
-        if (field[objFrom.z][objFrom.y][objFrom.x].getPlayer() === currentTurn &&
+        if (field[objFrom.z][objFrom.y][objFrom.x].getPlayer() === mCurrenTurn &&
             !(field[objTo.z][objTo.y][objTo.x])) {
-            this.gamefield.field[objFrom.z][objFrom.y][objFrom.x] = null;
+            mGamefield.field[objFrom.z][objFrom.y][objFrom.x] = null;
             this.createToken(posTo);
         }
     }
@@ -186,6 +202,19 @@ function Game(p1, p2) {
         return pos;
     }
 
-    this.newGame();
+    this.getRemoveFlag = function() {
+        return mRemoveFlag;
+    }
+
+    this.getGamefield = function() {
+        return mGamefield;
+    }
+
+    this.getGameProblemSolver = function() {
+        return mGameProblemSolver;
+    }
+
+
+    this.initGame(player1, player2);
 
 }

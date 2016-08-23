@@ -1,6 +1,6 @@
 function GameProblemSolver(game) {
     var mGame = game;
-    var mField = game.gamefield.field;
+    var mField = game.getGamefield().field;
     /**
      * hasMorris - checks if the token is withing a morris.
      *
@@ -105,7 +105,7 @@ function GameProblemSolver(game) {
      */
     this.numberOfMoves = function(player, field) {
         if (!field) {
-            mField = mGame.gamefield.field;
+            mField = mGame.getGamefield().field;
         }
         var num = 0;
         for (var z = 0; z < mField.length; z++) {
@@ -154,7 +154,7 @@ function GameProblemSolver(game) {
      * @return {int}        number of moves
      */
     this.numberOfPossibleMoves = function(player) {
-        var clonedField = mGame.gamefield.cloneField();
+        var clonedField = mGame.getGamefield().cloneField();
         var num = 0;
         for (var z = 0; z < clonedField.length; z++) {
             for (var y = 0; y < clonedField[0].length; y++) {
@@ -411,11 +411,11 @@ function GameProblemSolver(game) {
      * @return {int[]}           all vertex indices of possible movements
      */
     this.getPossibleMoves = function(vertIndex) {
-        var coords = game.convertVertexPosToArrayPos(vertIndex);
+        var coords = mGame.convertVertexPosToArrayPos(vertIndex);
         var x = coords.x;
         var y = coords.y;
         var z = coords.z;
-        var field = game.gamefield.field;
+        var field = mGame.getGamefield().field;
 
         var moves = [];
 
@@ -425,16 +425,16 @@ function GameProblemSolver(game) {
         var right = this.getMoveRightCoords(z, y, x, field);
 
         if (up) {
-            moves.push(game.convertArrayPosToVertexPos(up.z, up.y, up.x));
+            moves.push(mGame.convertArrayPosToVertexPos(up.z, up.y, up.x));
         }
         if (down) {
-            moves.push(game.convertArrayPosToVertexPos(down.z, down.y, down.x));
+            moves.push(mGame.convertArrayPosToVertexPos(down.z, down.y, down.x));
         }
         if (left) {
-            moves.push(game.convertArrayPosToVertexPos(left.z, left.y, left.x));
+            moves.push(mGame.convertArrayPosToVertexPos(left.z, left.y, left.x));
         }
         if (right) {
-            moves.push(game.convertArrayPosToVertexPos(right.z, right.y, right.x));
+            moves.push(mGame.convertArrayPosToVertexPos(right.z, right.y, right.x));
         }
 
         return moves;
@@ -446,7 +446,7 @@ function GameProblemSolver(game) {
      * @param  {int} z     z coordinate
      * @param  {int} y     y coordinates
      * @param  {int} x     x coordinates
-     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @param  {PlayerToken[][][]} field the getGamefield() as an 3d array
      * @return {boolean}       true if you could move up
      */
     this.canMoveUp = function(z, y, x, field) {
@@ -459,7 +459,7 @@ function GameProblemSolver(game) {
      * @param  {int} z     z coordinate
      * @param  {int} y     y coordinates
      * @param  {int} x     x coordinates
-     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @param  {PlayerToken[][][]} field the getGamefield() as an 3d array
      * @return {boolean}       true if you could move down
      */
     this.canMoveDown = function(z, y, x, field) {
@@ -472,7 +472,7 @@ function GameProblemSolver(game) {
      * @param  {int} z     z coordinate
      * @param  {int} y     y coordinates
      * @param  {int} x     x coordinates
-     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @param  {PlayerToken[][][]} field the getGamefield() as an 3d array
      * @return {boolean}       true if you could move right
      */
     this.canMoveRight = function(z, y, x, field) {
@@ -485,7 +485,7 @@ function GameProblemSolver(game) {
      * @param  {int} z     z coordinate
      * @param  {int} y     y coordinates
      * @param  {int} x     x coordinates
-     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @param  {PlayerToken[][][]} field the getGamefield() as an 3d array
      * @return {boolean}       true if you could move left
      */
     this.canMoveLeft = function(z, y, x, field) {
@@ -498,7 +498,7 @@ function GameProblemSolver(game) {
      * @param  {int} z     z coordinate
      * @param  {int} y     y coordinates
      * @param  {int} x     x coordinates
-     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @param  {PlayerToken[][][]} field the getGamefield() as an 3d array
      * @return {x,y,z}       coordinates of field above, if movement could be
      * done, otherwise null
      */
@@ -527,7 +527,7 @@ function GameProblemSolver(game) {
      * @param  {int} z     z coordinate
      * @param  {int} y     y coordinates
      * @param  {int} x     x coordinates
-     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @param  {PlayerToken[][][]} field the getGamefield() as an 3d array
      * @return {x,y,z}       coordinates of field below, if movement could be
      * done, otherwise null
      */
@@ -556,7 +556,7 @@ function GameProblemSolver(game) {
      * @param  {int} z     z coordinate
      * @param  {int} y     y coordinates
      * @param  {int} x     x coordinates
-     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @param  {PlayerToken[][][]} field the getGamefield() as an 3d array
      * @return {x,y,z}       coordinates of left field, if movement could be
      * done, otherwise null
      */
@@ -585,7 +585,7 @@ function GameProblemSolver(game) {
      * @param  {int} z     z coordinate
      * @param  {int} y     y coordinates
      * @param  {int} x     x coordinates
-     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @param  {PlayerToken[][][]} field the getGamefield() as an 3d array
      * @return {x,y,z}       coordinates of right field, if movement could be
      * done, otherwise null
      */
