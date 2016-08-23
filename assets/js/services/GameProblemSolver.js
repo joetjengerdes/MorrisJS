@@ -405,47 +405,209 @@ function GameProblemSolver(game) {
         return false;
     }
 
+    /**
+     * The functions returns all possible places of the given vertIndex where
+     * this could be moved to as an array. This array also contains vertIndeces.
+     * A move can be done, if there is a field connect and the field is free
+     * (there is no token of any player on it).
+     * @param  {int} vertIndex vertex index of the token which should be check
+     * @return {int[]}           all vertex indices of possible movements
+     */
+    this.getPossibleMoves = function(vertIndex) {
+        var coords = game.convertVertexPosToArrayPos(vertIndex);
+        var x = coords.x;
+        var y = coords.y;
+        var z = coords.z;
+        var field = game.gamefield.field;
+
+        var moves = [];
+
+        var up = this.getMoveUpCoords(z, y, x, field);
+        var down = this.getMoveDownCoords(z, y, x, field);
+        var left = this.getMoveLeftCoords(z, y, x, field);
+        var right = this.getMoveRightCoords(z, y, x, field);
+
+        if (up) {
+            moves.push(game.convertArrayPosToVertexPos(up.z, up.y, up.x));
+        }
+        if (down) {
+            moves.push(game.convertArrayPosToVertexPos(down.z, down.y, down.x));
+        }
+        if (left) {
+            moves.push(game.convertArrayPosToVertexPos(left.z, left.y, left.x));
+        }
+        if (right) {
+            moves.push(game.convertArrayPosToVertexPos(right.z, right.y, right.x));
+        }
+
+        return moves;
+    }
+
+    /**
+     * Returns if a token can move up from the given coordinates. It can only
+     * move, if there is a field and there is no token on it.
+     * @param  {int} z     z coordinate
+     * @param  {int} y     y coordinates
+     * @param  {int} x     x coordinates
+     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @return {boolean}       true if you could move up
+     */
     this.canMoveUp = function(z, y, x, field) {
+        return this.getMoveUpCoords(z, y, x, field) ? true : false;
+    }
+
+    /**
+     * Returns if a token can move down from the given coordinates. It can only
+     * move, if there is a field and there is no token on it.
+     * @param  {int} z     z coordinate
+     * @param  {int} y     y coordinates
+     * @param  {int} x     x coordinates
+     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @return {boolean}       true if you could move down
+     */
+    this.canMoveDown = function(z, y, x, field) {
+        return this.getMoveDownCoords(z, y, x, field) ? true : false;
+    }
+
+    /**
+     * Returns if a token can move right from the given coordinates. It can only
+     * move, if there is a field and there is no token on it.
+     * @param  {int} z     z coordinate
+     * @param  {int} y     y coordinates
+     * @param  {int} x     x coordinates
+     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @return {boolean}       true if you could move right
+     */
+    this.canMoveRight = function(z, y, x, field) {
+        return this.getMoveRightCoords(z, y, x, field) ? true : false;
+    }
+
+    /**
+     * Returns if a token can move left from the given coordinates. It can only
+     * move, if there is a field and there is no token on it.
+     * @param  {int} z     z coordinate
+     * @param  {int} y     y coordinates
+     * @param  {int} x     x coordinates
+     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @return {boolean}       true if you could move left
+     */
+    this.canMoveLeft = function(z, y, x, field) {
+        return this.getMoveLeftCoords(z, y, x, field) ? true : false;
+    }
+
+    /**
+     * Returns the coordinates of the field above, if there is a field and
+     * there is no token on it. Otherwise it returns null
+     * @param  {int} z     z coordinate
+     * @param  {int} y     y coordinates
+     * @param  {int} x     x coordinates
+     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @return {x,y,z}       coordinates of field above, if movement could be
+     * done, otherwise null
+     */
+    this.getMoveUpCoords = function(z, y, x, field) {
         if (x == 1) {
             if ((z > 0) && !field[z - 1][y][x]) {
-                return true;
+                return {
+                    x: x,
+                    y: y,
+                    z: z - 1
+                }
             }
         } else if ((y > 0) && !field[z][y - 1][x]) {
-            return true;
+            return {
+                x: x,
+                y: y - 1,
+                z: z
+            }
         }
-        return false;
+        return null;
     }
 
-    this.canMoveDown = function(z, y, x, field) {
+    /**
+     * Returns the coordinates of the field below, if there is a field and
+     * there is no token on it. Otherwise it returns null
+     * @param  {int} z     z coordinate
+     * @param  {int} y     y coordinates
+     * @param  {int} x     x coordinates
+     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @return {x,y,z}       coordinates of field below, if movement could be
+     * done, otherwise null
+     */
+    this.getMoveDownCoords = function(z, y, x, field) {
         if (x == 1) {
             if ((z < 2) && !field[z + 1][y][x]) {
-                return true;
+                return {
+                    x: x,
+                    y: y,
+                    z: z + 1
+                }
             }
         } else if ((y < 2) && !field[z][y + 1][x]) {
-            return true;
+            return {
+                x: x,
+                y: y + 1,
+                z: z
+            }
         }
-        return false;
+        return null;
     }
 
-    this.canMoveRight = function(z, y, x, field) {
+    /**
+     * Returns the coordinates of the field to the left, if there is a field and
+     * there is no token on it. Otherwise it returns null
+     * @param  {int} z     z coordinate
+     * @param  {int} y     y coordinates
+     * @param  {int} x     x coordinates
+     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @return {x,y,z}       coordinates of left field, if movement could be
+     * done, otherwise null
+     */
+    this.getMoveRightCoords = function(z, y, x, field) {
         if (y == 1) {
             if ((z < 2) && !field[z + 1][y][x]) {
-                return true;
+                return {
+                    x: x,
+                    y: y,
+                    z: z + 1
+                }
             }
         } else if ((x < 2) && !field[z][y][x + 1]) {
-            return true;
+            return {
+                x: x + 1,
+                y: y,
+                z: z
+            }
         }
-        return false;
+        return null;
     }
 
-    this.canMoveLeft = function(z, y, x, field) {
+    /**
+     * Returns the coordinates of the field to the right, if there is a field and
+     * there is no token on it. Otherwise it returns null
+     * @param  {int} z     z coordinate
+     * @param  {int} y     y coordinates
+     * @param  {int} x     x coordinates
+     * @param  {PlayerToken[][][]} field the gamefield as an 3d array
+     * @return {x,y,z}       coordinates of right field, if movement could be
+     * done, otherwise null
+     */
+    this.getMoveLeftCoords = function(z, y, x, field) {
         if (y == 1) {
             if ((z > 0) && !field[z - 1][y][x]) {
-                return true;
+                return {
+                    x: x,
+                    y: y,
+                    z: z - 1
+                }
             }
         } else if ((x > 0) && !field[z][y][x - 1]) {
-            return true;
+            return {
+                x: x - 1,
+                y: y,
+                z: z
+            }
         }
-        return false;
+        return null;
     }
 }

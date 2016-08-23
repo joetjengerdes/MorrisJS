@@ -126,6 +126,11 @@ function Game(p1, p2) {
      * @param  {int} posTo   position where to move
      */
     this.moveToken = function(posFrom, posTo) {
+        // player cannot move the token to the selected field
+        if (this.gameProblemSolver.getPossibleMoves(posFrom).indexOf(posTo) < 0) {
+            return;
+        }
+
         var objTo = this.convertVertexPosToArrayPos(posTo);
         var objFrom = this.convertVertexPosToArrayPos(posFrom);
 
@@ -167,10 +172,6 @@ function Game(p1, p2) {
         var pos = base + diff;
 
         return pos;
-    }
-
-    function isTokenOfCurrentPlayer(vertexId) {
-
     }
 
     this.newGame();
