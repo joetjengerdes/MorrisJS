@@ -8,7 +8,7 @@ function Game(player1, player2) {
     var mTokensPlaced = 0;
     var mGameProblemSolver;
     const MAX_TOKEN_TO_PLACE = 18;
-
+    var soundController = new SoundController();
 
 
     /**
@@ -120,6 +120,7 @@ function Game(player1, player2) {
         if (placed) {
             mCurrenTurn.placeToken();
         }
+        soundController.playMoveSound();
     }
 
     /**
@@ -154,6 +155,8 @@ function Game(player1, player2) {
         if (enemy.hasLost()) {
             mode = 0;
         }
+
+        soundController.playTokenStealSound();
 
         this.changeTurn();
         return true;
