@@ -129,7 +129,6 @@ function Game(player1, player2) {
      * @return {Boolean} success
      */
     this.removeToken = function(pos) {
-
         var obj = this.convertVertexPosToArrayPos(pos);
         var token = mGamefield.field[obj.z][obj.y][obj.x];
 
@@ -140,8 +139,6 @@ function Game(player1, player2) {
         var enemy = mCurrenTurn === mPlayer1 ? mPlayer2 : mPlayer1;
         // get all tokens of the enemy that are not in a morris
         var tokenNotInMorris = mGameProblemSolver.getAllTokenNotInMorris(enemy);
-
-        console.log(tokenNotInMorris);
 
         // enemy player has stones not in a morris, but he selected one in a
         // morris is not allowed. user have to choose another
@@ -157,6 +154,8 @@ function Game(player1, player2) {
         if (enemy.hasLost()) {
             mode = 0;
         }
+
+        this.changeTurn();
         return true;
     }
 
@@ -170,7 +169,7 @@ function Game(player1, player2) {
      */
     this.moveToken = function(posFrom, posTo) {
         // player cannot move the token to the selected field
-        if (!currentTurn.canJump() && mGameProblemSolver.getPossibleMoves(posFrom).indexOf(posTo) < 0) {
+        if (!mCurrenTurn.canJump() && mGameProblemSolver.getPossibleMoves(posFrom).indexOf(posTo) < 0) {
             return;
         }
 
