@@ -1,32 +1,32 @@
 function SizeCalculationService(canvas, gf) {
-    this.canvas = canvas;
-    var gamefield = gf;
+    var mCanvas = canvas;
+    var mGamefield = gf;
 
     this.calculate = function() {
 
-        canvas.width = document.body.clientWidth; //document.width is obsolete
-        canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
+        mCanvas.width = document.body.clientWidth; //document.width is obsolete
+        mCanvas.height = Math.max(window.innerHeight, document.body.clientHeight);
 
-        var canvasHeight = Math.min(window.innerHeight, document.body.clientHeight);
+        var mCanvasHeight = Math.min(window.innerHeight, document.body.clientHeight);
 
         var size;
-        if (canvasHeight <= canvas.width) {
-            size = canvasHeight;
+        if (mCanvasHeight <= mCanvas.width) {
+            size = mCanvasHeight;
         } else {
-            size = canvas.width;
+            size = mCanvas.width;
         }
 
-        gamefield.height = size;
-        gamefield.width = size;
+        mGamefield.height = size;
+        mGamefield.width = size;
 
-        gamefield.spaceBetween = (2 * size) / 15;
-        gamefield.circleSize = (2 * size) / 120;
+        mGamefield.spaceBetween = (2 * size) / 15;
+        mGamefield.circleSize = (2 * size) / 120;
 
-        gamefield.lineWidth = (2 * size) / 350;
-        if (gamefield.circleSize < 1) {
-            gamefield.circleSize = 1
+        mGamefield.lineWidth = (2 * size) / 350;
+        if (mGamefield.circleSize < 1) {
+            mGamefield.circleSize = 1
         };
-        gamefield.leftOffset = (canvas.width - size) / 2;
+        mGamefield.leftOffset = (mCanvas.width - size) / 2;
     }
 
 }
