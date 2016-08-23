@@ -1,20 +1,22 @@
 function GameController(game, stbar) {
-    this.valid = false;
-    this.game = game;
-    var controller = this;
-    var eventController = null;
-    var drawController = null;
+    var mGame = game;
+    var mController = this;
+    var mEventController = null;
+    var mDrawController = null;
     // flag if a player selected a token
-    var playerSelectedToken = null;
+    var mSelectedPlayerToken = null;
+    var mGameStatusBar = stbar;
 
-    var gameStatusBar = stbar;
+    this.getGame = function() {
+        return mGame;
+    }
 
     this.setDrawController = function(drawController_) {
-        drawController = drawController_;
+        mDrawController = drawController_;
     }
 
     this.getDrawController = function() {
-        return drawController;
+        return mDrawController;
     }
 
     this.setEventController = function(eventController) {
@@ -22,70 +24,70 @@ function GameController(game, stbar) {
     }
 
     this.getEventController = function() {
-        return eventController;
+        return mEventController;
     }
 
     this.doAction = function(x, y) {
-        if (game.getRemoveFlag() == 0) {
-            if (game.isPlacingPhase()) {
-                // it's the player1 turn, on human-cpu game this represents the
+        if (mGame.getRemoveFlag() == 0) {
+            if (mGame.isPlacingPhase()) {
+                // it's the player1 turn, on human-cpu mGame this represents the
                 // human player
-                //console.log("Is placing PHASE: " + game.isPlacingPhase());
+                //console.log("Is placing PHASE: " + mGame.isPlacingPhase());
 
-                gameStatusBar.setText("Place a stone!");
+                mGameStatusBar.setText("Place a stone!");
 
-                if (game.isPlayerOneTurn()) {
+                if (mGame.isPlayerOneTurn()) {
                     var index = getVerticeIndexOfCoords(x, y);
 
-                    if (index != -1 && !game.getGameProblemSolver().isTokenOnField(index)) {
-                        game.createToken(index, true);
+                    if (index != -1 && !mGame.getGameProblemSolver().isTokenOnField(index)) {
+                        mGame.createToken(index, true);
 
-                        if (game.getRemoveFlag() == 0) {
-                            game.changeTurn();
+                        if (mGame.getRemoveFlag() == 0) {
+                            mGame.changeTurn();
                         }
                     }
 
                 } else {
                     // do nothing: it's CPUs turn and user tried to do s.th.
                     // TODO: remove test
-                    var vertices = game.getGamefield().vertices;
+                    var vertices = mGame.getGamefield().vertices;
                     for (var i = 0; i < vertices.length; i++) {
-                        //var coord = game.convertVertexPosToArrayPos(i);
+                        //var coord = mGame.convertVertexPosToArrayPos(i);
                         //console.log(coord);
-                        if (!game.getGameProblemSolver().isTokenOnField(i)) {
-                            //console.log(game.getGamefield().field[coord.z][coord.y][coord.x]);
-                            game.createToken(i, true);
+                        if (!mGame.getGameProblemSolver().isTokenOnField(i)) {
+                            //console.log(mGame.getGamefield().field[coord.z][coord.y][coord.x]);
+                            mGame.createToken(i, true);
                             //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
 
-                            if (game.getRemoveFlag() == 1) {
-                                var vertices = game.getGamefield().vertices;
+                            if (mGame.getRemoveFlag() == 1) {
+                                var vertices = mGame.getGamefield().vertices;
                                 for (var i = 0; i < vertices.length; i++) {
-                                    if (game.getGameProblemSolver().isTokenOnField(i) && game.removeToken(i)) {
+                                    if (mGame.getGameProblemSolver().isTokenOnField(i) && mGame.removeToken(i)) {
                                         break;
                                     }
                                 }
                             }
-                            game.changeTurn();
+                            mGame.changeTurn();
                             break;
                         }
                     }
                 }
-            } else if (game.hasEnded()) {
-                gameStatusBar.setText("Game ended!");
-            } else { // gamemod: normal play
-                gameStatusBar.setText("Select a token to move")
+            } else if (mGame.hasEnded()) {
+                mGameStatusBar.setText("Game ended!");
+            } else { // mGamemod: normal play
+                mGameStatusBar.setText("Select a token to move")
                 var index = getVerticeIndexOfCoords(x, y);
                 // select or reselect a token
-                if (index != -1 && game.getGameProblemSolver().isTokenOnField(index)) {
+                if (index != -1 && mGame.getGameProblemSolver().isTokenOnField(index)) {
                     // player tried to select the enemies token
                     var token = getTokenOfField(index);
-                    if (token.getPlayer() !== game.getCurrentPlayer()) return;
+                    if (token.getPlayer() !== mGame.getCurrentPlayer()) return;
                     selectToken(token);
                 }
                 // player clicked on a free spot, so he wants to move the selected
                 else {
                     // player did not select any token to move
-                    if (!playerSelectedToken) return;
+                    if (!mSelectedPlayerToken) return;
 
                     doMovement(x, y);
                     unselectAllOtherToken();
@@ -95,40 +97,40 @@ function GameController(game, stbar) {
 
                 console.log("normal play");
 
-                if (game.isPlayerOneTurn()) {
+                if (mGame.isPlayerOneTurn()) {
                     var index = getVerticeIndexOfCoords(x, y);
                     console.log(index);
-                    if (index != -1 && game.getGameProblemSolver().isTokenOnField(index)) {
+                    if (index != -1 && mGame.getGameProblemSolver().isTokenOnField(index)) {
 
                     }
                 }
             }
         } else {
-            gameStatusBar.setText("Remove a stone!");
+            mGameStatusBar.setText("Remove a stone!");
 
             console.log("remove" + x + " " + y);
             var index = getVerticeIndexOfCoords(x, y);
 
             console.log(index);
-            if (index != -1 && game.getGameProblemSolver().isTokenOnField(index)) {
+            if (index != -1 && mGame.getGameProblemSolver().isTokenOnField(index)) {
                 console.log(index);
-                if (game.removeToken(index)) {
+                if (mGame.removeToken(index)) {
                     console.log("REMOVE");
-                    game.changeTurn();
-                    gameStatusBar.setText("Token removed!");
+                    mGame.changeTurn();
+                    mGameStatusBar.setText("Token removed!");
                     //break;
                 } else {
-                    gameStatusBar.setText("You cannot remove your own token!");
+                    mGameStatusBar.setText("You cannot remove your own token!");
                 }
             } else {
-                gameStatusBar.setText("There's no token on this field");
+                mGameStatusBar.setText("There's no token on this field");
             }
         }
-        drawController.redraw();
+        mDrawController.redraw();
     }
 
     function getVerticeIndexOfCoords(x, y) {
-        var vertices = game.getGamefield().vertices;
+        var vertices = mGame.getGamefield().vertices;
         for (var i = 0; i < vertices.length; i++) {
             if (vertices[i].contains(x, y)) {
                 return i;
@@ -138,27 +140,27 @@ function GameController(game, stbar) {
     }
 
     function getTokenOfField(vertIndex) {
-        var coord = game.convertVertexPosToArrayPos(vertIndex);
-        return game.getGamefield().field[coord.z][coord.y][coord.x];
+        var coord = mGame.convertVertexPosToArrayPos(vertIndex);
+        return mGame.getGamefield().field[coord.z][coord.y][coord.x];
     }
 
     function selectToken(token) {
         // a player had selected a token before, so all token needs to be set
         // to not selected again
-        if (playerSelectedToken) {
+        if (mSelectedPlayerToken) {
             unselectAllOtherToken();
         }
         token.selected = true;
-        playerSelectedToken = token;
+        mSelectedPlayerToken = token;
     }
 
     function unselectAllOtherToken() {
-        playerSelectedToken = null;
+        mSelectedPlayerToken = null;
         for (var z = 0; z < 3; z++) {
             for (var y = 0; y < 3; y++) {
                 for (var x = 0; x < 3; x++) {
-                    if (game.getGamefield().field[z][y][x]) {
-                        game.getGamefield().field[z][y][x].selected = false;
+                    if (mGame.getGamefield().field[z][y][x]) {
+                        mGame.getGamefield().field[z][y][x].selected = false;
                     }
                 }
             }
@@ -166,7 +168,7 @@ function GameController(game, stbar) {
     }
 
     function doMovement(x, y) {
-        game.moveToken(playerSelectedToken.vertexId,
+        mGame.moveToken(mSelectedPlayerToken.vertexId,
             getVerticeIndexOfCoords(x, y));
     }
 }
