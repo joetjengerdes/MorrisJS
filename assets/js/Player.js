@@ -51,7 +51,7 @@ function Player(playerName, color) {
      * @return {Boolean} true if game lost, false if game running or he won
      */
     this.hasLost = function() {
-        return mTokenCount < 2 && !mGame.isPlacingPhase();
+        return mTokenCount < 3 && !mGame.isPlacingPhase();
     }
 
 }

@@ -17,7 +17,7 @@ function Game(p1, p2) {
      */
     this.newGame = function() {
         player1.initPlayer();
-        player2.setGame(this);
+        player1.setGame(this);
         player2.initPlayer();
         player2.cpu = 1;
         player2.color = "hsla(120, 100%, 50%, 1)";
@@ -120,7 +120,11 @@ function Game(p1, p2) {
         if (token.getPlayer() !== currentTurn) {
             this.gamefield.field[obj.z][obj.y][obj.x] = null;
             this.removeFlag = 0;
-            token.getPlayer().lostToken();
+            var enemy = token.getPlayer();
+            enemy.lostToken();
+            if (enemy.hasLost()) {
+                mode = 0;
+            }
             return true;
         }
         return false;
@@ -135,7 +139,7 @@ function Game(p1, p2) {
      */
     this.moveToken = function(posFrom, posTo) {
         // player cannot move the token to the selected field
-        if (this.gameProblemSolver.getPossibleMoves(posFrom).indexOf(posTo) < 0) {
+        if (!currentTurn.canJump() && this.gameProblemSolver.getPossibleMoves(posFrom).indexOf(posTo) < 0) {
             return;
         }
 
