@@ -12,8 +12,8 @@ function GameProblemSolver(game) {
         var vertexId = token.vertexId;
 
         // TODO: rausnehmen nach dem testen
-        console.log("CurrenPlayers Moves: " + this.numberOfMoves(game.getCurrentPlayer(), game.gamefield.field));
-        console.log("OpponentPlayers Moves: " + this.numberOfMoves(game.getOpponentPlayer(), game.gamefield.field));
+        console.log("CurrenPlayers Moves: " + this.numberOfPossibleMoves(game.getCurrentPlayer()));
+        console.log("OpponentPlayers Moves: " + this.numberOfPossibleMoves(game.getOpponentPlayer()));
 
         var coords = game.convertVertexPosToArrayPos(vertexId);
 
@@ -154,7 +154,7 @@ function GameProblemSolver(game) {
      * @return {int}        number of moves
      */
     this.numberOfPossibleMoves = function(player) {
-        var clonedField = game.gamefield.clone().field;
+        var clonedField = game.gamefield.cloneField();
         var num = 0;
         for (var z = 0; z < clonedField.length; z++) {
             for (var y = 0; y < clonedField[0].length; y++) {
@@ -166,7 +166,7 @@ function GameProblemSolver(game) {
                 }
             }
         }
-        return numberOfMoves(player, clonedField);
+        return this.numberOfMoves(player, clonedField);
     }
 
     this.numberOfMorris = function(player) {
