@@ -118,15 +118,24 @@ function Game(p1, p2) {
         return false;
     }
 
+    /**
+     * This function moves a token from a player which is given as
+     * vertex index in posFrom and moves it to a <b>free</b> position
+     * given in posTo.
+     * @param  {int} posFrom position of token to move
+     * @param  {int} posTo   position where to move
+     */
     this.moveToken = function(posFrom, posTo) {
-        console.log(posFrom);
-        console.log(posTo);
-        console.log(this.createToken);
-        //playerSelectedToken.vertexId
+        var objTo = this.convertVertexPosToArrayPos(posTo);
         var objFrom = this.convertVertexPosToArrayPos(posFrom);
-        this.gamefield.field[objFrom.z][objFrom.y][objFrom.x] = null;
 
-        this.createToken(posTo);
+        var field = this.gamefield.field;
+
+        if (field[objFrom.z][objFrom.y][objFrom.x].getPlayer() === currentTurn &&
+            !(field[objTo.z][objTo.y][objTo.x])) {
+            this.gamefield.field[objFrom.z][objFrom.y][objFrom.x] = null;
+            this.createToken(posTo);
+        }
     }
 
     //TODO: move this function
@@ -187,6 +196,10 @@ function Game(p1, p2) {
                 }
         }
         return base;
+    }
+
+    function isTokenOfCurrentPlayer(vertexId) {
+
     }
 
     this.newGame();
