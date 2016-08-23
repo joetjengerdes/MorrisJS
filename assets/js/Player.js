@@ -6,7 +6,9 @@ function Player(playerName) {
     var mTokenCount = 0;
     var mGame;
 
-
+    this.getName = function() {
+        return mPlayerName;
+    }
 
     this.resetTokenCount = function() {
         mTokenCount = 0;

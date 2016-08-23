@@ -68,7 +68,8 @@
 
          var p1 = new Player('Mr. Test');
          //console.log(p1.isVisible());
-         var game = new Game(p1);
+         var gsb = new GameStatusBar();
+         var game = new Game(gsb, p1);
 
          var gameStatusBar = new GameStatusBar();
 
