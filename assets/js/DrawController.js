@@ -99,7 +99,7 @@ function DrawController(canvas, gf, stbar) {
     function drawStatusBar() {
         //console.log(gameStatusBar);
         mCtx.beginPath();
-        mCtx.rect(0, mGamefield.getHeight() - mGameStatusBar.height, mCanvas.width, mGamefield.getHeight() - mGameStatusBar.getHeight);
+        mCtx.rect(0, mGamefield.getHeight() - mGameStatusBar.getHeight(), mCanvas.width, mGamefield.getHeight() - mGameStatusBar.getHeight());
         mCtx.fillStyle = mGameStatusBar.getBackgroundColor();
         mCtx.fill();
         mCtx.closePath();
@@ -111,8 +111,8 @@ function DrawController(canvas, gf, stbar) {
         mCtx.font = "\"" + mGameStatusBar.getFontSize() + " " +
             mGameStatusBar.getFontFamily() + "\"";
         mCtx.fillStyle = mGameStatusBar.getFontColor();
-        mCtx.fillText(mGameStatusBar.getText(), mGamefield.leftOffset,
-            mGamefield.height - (mGameStatusBar.getHeight() / 3));
+        mCtx.fillText(mGameStatusBar.getText(), mGamefield.getLeftOffset(),
+            mGamefield.getHeight() - (mGameStatusBar.getHeight() / 3));
         mCtx.closePath();
     }
 
