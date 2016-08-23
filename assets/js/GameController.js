@@ -66,6 +66,7 @@ function GameController(game, stbar) {
                                         break;
                                     }
                                 }
+                                return;
                             }
                             mGame.changeTurn();
                             break;
@@ -89,6 +90,7 @@ function GameController(game, stbar) {
                     // player did not select any token to move
                     if (!mSelectedPlayerToken) return;
 
+                    console.log("move!");
                     doMovement(x, y);
                     unselectAllOtherToken();
                 }
@@ -115,8 +117,6 @@ function GameController(game, stbar) {
             if (index != -1 && mGame.getGameProblemSolver().isTokenOnField(index)) {
                 console.log(index);
                 if (mGame.removeToken(index)) {
-                    console.log("REMOVE");
-                    mGame.changeTurn();
                     mGameStatusBar.setText("Token removed!");
                     //break;
                 } else {
@@ -150,7 +150,7 @@ function GameController(game, stbar) {
         if (mSelectedPlayerToken) {
             unselectAllOtherToken();
         }
-        token.selected = true;
+        token.select();
         mSelectedPlayerToken = token;
     }
 
@@ -160,7 +160,7 @@ function GameController(game, stbar) {
             for (var y = 0; y < 3; y++) {
                 for (var x = 0; x < 3; x++) {
                     if (mGame.getGamefield().getField()[z][y][x]) {
-                        mGame.getGamefield().getField()[z][y][x].selected = false;
+                        mGame.getGamefield().getField()[z][y][x].unselect();
                     }
                 }
             }
@@ -168,7 +168,7 @@ function GameController(game, stbar) {
     }
 
     function doMovement(x, y) {
-        mGame.moveToken(mSelectedPlayerToken.vertexId,
+        mGame.moveToken(mSelectedPlayerToken.getVertexIndex(),
             getVerticeIndexOfCoords(x, y));
     }
 }

@@ -15,6 +15,14 @@ function PlayerToken(p) {
         return mSelected;
     }
 
+    this.select = function() {
+        mSelected = true;
+    }
+
+    this.unselect = function() {
+        mSelected = false;
+    }
+
     this.getVertexIndex = function() {
         return mVertexId;
     }
