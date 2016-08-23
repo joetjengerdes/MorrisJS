@@ -160,42 +160,13 @@ function Game(p1, p2) {
 
     this.convertArrayPosToVertexPos = function(z, y, x) {
         var base = z * 8;
-        switch (x) {
-            case 0:
-                switch (y) {
-                    case 1:
-                        base += 3;
-                        break;
-                    case 2:
-                        base += 5;
-                        break;
-                }
-                break;
-            case 1:
-                switch (y) {
-                    case 0:
-                        base += 1;
-                        break;
-                    case 2:
-                        base += 6;
-                        break;
-                }
-                break;
-            case 2:
-                switch (y) {
-                    case 0:
-                        base += 2;
-                        break;
-                    case 1:
-                        base += 4;
-                        break;
-                    case 2:
-                        base += 7;
-                        break;
-
-                }
+        var diff = y * 3 + x
+        if (diff > 4) {
+            diff--;
         }
-        return base;
+        var pos = base + diff;
+
+        return pos;
     }
 
     function isTokenOfCurrentPlayer(vertexId) {
