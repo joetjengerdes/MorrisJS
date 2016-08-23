@@ -46,7 +46,7 @@ function EventController(canvas, gamefield) {
             }
             resizeTimeout = setTimeout(function() {
                 sizeCalculationService.calculate();
-                drawController.redraw();
+                drawController.redraw(true);
             }, 200);
         }
 
