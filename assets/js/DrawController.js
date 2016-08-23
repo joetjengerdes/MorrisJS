@@ -9,10 +9,10 @@ function DrawController(canvas, gf, stbar) {
     function initDrawController() {
         gameStatusBar.setTextChangedListener(self);
 
-        Vertex.prototype.draw = function(ctx, x, y) {
-            ctx.fillStyle = this.fill;
+        Vertex.prototype.draw = function(ctx) {
+            ctx.fillStyle = this.getFill();
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.circleSize, 0, Math.PI * 2, true);
+            ctx.arc(this.getX(), this.getY(), this.getCircleSize(), 0, Math.PI * 2, true);
             ctx.closePath();
             ctx.fill();
         }
@@ -20,8 +20,8 @@ function DrawController(canvas, gf, stbar) {
 
     this.drawVertex = function(x, y, color) {
         var v = new Vertex(x, y, gamefield.circleSize * 2.5);
-        v.fill = color;
-        v.draw(ctx, x, y);
+        v.setFill(color);
+        v.draw(ctx);
     }
 
     this.redraw = function(redrawA = false) {
@@ -50,21 +50,18 @@ function DrawController(canvas, gf, stbar) {
 
                         var v = verts[pToken.vertexId];
 
-                        //console.log(pToken.selected);
-                        //console.log(pToken.getColor());
-                        // draw selected token
-                        if (pToken.selected) {
+                        if (pToken.isSelected()) {
                             // TODO: fix hardcoded colors
                             if (pToken.getColor() == "hsla(120, 100%, 50%, 1)") {
-                                self.drawVertex(v.x, v.y, "hsla(120, 100%, 70%, 1)");
+                                self.drawVertex(v.getX(), v.getY(), "hsla(120, 100%, 70%, 1)");
                             } else {
-                                self.drawVertex(v.x, v.y, "hsla(0, 100%, 70%, 1)")
+                                self.drawVertex(v.getX(), v.getY(), "hsla(0, 100%, 70%, 1)")
                             }
 
                         }
                         // draw not selected token
                         else {
-                            self.drawVertex(v.x, v.y, pToken.getColor());
+                            self.drawVertex(v.getX(), v.getY(), pToken.getColor());
                         }
                     }
                 }
@@ -117,18 +114,7 @@ function DrawController(canvas, gf, stbar) {
     }
 
     function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {
-        /*
- drawCircle(ctx, leftOffset + wFrom + offset, hFrom + offset);
-     drawCircle(ctx, leftOffset + wTo - offset, hFrom + offset);
-     drawCircle(ctx, leftOffset + wFrom + offset, hTo - offset);
-      drawCircle(ctx, leftOffset + wTo - offset, hTo - offset);
-*/
-        //drawCircle(ctx, wFrom + offset, hFrom + offset);
-        //drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hFrom + offset);
-        //drawCircle(ctx, leftOffset + wFrom + offset, ((hTo + hFrom) / 2));
-        //drawCircle(ctx, leftOffset + ((wTo + wFrom) / 2), hTo - offset);
-        //drawCircle(ctx, leftOffset + wTo - offset, ((hTo + hFrom) / 2));
-        //
+
         var leftOffset = gamefield.leftOffset;
         var circleSize = Math.round(gamefield.circleSize);
         var lineWidth = gamefield.lineWidth;
@@ -156,15 +142,6 @@ function DrawController(canvas, gf, stbar) {
 
 
     }
-
-    function drawCircle(ctx, posX, posY, size = circleSize) {
-        ctx.fillStyle = circleColor;
-        ctx.beginPath();
-        ctx.arc(posX, posY, circleSize, 0, 2 * Math.PI, false);
-        ctx.fill();
-        ctx.stroke();
-    }
-
 
     function drawLine(ctx, xFrom, yFrom, xTo, yTo) {
         ctx.beginPath();

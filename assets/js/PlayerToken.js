@@ -1,8 +1,7 @@
 function PlayerToken(p) {
-    var size;
     var player = p;
-    this.vertexId = -1;
-    this.selected = false;
+    var mVertexId = -1;
+    var mSelected = false;
 
     this.move = function(x, y) {
         return;
@@ -22,5 +21,9 @@ function PlayerToken(p) {
 
     this.getPlayer = function() {
         return player;
+    }
+
+    this.isSelected = function() {
+        return mSelected;
     }
 }
