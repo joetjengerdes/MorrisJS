@@ -1,13 +1,14 @@
 function DrawController(canvas, gf, stbar) {
-    this.canvas = canvas;
-    var gamefield = gf;
-    var ctx = canvas.getContext("2d");
+    var mCanvas = canvas;
+    var mGamefield = gf;
+    var mCtx = mCanvas.getContext("2d");
+    // BUGFIX self reference
     var self = this;
-    var redrawAll = false;
-    var gameStatusBar = stbar;
+    var mRedrawAll = false;
+    var mGameStatusBar = stbar;
 
     function initDrawController() {
-        gameStatusBar.setTextChangedListener(self);
+        mGameStatusBar.setTextChangedListener(self);
 
         Vertex.prototype.draw = function(ctx) {
             ctx.fillStyle = this.getFill();
@@ -19,16 +20,16 @@ function DrawController(canvas, gf, stbar) {
     }
 
     this.drawVertex = function(x, y, color) {
-        var v = new Vertex(x, y, gamefield.circleSize * 2.5);
+        var v = new Vertex(x, y, mGamefield.circleSize * 2.5);
         v.setFill(color);
-        v.draw(ctx);
+        v.draw(mCtx);
     }
 
     this.redraw = function(redrawA = false) {
-        redrawAll = redrawA;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (redrawAll) {
-            gamefield.vertices = [];
+        mRedrawAll = redrawA;
+        mCtx.clearRect(0, 0, mCanvas.width, mCanvas.height);
+        if (mRedrawAll) {
+            mGamefield.vertices = [];
         }
         drawField();
         drawTokens();
@@ -40,13 +41,13 @@ function DrawController(canvas, gf, stbar) {
     }
 
     function drawTokens() {
-        var field = gamefield.field;
+        var field = mGamefield.field;
         for (var z = 0; z < field.length; z++) {
             for (var y = 0; y < field[0].length; y++) {
                 for (var x = 0; x < field[0][0].length; x++) {
                     var pToken = field[z][y][x];
                     if (pToken) {
-                        var verts = gamefield.vertices;
+                        var verts = mGamefield.vertices;
 
                         var v = verts[pToken.getVertexIndex()];
 
@@ -70,65 +71,65 @@ function DrawController(canvas, gf, stbar) {
     }
 
     function drawField() {
-        var h = gamefield.height;
-        var w = gamefield.width;
-        var spaceBetween = gamefield.spaceBetween;
-        var leftOffset = gamefield.leftOffset;
+        var h = mGamefield.height;
+        var w = mGamefield.width;
+        var spaceBetween = mGamefield.spaceBetween;
+        var leftOffset = mGamefield.leftOffset;
 
-        drawFieldPart(ctx, 0, 0, h, w);
-        drawFieldPart(ctx, spaceBetween, spaceBetween, h - spaceBetween, w - spaceBetween);
-        drawFieldPart(ctx, 2 * spaceBetween, 2 * spaceBetween, h - 2 * spaceBetween, w - 2 * spaceBetween);
+        drawFieldPart(mCtx, 0, 0, h, w);
+        drawFieldPart(mCtx, spaceBetween, spaceBetween, h - spaceBetween, w - spaceBetween);
+        drawFieldPart(mCtx, 2 * spaceBetween, 2 * spaceBetween, h - 2 * spaceBetween, w - 2 * spaceBetween);
 
         // von links bis mitte
-        drawLine(ctx, leftOffset + 0 + 50, ((h + 0) / 2), leftOffset + spaceBetween * 2 + 50, ((h + 0) / 2));
+        drawLine(mCtx, leftOffset + 0 + 50, ((h + 0) / 2), leftOffset + spaceBetween * 2 + 50, ((h + 0) / 2));
         // von rechts bis mitte
-        drawLine(ctx, leftOffset + w - 50, ((h + 0) / 2), leftOffset + w - spaceBetween * 2 - 50, ((h + 0) / 2));
+        drawLine(mCtx, leftOffset + w - 50, ((h + 0) / 2), leftOffset + w - spaceBetween * 2 - 50, ((h + 0) / 2));
 
         // von oben bis mitte
-        drawLine(ctx, leftOffset + (w / 2), 50, leftOffset + (w / 2), spaceBetween * 2 + 50);
+        drawLine(mCtx, leftOffset + (w / 2), 50, leftOffset + (w / 2), spaceBetween * 2 + 50);
         // von unten bis mitte
-        drawLine(ctx, leftOffset + (w / 2), h - 50, leftOffset + (w / 2), h - 50 - spaceBetween * 2);
+        drawLine(mCtx, leftOffset + (w / 2), h - 50, leftOffset + (w / 2), h - 50 - spaceBetween * 2);
 
-        for (i = 0; i < gamefield.vertices.length; i++) {
-            gamefield.vertices[i].draw(ctx);
+        for (i = 0; i < mGamefield.vertices.length; i++) {
+            mGamefield.vertices[i].draw(mCtx);
             //console.log(gamefield.vertices[i].draw);
         }
     }
 
     function drawStatusBar() {
         //console.log(gameStatusBar);
-        ctx.beginPath();
-        ctx.rect(0, gamefield.height - gameStatusBar.height, canvas.width, gamefield.height - gameStatusBar.height);
-        ctx.fillStyle = gameStatusBar.backgroundColor;
-        ctx.fill();
-        ctx.closePath();
+        mCtx.beginPath();
+        mCtx.rect(0, mGamefield.height - mGameStatusBar.height, mCanvas.width, mGamefield.height - mGameStatusBar.height);
+        mCtx.fillStyle = mGameStatusBar.backgroundColor;
+        mCtx.fill();
+        mCtx.closePath();
         drawStatusBarText();
     }
 
     function drawStatusBarText() {
-        ctx.beginPath();
-        ctx.font = "\"" + gameStatusBar.fontSize + " " + gameStatusBar.fontFamily + "\"";
-        ctx.fillStyle = gameStatusBar.fontColor;
-        ctx.fillText(gameStatusBar.getText(), gamefield.leftOffset, gamefield.height - (gameStatusBar.height / 3));
-        ctx.closePath();
+        mCtx.beginPath();
+        mCtx.font = "\"" + mGameStatusBar.fontSize + " " + mGameStatusBar.fontFamily + "\"";
+        mCtx.fillStyle = mGameStatusBar.fontColor;
+        mCtx.fillText(mGameStatusBar.getText(), mGamefield.leftOffset, mGamefield.height - (mGameStatusBar.height / 3));
+        mCtx.closePath();
     }
 
     function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {
 
-        var leftOffset = gamefield.leftOffset;
-        var circleSize = Math.round(gamefield.circleSize);
-        var lineWidth = gamefield.lineWidth;
+        var leftOffset = mGamefield.leftOffset;
+        var circleSize = Math.round(mGamefield.circleSize);
+        var lineWidth = mGamefield.lineWidth;
 
-        if (redrawAll) {
+        if (mRedrawAll) {
             // vertices from top left to bottom right
-            gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hFrom + offset, circleSize));
-            gamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hFrom + offset, circleSize));
-            gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hFrom + offset, circleSize));
-            gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, ((hTo + hFrom) / 2), circleSize));
-            gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, ((hTo + hFrom) / 2), circleSize));
-            gamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hTo - offset, circleSize));
-            gamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hTo - offset, circleSize));
-            gamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hTo - offset, circleSize));
+            mGamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hFrom + offset, circleSize));
+            mGamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hFrom + offset, circleSize));
+            mGamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hFrom + offset, circleSize));
+            mGamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, ((hTo + hFrom) / 2), circleSize));
+            mGamefield.vertices.push(new Vertex(leftOffset + wTo - offset, ((hTo + hFrom) / 2), circleSize));
+            mGamefield.vertices.push(new Vertex(leftOffset + wFrom + offset, hTo - offset, circleSize));
+            mGamefield.vertices.push(new Vertex(leftOffset + ((wTo + wFrom) / 2), hTo - offset, circleSize));
+            mGamefield.vertices.push(new Vertex(leftOffset + wTo - offset, hTo - offset, circleSize));
         }
 
         // von oben links nach unten links
@@ -147,7 +148,7 @@ function DrawController(canvas, gf, stbar) {
         ctx.beginPath();
         ctx.moveTo(xFrom, yFrom);
         ctx.lineTo(xTo, yTo);
-        ctx.lineWidth = gamefield.lineWidth;
+        ctx.lineWidth = mGamefield.lineWidth;
         ctx.stroke();
     }
 
