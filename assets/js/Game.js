@@ -17,9 +17,11 @@ function Game(p1, p2) {
      */
     this.newGame = function() {
         player1.initPlayer();
+        player2.setGame(this);
         player2.initPlayer();
         player2.cpu = 1;
         player2.color = "hsla(120, 100%, 50%, 1)";
+        player2.setGame(this);
         this.gamemode = 0;
         this.gamefield.setToDefault();
         if (currentTurn == null || currentTurn == player2) {
@@ -84,8 +86,10 @@ function Game(p1, p2) {
      * If a morris is found, it will set the removeFlag to 1.
      *
      * @param  {int} pos position of the Vertex/vertexId
+     * @param  {Boolean} true if the token is placed, false if it is only created
+     * because it has been moved. Default is false.p
      */
-    this.createToken = function(pos) {
+    this.createToken = function(pos, placed = false) {
         var token = new PlayerToken(currentTurn);
         token.vertexId = pos;
         var obj = this.convertVertexPosToArrayPos(pos);
@@ -96,6 +100,9 @@ function Game(p1, p2) {
         if (this.gameProblemSolver.hasMorris(token)) {
             console.log("MILL!WUHU!");
             this.removeFlag = 1;
+        }
+        if (placed) {
+            currentTurn.placeToken();
         }
     }
 
@@ -113,6 +120,7 @@ function Game(p1, p2) {
         if (token.getPlayer() !== currentTurn) {
             this.gamefield.field[obj.z][obj.y][obj.x] = null;
             this.removeFlag = 0;
+            token.getPlayer().lostToken();
             return true;
         }
         return false;

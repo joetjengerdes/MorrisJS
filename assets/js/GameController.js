@@ -38,7 +38,7 @@ function GameController(game, stbar) {
                     var index = getVerticeIndexOfCoords(x, y);
 
                     if (index != -1 && !game.gameProblemSolver.isTokenOnField(index)) {
-                        game.createToken(index);
+                        game.createToken(index, true);
 
                         if (game.removeFlag == 0) {
                             game.changeTurn();
@@ -54,7 +54,7 @@ function GameController(game, stbar) {
                         //console.log(coord);
                         if (!game.gameProblemSolver.isTokenOnField(i)) {
                             //console.log(game.gamefield.field[coord.z][coord.y][coord.x]);
-                            game.createToken(i);
+                            game.createToken(i, true);
                             //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
 
                             if (game.removeFlag == 1) {
@@ -71,7 +71,7 @@ function GameController(game, stbar) {
                     }
                 }
             } else if (game.hasEnded()) {
-
+                gameStatusBar.setText("Game ended!");
             } else { // gamemod: normal play
                 gameStatusBar.setText("Select a token to move")
                 var index = getVerticeIndexOfCoords(x, y);
