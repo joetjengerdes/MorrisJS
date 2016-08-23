@@ -8,13 +8,18 @@ function GameProblemSolver(game) {
      * @return {Boolean}       is there a morris
      */
     this.hasMorris = function(token) {
-        var vertexId = token.vertexId;
+        console.log(token);
+        console.log(token.getVertexIndex);
+        var vertexId = token.getVertexIndex();
 
         // TODO: rausnehmen nach dem testen
         //console.log("CurrenPlayers OpenMorris: " + this.numberOfOpenMorris(mGame.getCurrentPlayer()));
         //console.log("OpponentPlayers OpenMorris: " + this.numberOfOpenMorris(mGame.getOpponentPlayer()));
 
         var coords = mGame.convertVertexPosToArrayPos(vertexId);
+
+        console.log(mField);
+        console.log(coords);
 
         // row
         var secondToken = mField[coords.z][coords.y][(coords.x + 1) % 3];
@@ -44,6 +49,19 @@ function GameProblemSolver(game) {
         return false;
     }
 
+    this.getAllTokenNotInMorris = function(player) {
+        var tokensNotInMorris = [];
+        var allTokens = this.getAllTokenOfPlayer(player);
+        console.log(allTokens);
+        for (var i = 0; i < allTokens.length; i++) {
+            var token = allTokens[i];
+            if (!this.hasMorris(token)) {
+                tokensNotInMorris.push(token);
+            }
+        }
+        return tokensNotInMorris;
+    }
+
 
     /**
      * hasSamePlayer - checks if the token have the same owner.
@@ -69,18 +87,27 @@ function GameProblemSolver(game) {
      * @return {int}        number of Token
      */
     this.getNumberOfToken = function(player) {
-        var num = 0;
+        return this.getAllTokenofPlayer(player).length;
+    }
+
+    /**
+     * This functions returns all tokens the given player owns as
+     * an array
+     * @return {PlayerToken[]} all tokens of a player
+     */
+    this.getAllTokenOfPlayer = function(player) {
+        var tokens = [];
         for (var z = 0; z < mField.length; z++) {
             for (var y = 0; y < mField[0].length; y++) {
                 for (var x = 0; x < mField[0][0].length; x++) {
                     var token = mField[z][y][x];
                     if (token && (token.getPlayer() === player)) {
-                        num++;
+                        tokens.push(token);
                     }
                 }
             }
         }
-        return num;
+        return tokens;
     }
 
     /**

@@ -109,7 +109,7 @@ function Game(player1, player2) {
      */
     this.createToken = function(pos, placed = false) {
         var token = new PlayerToken(mCurrenTurn);
-        token.vertexId = pos;
+        token.setVertexIndex(pos);
         var obj = this.convertVertexPosToArrayPos(pos);
 
         mGamefield.field[obj.z][obj.y][obj.x] = token;
@@ -129,22 +129,37 @@ function Game(player1, player2) {
      * @return {Boolean} success
      */
     this.removeToken = function(pos) {
-        console.log(pos);
+
         var obj = this.convertVertexPosToArrayPos(pos);
         var token = mGamefield.field[obj.z][obj.y][obj.x];
 
-        if (token.getPlayer() !== mCurrenTurn) {
-            mGamefield.field[obj.z][obj.y][obj.x] = null;
-            mRemoveFlag = 0;
-            var enemy = token.getPlayer();
-            enemy.lostToken();
-            if (enemy.hasLost()) {
-                mode = 0;
-            }
-            return true;
+        // player selected his own token to remove: not allowed
+        if (token.getPlayer() === mCurrenTurn) return false;
+
+        // get the enemy
+        var enemy = mCurrenTurn === mPlayer1 ? mPlayer2 : mPlayer1;
+        // get all tokens of the enemy that are not in a morris
+        var tokenNotInMorris = mGameProblemSolver.getAllTokenNotInMorris(enemy);
+
+        console.log(tokenNotInMorris);
+
+        // enemy player has stones not in a morris, but he selected one in a
+        // morris is not allowed. user have to choose another
+        if (tokenNotInMorris.length > 0 && tokenNotInMorris.indexOf(token) < 0) {
+            return;
         }
-        return false;
+
+        // remove the stone
+        mGamefield.field[obj.z][obj.y][obj.x] = null;
+        mRemoveFlag = 0;
+        enemy.lostToken();
+        // check if this remove causes the end of the game
+        if (enemy.hasLost()) {
+            mode = 0;
+        }
+        return true;
     }
+
 
     /**
      * This function moves a token from a player which is given as

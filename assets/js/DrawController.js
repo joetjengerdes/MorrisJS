@@ -48,7 +48,7 @@ function DrawController(canvas, gf, stbar) {
                     if (pToken) {
                         var verts = gamefield.vertices;
 
-                        var v = verts[pToken.vertexId];
+                        var v = verts[pToken.getVertexIndex()];
 
                         if (pToken.isSelected()) {
                             // TODO: fix hardcoded colors

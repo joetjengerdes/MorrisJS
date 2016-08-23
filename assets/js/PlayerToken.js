@@ -14,4 +14,12 @@ function PlayerToken(p) {
     this.isSelected = function() {
         return mSelected;
     }
+
+    this.getVertexIndex = function() {
+        return mVertexId;
+    }
+
+    this.setVertexIndex = function(vertexIndex) {
+        mVertexId = vertexIndex;
+    }
 }
