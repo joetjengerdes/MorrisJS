@@ -395,7 +395,6 @@ function GameProblemSolver(game) {
 
     this.isTokenOnField = function(vertIndex) {
         var coord = mGame.convertVertexPosToArrayPos(vertIndex);
-        console.log("COORDS" + coord);
 
         if (mField[coord.z][coord.y][coord.x]) {
             return true;
