@@ -1,29 +1,28 @@
 function EventController(canvas, gamefield) {
     var canvas = canvas;
-    var gameController = null;
-    var drawController = null;
-    var sizeCalculationService = new SizeCalculationService(canvas, gamefield);
+    var mGameController = null;
+    var mDrawController = null;
+    var mSizeCalculationService = new SizeCalculationService(canvas, gamefield);
     // timeout used for resizing, so calculation
     // is not done by every frame change
-    var resizeTimeout = null;
-    var mouseMoveTimeout = null;
+    var mResizeTimeout = null;
+    var mMouseMoveTimeout = null;
     var mCursorInRange = false;
-    var self = this;
 
     this.setGameController = function(controller) {
-        gameController = controller;
+        mGameController = controller;
     }
 
     this.getGameController = function() {
-        return gameController;
+        return mGameController;
     }
 
     this.setDrawController = function(drawc) {
-        drawController = drawc;
+        mDrawController = drawc;
     }
 
     this.getDrawController = function() {
-        return drawController;
+        return mDrawController;
     }
 
     function initController() {
@@ -37,24 +36,24 @@ function EventController(canvas, gamefield) {
             var x = mouse.x;
             var y = mouse.y;
 
-            gameController.doAction(mouse.x, mouse.y);
+            mGameController.doAction(mouse.x, mouse.y);
         });
 
         window.onresize = function() {
-            if (resizeTimeout != null) {
-                clearTimeout(resizeTimeout);
+            if (mResizeTimeout != null) {
+                clearTimeout(mResizeTimeout);
             }
-            resizeTimeout = setTimeout(function() {
-                sizeCalculationService.calculate();
-                drawController.redraw(true);
+            mResizeTimeout = setTimeout(function() {
+                mSizeCalculationService.calculate();
+                mDrawController.redraw(true);
             }, 200);
         }
 
         canvas.addEventListener('mousemove', function(e) {
-            if (mouseMoveTimeout != null) {
-                clearTimeout(mouseMoveTimeout);
+            if (mMouseMoveTimeout != null) {
+                clearTimeout(mMouseMoveTimeout);
             }
-            mouseMoveTimeout = setTimeout(function() {
+            mMouseMoveTimeout = setTimeout(function() {
                 var mouse = getMouse(e);
 
                 //console.log(self.cursorInRange);
@@ -73,13 +72,13 @@ function EventController(canvas, gamefield) {
                 //console.log(markedVertex);
                 if (markedVertex != null) {
                     if (!beforeCursorinRange) {
-                        drawController.redraw(true);
-                        drawController.drawVertex(markedVertex.getX(), markedVertex.getY(), 'rgba(0,0,0,0.2)');
+                        mDrawController.redraw(true);
+                        mDrawController.drawVertex(markedVertex.getX(), markedVertex.getY(), 'rgba(0,0,0,0.2)');
                     }
                 } else {
                     if (beforeCursorinRange) {
                         mCursorInRange = false;
-                        drawController.redraw(true);
+                        mDrawController.redraw(true);
                     }
                 }
 
@@ -87,7 +86,7 @@ function EventController(canvas, gamefield) {
 
         });
         // do first calculation
-        sizeCalculationService.calculate();
+        mSizeCalculationService.calculate();
     }
 
     //return relative position to canvas
