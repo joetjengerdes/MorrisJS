@@ -125,7 +125,7 @@ function Game(gsb, player1, player2) {
     }
 
     function currentPlayerWonGame() {
-        mode = 0;
+        mMode = 0;
         gameStatusBar.setText(mCurrentTurn.getName() + " won!");
     }
 
@@ -171,6 +171,7 @@ function Game(gsb, player1, player2) {
                 }
             }
         }
+        mDrawController.redraw();
     }
 
 
@@ -230,9 +231,26 @@ function Game(gsb, player1, player2) {
                     this.moveToken(mSelectedPlayerToken.getVertexIndex(), selectedVertex);
                     unselectSelectedToken();
                 }
+                var token = getTokenOfField(selectedVertex);
+                if (token.getPlayer() !== this.getCurrentPlayer()) return;
+                selectToken(token);
             }
+            // player clicked on a free spot, so he wants to move the selected
+            else {
+                // player did not select any token to move
+                if (!mSelectedPlayerToken) return;
 
+                doMovement(x, y);
+                unselectSelectedToken();
+            }
+            removeIfMorris();
+            checkIfEnemyCannotMove();
         }
+    }
+
+    function doMovement(x, y) {
+        mGame.moveToken(mSelectedPlayerToken.getVertexIndex(),
+            getVerticeIndexOfCoords(x, y));
     }
 
     function selectToken(token) {
@@ -363,6 +381,7 @@ function Game(gsb, player1, player2) {
         return true;
     }
 
+    soundController.playTokenStealSound();
 
     /**
      * This function moves a token from a player which is given as
@@ -410,6 +429,7 @@ function Game(gsb, player1, player2) {
             z: z
         }
     }
+}
 
     this.convertArrayPosToVertexPos = function(z, y, x) {
         var base = z * 8;
@@ -429,11 +449,15 @@ function Game(gsb, player1, player2) {
     this.getGamefield = function() {
         return mGamefield;
     }
+}
 
     this.getGameProblemSolver = function() {
         return mGameProblemSolver;
     }
+    var pos = base + diff;
 
+    return pos;
+}
 
     this.initGame(player1, player2);
 
