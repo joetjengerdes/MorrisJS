@@ -52,24 +52,6 @@ function GameController(game, stbar) {
         return -1;
     }
 
-    function getTokenOfField(vertIndex) {
-        var coord = mGame.convertVertexPosToArrayPos(vertIndex);
-        return mGame.getGamefield().getField()[coord.z][coord.y][coord.x];
-    }
-
-    function selectToken(token) {
-        unselectSelectedToken();
-        token.select();
-        mSelectedPlayerToken = token;
-    }
-
-    function unselectSelectedToken() {
-        if (mSelectedPlayerToken) {
-            mSelectedPlayerToken.unselect();
-        }
-        mSelectedPlayerToken = null;
-    }
-
     function doMovement(x, y) {
         mGame.moveToken(mSelectedPlayerToken.getVertexIndex(),
             getVerticeIndexOfCoords(x, y));
