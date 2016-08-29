@@ -2,7 +2,9 @@ function ArtificialIntelligenceService(game) {
     var mGame = game;
     var mMoves = [];
     var mField = mGame.getGamefield().cloneField();
-
+    var mDepth = 5;
+    var mBestMove;
+    //TODO: PROBLEM: welcher SPIELER ist an der reihe
 
     /**
      * evaluate - ... the current gamefield and return a "score". this score indicates
@@ -33,7 +35,7 @@ function ArtificialIntelligenceService(game) {
         /**
          * number of moves
          */
-        var numberMovesWeight = [0.00, 0.10, 0.15, 0.20, 0.25, 0.30]
+        var numberOfMovesWeight = [0.00, 0.10, 0.15, 0.20, 0.25, 0.30]
         var numberOfMovesCurrentPlayer = gameProblemSolver.numberOfMoves(mGame.getCurrentPlayer(), mField);
         var numberOfMovesOpponentPlayer = gameProblemSolver.numberOfMoves(mGame.getOpponentPlayer(), mField);
 
@@ -42,15 +44,15 @@ function ArtificialIntelligenceService(game) {
          * else the index is floor of numberOfMoves/2
          */
         if (numberOfMovesCurrentPlayer >= 10) {
-            result += numberOfMoves[5];
+            result += numberOfMovesWeight[5];
         } else {
-            result += numberOfMoves[Math.floor(numberOfMovesCurrentPlayer / 2)];
+            result += numberOfMovesWeight[Math.floor(numberOfMovesCurrentPlayer / 2)];
         }
         // for the opponent
         if (numberOfMovesOpponentPlayer >= 10) {
-            result -= numberOfMoves[5];
+            result -= numberOfMovesWeight[5];
         } else {
-            result -= numberOfMoves[Math.floor(numberOfMovesOpponentPlayer / 2)];
+            result -= numberOfMovesWeight[Math.floor(numberOfMovesOpponentPlayer / 2)];
         }
 
 
@@ -129,13 +131,13 @@ function ArtificialIntelligenceService(game) {
         if (mGame.isPlacingPhase()) {
             var vertices = gamefield.getVertices();
             var problemSolver = mGame.getGameProblemSolver();
-            for (var z; z < vertices.length; z++) {
+            for (var z = 0; z < vertices.length; z++) {
                 if (problemSolver.isTokenOnField(z)) {
                     var obj = mGame.convertVertexPosToArrayPos(z);
-                    move.push({
+                    mMoves.push({
                         src: null,
                         dst: obj
-                    }); // TODO: geht es so ??
+                    }); // TODO: WELCHER SPILER FEHLT
                 }
             }
         } else {
@@ -143,7 +145,7 @@ function ArtificialIntelligenceService(game) {
                 for (var y = 0; y < mField[0].length; y++) {
                     for (var x = 0; x < mField[0][0].length; x++) {
                         var token = mField[z][y][x];
-                        if (token && (token.getPlayer() === mGame.getCurrentTurn())) {
+                        if (token && (token.getPlayer() === mGame.getCurrentPlayer())) {
                             if (problemSolver.canMoveUp(z, y, x)) {
                                 mMoves.push({
                                     src: {
@@ -219,7 +221,7 @@ function ArtificialIntelligenceService(game) {
         }
         if (move.dst) {
             // is not visible. x,y is not neccessary
-            var token = new PlayerToken(mGame.getCurrentTurn(), null, null, mGame.getCurrentTurn());
+            var token = new PlayerToken(mGame.getCurrentPlayer());
             mField[move.dst.z][move.dst.y][move.dst.x] = token;
         }
     }
@@ -228,12 +230,12 @@ function ArtificialIntelligenceService(game) {
     /**
      * undoMove - undo the simulated move.
      *
-     * @param  {obj} move object with coordinates.       
+     * @param  {obj} move object with coordinates.
      */
     function undoMove(move) {
         if (move.src) {
             // is not visible. x,y is not neccessary
-            var token = new PlayerToken(mGame.getCurrentTurn(), null, null, mGame.getCurrentTurn());
+            var token = new PlayerToken(mGame.getCurrentPlayer());
             mField[move.src.z][move.src.y][move.src.x] = token;
         }
         if (move.dst) {
@@ -241,27 +243,29 @@ function ArtificialIntelligenceService(game) {
         }
     }
 
-    function alphaBeta(deep, alpha, beta) {
-        if (deep == 0)
+    function alphaBeta(depth, alpha, beta) {
+        if (depth == 0) {
             return evaluate();
+        }
 
         var PVfound = false;
-        var max = Number.MIN_VALUE;
+        var max = Number.NEGATIVE_INFINITY;
         initMoves();
         while (mMoves.length > 0) {
-            var currentMove = move.pop();
+            var currentMove = mMoves.pop();
             doNextMove(currentMove);
             if (PVfound) {
-                var val = -alphaBeta(deep - 1, -alpha - 1, -alpha);
+                var val = -alphaBeta(depth - 1, -alpha - 1, -alpha);
                 if (val > alpha && val < beta)
-                    val = -alphaBeta(deep - 1, -beta, -val);
+                    val = -alphaBeta(depth - 1, -beta, -val);
             } else
-                val = -alphaBeta(deep - 1, -beta, -alpha);
+                val = -alphaBeta(depth - 1, -beta, -alpha);
             undoMove(currentMove);
             if (val > max) {
                 if (val >= beta)
                     return val;
                 max = val;
+                mBestMove = currentMove;
                 if (val > alpha) {
                     alpha = val;
                     PVfound = TRUE;
@@ -269,5 +273,12 @@ function ArtificialIntelligenceService(game) {
             }
         }
         return max;
+    }
+
+    this.getBestMove = function(gameField) {
+        mField = gameField.cloneField();
+        var val = alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+        console.log("VAL: " + val);
+        return mBestMove;
     }
 }

@@ -82,7 +82,7 @@ function GameProblemSolver(game) {
      * @return {int}        number of Token
      */
     this.getNumberOfToken = function(player) {
-        return this.getAllTokenofPlayer(player).length;
+        return this.getAllTokenOfPlayer(player).length;
     }
 
     /**
@@ -330,7 +330,7 @@ function GameProblemSolver(game) {
                 openMorrisFlag = false;
             } else {
                 undefinedFlag = true;
-                openMorrisFlag = callback(z, y, x);
+                openMorrisFlag = callback(player, z, y, x);
             }
         } else if (token.getPlayer() !== player) {
             openMorrisFlag = false;
@@ -338,7 +338,7 @@ function GameProblemSolver(game) {
         return [openMorrisFlag, undefinedFlag];
     }
 
-    function checkNeighboursX(z, y, x) {
+    function checkNeighboursX(player, z, y, x) {
         // x is in the middle
         if (x == 1) {
             // z is in the middle. check z0 and z1.
@@ -365,7 +365,7 @@ function GameProblemSolver(game) {
         return true;
     }
 
-    function checkNeighboursY(z, y, x) {
+    function checkNeighboursY(player, z, y, x) {
         //is y in the middle
         if (y == 1) {
             // z is in the middle. check z0 and z1.
@@ -392,7 +392,7 @@ function GameProblemSolver(game) {
         return true;
     }
 
-    function checkNeighboursZ(z, y, x) {
+    function checkNeighboursZ(player, z, y, x) {
         //is y
         if (y == 1) {
             token = mField[z][y + 1][x];

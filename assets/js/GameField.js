@@ -76,7 +76,7 @@ function GameField() {
     }
 
     this.cloneField = function() {
-        var clone = this.field.map(function(arr) {
+        var clone = mField.map(function(arr) {
             return arr.map(function(arr2) {
                 return arr2.slice(0);
             });

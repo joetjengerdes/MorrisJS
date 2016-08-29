@@ -9,9 +9,10 @@ function Game(gsb, player1, player2) {
     var mCurrentTurn = null;
     var mTokensPlaced = 0;
     var mGameProblemSolver;
-    var mSoundController = new SoundController();
+    var mSoundController;
     var mGameStatusBar = gsb;
     var mSelectedPlayerToken;
+    var mArtificialIntelligenceService;
 
     /**
      * initGame - This function initializes a the game object and sets member.
@@ -26,6 +27,8 @@ function Game(gsb, player1, player2) {
         mGamefield = new GameField();
         mGameProblemSolver = new GameProblemSolver(this);
         this.newGame();
+        mArtificialIntelligenceService = new ArtificialIntelligenceService(this);
+        mSoundController = new SoundController();
     }
 
 
@@ -146,6 +149,9 @@ function Game(gsb, player1, player2) {
     function doTurnCPU() {
         // do nothing: it's CPUs turn and user tried to do s.th.
         // TODO: remove test
+
+        var move = mArtificialIntelligenceService.getBestMove(mGamefield);
+        //console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
         if (self.isPlacingPhase()) {
             var vertices = mGamefield.getVertices();
             for (var i = 0; i < vertices.length; i++) {
@@ -400,7 +406,6 @@ function Game(gsb, player1, player2) {
         return true;
     }
 
-    mSoundController.playTokenStealSound();
 
     /**
      * This function moves a token from a player which is given as
@@ -473,8 +478,5 @@ function Game(gsb, player1, player2) {
     }
 
     this.initGame(player1, player2);
-
-}
-yer2);
 
 }
