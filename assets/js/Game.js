@@ -475,3 +475,6 @@ function Game(gsb, player1, player2) {
     this.initGame(player1, player2);
 
 }
+yer2);
+
+}
