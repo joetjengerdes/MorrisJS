@@ -8,8 +8,6 @@ function GameProblemSolver(game) {
      * @return {Boolean}       is there a morris
      */
     this.hasMorris = function(token) {
-        console.log(token);
-        console.log(token.getVertexIndex);
         var vertexId = token.getVertexIndex();
 
         // TODO: rausnehmen nach dem testen
@@ -17,9 +15,6 @@ function GameProblemSolver(game) {
         //console.log("OpponentPlayers OpenMorris: " + this.numberOfOpenMorris(mGame.getOpponentPlayer()));
 
         var coords = mGame.convertVertexPosToArrayPos(vertexId);
-
-        console.log(mField);
-        console.log(coords);
 
         // row
         var secondToken = mField[coords.z][coords.y][(coords.x + 1) % 3];
@@ -52,7 +47,7 @@ function GameProblemSolver(game) {
     this.getAllTokenNotInMorris = function(player) {
         var tokensNotInMorris = [];
         var allTokens = this.getAllTokenOfPlayer(player);
-        console.log(allTokens);
+        //console.log(allTokens);
         for (var i = 0; i < allTokens.length; i++) {
             var token = allTokens[i];
             if (!this.hasMorris(token)) {
@@ -536,14 +531,14 @@ function GameProblemSolver(game) {
                     x: x,
                     y: y,
                     z: z - 1
-                }
+                };
             }
         } else if ((y > 0) && !field[z][y - 1][x]) {
             return {
                 x: x,
                 y: y - 1,
                 z: z
-            }
+            };
         }
         return null;
     }
@@ -565,14 +560,14 @@ function GameProblemSolver(game) {
                     x: x,
                     y: y,
                     z: z + 1
-                }
+                };
             }
         } else if ((y < 2) && !field[z][y + 1][x]) {
             return {
                 x: x,
                 y: y + 1,
                 z: z
-            }
+            };
         }
         return null;
     }
@@ -594,14 +589,14 @@ function GameProblemSolver(game) {
                     x: x,
                     y: y,
                     z: z + 1
-                }
+                };
             }
         } else if ((x < 2) && !field[z][y][x + 1]) {
             return {
                 x: x + 1,
                 y: y,
                 z: z
-            }
+            };
         }
         return null;
     }
@@ -623,14 +618,14 @@ function GameProblemSolver(game) {
                     x: x,
                     y: y,
                     z: z - 1
-                }
+                };
             }
         } else if ((x > 0) && !field[z][y][x - 1]) {
             return {
                 x: x - 1,
                 y: y,
                 z: z
-            }
+            };
         }
         return null;
     }

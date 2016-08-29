@@ -1,4 +1,6 @@
 function Game(gsb, player1, player2) {
+    const MAX_TOKEN_TO_PLACE = 18;
+    var self = this;
     var mMode = 1; // 0 end, 1 = start placing, 2 = normal play
     var mWaitForRemoveToken = 0;
     var mGamefield;
@@ -7,10 +9,8 @@ function Game(gsb, player1, player2) {
     var mCurrentTurn = null;
     var mTokensPlaced = 0;
     var mGameProblemSolver;
-    const MAX_TOKEN_TO_PLACE = 18;
-    var soundController = new SoundController();
-    var gameStatusBar = gsb;
-    var self = this;
+    var mSoundController = new SoundController();
+    var mGameStatusBar = gsb;
     var mSelectedPlayerToken;
 
     /**
@@ -36,13 +36,13 @@ function Game(gsb, player1, player2) {
      * is selected as the starting player.
      */
     this.newGame = function() {
+        mMode = 1;
         mPlayer1.setGame(this);
         mPlayer1.resetTokenCount();
         mPlayer2.resetTokenCount();
         mPlayer2.setCpu();
         mPlayer2.setColor("hsla(120, 100%, 50%, 1)");
         mPlayer2.setGame(this);
-        mMode = 1;
         mGamefield.setToDefault();
         if (mCurrentTurn == null || mCurrentTurn == mPlayer2) {
             mCurrentTurn = mPlayer1;
@@ -54,13 +54,19 @@ function Game(gsb, player1, player2) {
     /**
      * This function returns if the current phase
      * of the game is the phase where players are
-     * placing their tokens
+     * placing their token
      * @return {Boolean} true if it's the placing phase, otherwise false
      */
     this.isPlacingPhase = function() {
         return mMode == 1;
     }
 
+    /**
+     * This function returns if the current phase
+     * of the game is the phase where players are
+     * moving their token
+     * @return {Boolean} true if it's the moving phase, otherwise false
+     */
     this.isNormalPhase = function() {
         return mMode == 2;
     }
@@ -101,17 +107,20 @@ function Game(gsb, player1, player2) {
             return;
         }
 
+        mCurrentTurn = mCurrentTurn === mPlayer1 ? mPlayer2 : mPlayer1;
         if (mMode == 1) {
             mTokensPlaced++;
+            mGameStatusBar.setText("It's " + mCurrentTurn.getName() + "'s turn. Place a token.");
             if (mTokensPlaced >= MAX_TOKEN_TO_PLACE) {
                 mMode = 2;
-                gameStatusBar.setText("Select token which you want to move");
             }
         }
-        mCurrentTurn = mCurrentTurn === mPlayer1 ? mPlayer2 : mPlayer1;
-        gsb.setText("It's " + mCurrentTurn.getName() + "'s turn");
+        if (mMode == 2) {
+            mGameStatusBar.setText("Select token which you want to move.");
+        }
 
         if (mCurrentTurn.isCPU()) {
+            //wait(200);
             doTurnCPU();
         }
     }
@@ -126,7 +135,7 @@ function Game(gsb, player1, player2) {
 
     function currentPlayerWonGame() {
         mMode = 0;
-        gameStatusBar.setText(mCurrentTurn.getName() + " won!");
+        mGameStatusBar.setText(mCurrentTurn.getName() + " won!");
     }
 
     function checkIfEnemyCannotMove() {
@@ -154,7 +163,6 @@ function Game(gsb, player1, player2) {
                                 break;
                             }
                         }
-                        return;
                     }
                     self.changeTurn();
                     break;
@@ -163,10 +171,29 @@ function Game(gsb, player1, player2) {
         } else {
             var vertices = mGamefield.getVertices();
             for (var i = 0; i < vertices.length; i++) {
+
+                var coords = self.convertVertexPosToArrayPos(i);
+                var field = mGamefield.getField();
+                if (!mGameProblemSolver.isTokenOnField(i) ||
+                    field[coords.z][coords.y][coords.x].getPlayer() !== mCurrentTurn) {
+                    continue;
+                }
                 var moves = mGameProblemSolver.getPossibleMoves(i);
                 if (moves.length > 0) {
                     console.log("AUFRUG MOVE CPU");
-                    self.moveToken(i, moves[0]);
+                    console.log("from " + i + " to " + moves[0]);
+                    if (self.moveToken(i, moves[0])) {
+                        if (mWaitForRemoveToken) {
+                            var vertices = mGamefield.getVertices();
+                            for (var i = 0; i < vertices.length; i++) {
+                                if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
+                                    break;
+                                }
+                            }
+                            //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
+                        }
+                        self.changeTurn();
+                    }
                     break;
                 }
             }
@@ -194,7 +221,7 @@ function Game(gsb, player1, player2) {
         if (placed) {
             mCurrentTurn.placeToken();
         }
-        soundController.playMoveSound();
+        mSoundController.playMoveSound();
     }
 
     this.doAction = function(selectedVertex) {
@@ -211,9 +238,9 @@ function Game(gsb, player1, player2) {
 
                     if (!mWaitForRemoveToken) {
                         this.changeTurn();
+                    } else {
+                        mGameStatusBar.setText("It's " + mCurrentTurn.getName() + "'s turn. Click the token you want to remove");
                     }
-
-                    gameStatusBar.setText("Click the token you want to remove");
                 }
             } else if (this.isNormalPhase()) {
                 if (mGameProblemSolver.isTokenOnField(selectedVertex)) {
@@ -227,7 +254,13 @@ function Game(gsb, player1, player2) {
                     // player did not select any token to move
                     if (!mSelectedPlayerToken) return;
 
-                    this.moveToken(mSelectedPlayerToken.getVertexIndex(), selectedVertex);
+                    if (this.moveToken(mSelectedPlayerToken.getVertexIndex(), selectedVertex)) {
+                        if (!mWaitForRemoveToken) {
+                            this.changeTurn();
+                        } else {
+                            mGameStatusBar.setText("It's " + mCurrentTurn.getName() + "'s turn. Click the token you want to remove");
+                        }
+                    }
                     unselectSelectedToken();
                 }
             }
@@ -362,12 +395,12 @@ function Game(gsb, player1, player2) {
             currentPlayerWonGame();
         }
 
-        soundController.playTokenStealSound();
+        mSoundController.playTokenStealSound();
 
         return true;
     }
 
-    soundController.playTokenStealSound();
+    mSoundController.playTokenStealSound();
 
     /**
      * This function moves a token from a player which is given as
@@ -379,7 +412,7 @@ function Game(gsb, player1, player2) {
     this.moveToken = function(posFrom, posTo) {
         // player cannot move the token to the selected field
         if (!mCurrentTurn.canJump() && mGameProblemSolver.getPossibleMoves(posFrom).indexOf(posTo) < 0) {
-            return;
+            return false;
         }
 
         var objTo = this.convertVertexPosToArrayPos(posTo);
@@ -389,10 +422,9 @@ function Game(gsb, player1, player2) {
 
         if (field[objFrom.z][objFrom.y][objFrom.x].getPlayer() === mCurrentTurn &&
             !(field[objTo.z][objTo.y][objTo.x])) {
-            mGamefield.getField()[objFrom.z][objFrom.y][objFrom.x] = null;
+            field[objFrom.z][objFrom.y][objFrom.x] = null;
             this.createToken(posTo);
-            // TODO: remove wird nicht beachtet
-            this.changeTurn();
+            return true;
         }
     }
 
@@ -413,7 +445,7 @@ function Game(gsb, player1, player2) {
             x: x,
             y: y,
             z: z
-        }
+        };
     }
 
 
