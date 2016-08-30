@@ -16,6 +16,7 @@
    <script src="assets/js/SoundController.js"></script>
    <script src="assets/js/services/SizeCalculationService.js"></script>
    <script src="assets/js/services/GameProblemSolver.js"></script>
+   <script src="assets/js/GamebarDrawer.js"></script>
    <script src="assets/js/services/ArtificialIntelligenceService.js"></script>
    <link href="assets/css/style.css" rel="stylesheet" type="text/css">
    <!--Import Google Icon Font-->
@@ -49,9 +50,15 @@
          </div>
       </nav>
 
+      <!--
+      <p class="all"> Game started!</p>
+      <p class="player1">Place a token!</p>
+      <p class="player1"><img src="assets/img/player.png">Placed token!</p>
+      <p clasS="player2"><img src="assets/img/cpu.png"></img>Test123</p>
+      </div>-->
       <div id="sidebar">
          <div id="sidebar-inner">
-            bla
+
          </div>
       </div>
 
@@ -117,7 +124,6 @@
 
          musicOn = readCookie("musicOn");
 
-         console.log(musicOn);
          doMusicControls();
 
 
@@ -133,7 +139,10 @@
          var p1 = new Player('Mr. Test');
          //console.log(p1.isVisible());
          var gameStatusBar = new GameStatusBar();
+         var gbDrawer = new GamebarDrawer(gameStatusBar);
          var game = new Game(gameStatusBar, p1);
+
+
 
 
          var eventController = new EventController(canvas, game.getGamefield());

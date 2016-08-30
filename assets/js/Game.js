@@ -57,6 +57,7 @@ function Game(gsb, player1, player2) {
         if (mCurrentTurn.isCPU()) {
             this.doTurnCPU();
         }
+        mGameStatusBar.setText("New game started!", true);
     }
 
     /**
@@ -118,13 +119,13 @@ function Game(gsb, player1, player2) {
         mCurrentTurn = mCurrentTurn === mPlayer1 ? mPlayer2 : mPlayer1;
         if (mMode == 1) {
             mTokensPlaced++;
-            mGameStatusBar.setText("It's " + mCurrentTurn.getName() + "'s turn. Place a token.");
+            mGameStatusBar.setText("Placed a token", false, mCurrentTurn);
             if (mTokensPlaced >= MAX_TOKEN_TO_PLACE) {
                 mMode = 2;
             }
         }
         if (mMode == 2) {
-            mGameStatusBar.setText("Select token which you want to move.");
+            mGameStatusBar.setText("Select token which you want to move.", false, mCurrentTurn);
         }
     }
 
@@ -138,7 +139,8 @@ function Game(gsb, player1, player2) {
 
     function currentPlayerWonGame() {
         mMode = 0;
-        mGameStatusBar.setText(mCurrentTurn.getName() + " won!");
+        mGameStatusBar.setText(mCurrentTurn.getName() + " won!", false, mCurrentTurn);
+        mGameStatusBar.setText("Game ended!", true);
     }
 
     function checkIfEnemyCannotMove() {
@@ -168,6 +170,9 @@ function Game(gsb, player1, player2) {
                                 break;
                             }
                         }
+                        mGameStatusBar.setText(mCurrentTurn.getName() +
+                            " removed a token of " + this.getOpponentPlayer().getName(),
+                            false, mCurrentTurn, this.getOpponentPlayer());
                     }
                     self.changeTurn();
                     break;
@@ -234,6 +239,9 @@ function Game(gsb, player1, player2) {
         // player has a morris
         if (mWaitForRemoveToken) {
             if (this.removeToken(selectedVertex)) {
+                mGameStatusBar.setText(mCurrentTurn.getName() +
+                    " removed a token of " + this.getOpponentPlayer().getName(),
+                    false, mCurrentTurn, this.getOpponentPlayer());
                 this.changeTurn();
             }
         } else {
@@ -245,7 +253,8 @@ function Game(gsb, player1, player2) {
                     if (!mWaitForRemoveToken) {
                         this.changeTurn();
                     } else {
-                        mGameStatusBar.setText("It's " + mCurrentTurn.getName() + "'s turn. Click the token you want to remove");
+                        mGameStatusBar.setText("It's " + mCurrentTurn.getName() +
+                            "'s turn. Click the token you want to remove", false, mCurrentTurn);
                     }
                 }
             } else if (this.isNormalPhase()) {
@@ -264,7 +273,8 @@ function Game(gsb, player1, player2) {
                         if (!mWaitForRemoveToken) {
                             this.changeTurn();
                         } else {
-                            mGameStatusBar.setText("It's " + mCurrentTurn.getName() + "'s turn. Click the token you want to remove");
+                            mGameStatusBar.setText("It's " + mCurrentTurn.getName() +
+                                "'s turn. Click the token you want to remove");
                         }
                     }
                     unselectSelectedToken();

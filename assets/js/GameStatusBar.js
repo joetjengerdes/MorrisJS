@@ -6,13 +6,35 @@ function GameStatusBar() {
     var mFontSize = "16px";
     var mFontFamily = "Arial";
     var mTextChangedListener;
+    var mGeneralEvent = false;
+    var mPlayerActionFrom;
+    var mPlayerActionAffected;
 
-    this.setText = function(newText) {
+    this.setText = function(newText, general, player1, player2) {
         mText = newText;
+        mGeneralEvent = general;
+        mPlayerActionFrom = player1;
+        mPlayerActionAffected = player2;
 
         if (mTextChangedListener) {
             mTextChangedListener.statusBarTextChanged();
         }
+    }
+
+    this.isGeneralEvent = function() {
+        return mGeneralEvent;
+    }
+
+    this.getPlayerActionFrom = function() {
+        return mPlayerActionFrom;
+    }
+
+    this.getPlayerActionAffected = function() {
+        return mPlayerActionAffected;
+    }
+
+    this.getActionDescription = function() {
+        return mDescription;
     }
 
     this.getText = function() {

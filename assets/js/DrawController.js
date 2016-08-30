@@ -5,10 +5,10 @@ function DrawController(canvas, gf, stbar) {
     // BUGFIX self reference
     var self = this;
     var mRedrawAll = false;
-    var mGameStatusBar = stbar;
+    //var mGameStatusBar = stbar;
 
     function initDrawController() {
-        mGameStatusBar.setTextChangedListener(self);
+        //mGameStatusBar.setTextChangedListener(self);
 
         Vertex.prototype.draw = function(ctx) {
             ctx.fillStyle = this.getFill();
@@ -33,7 +33,7 @@ function DrawController(canvas, gf, stbar) {
         }
         drawField();
         drawTokens();
-        drawStatusBar();
+        //drawStatusBar();
     }
 
     this.statusBarTextChanged = function() {
@@ -96,7 +96,7 @@ function DrawController(canvas, gf, stbar) {
         }
     }
 
-    function drawStatusBar() {
+    /*function drawStatusBar() {
         //console.log(gameStatusBar);
         mCtx.beginPath();
         mCtx.rect(0, mGamefield.getHeight() - mGameStatusBar.getHeight(), mCanvas.width, mGamefield.getHeight() - mGameStatusBar.getHeight());
@@ -104,8 +104,9 @@ function DrawController(canvas, gf, stbar) {
         mCtx.fill();
         mCtx.closePath();
         drawStatusBarText();
-    }
+    }*/
 
+    /*
     function drawStatusBarText() {
         mCtx.beginPath();
         mCtx.font = "\"" + mGameStatusBar.getFontSize() + " " +
@@ -114,7 +115,7 @@ function DrawController(canvas, gf, stbar) {
         mCtx.fillText(mGameStatusBar.getText(), mGamefield.getLeftOffset(),
             mGamefield.getHeight() - (mGameStatusBar.getHeight() / 3));
         mCtx.closePath();
-    }
+    }*/
 
     function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {
 
