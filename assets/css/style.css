@@ -22,7 +22,7 @@ div#wrapper {
 #infomodal {
     top: 10%;
 }
-#infoBtn {
+#infoBtn, #newGameBtn {
     transition: 0.5s;
 }
 #game {

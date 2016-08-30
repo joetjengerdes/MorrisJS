@@ -71,6 +71,12 @@
             <h1>To play this game Javascript must be activated!</h1>
          </canvas>
 
+         <div class="fixed-action-btn" style="bottom: 120px; right: 24px;">
+            <a id="newGameBtn" class="btn-floating btn-large red">
+               <i class="large material-icons">replay</i>
+            </a>
+         </div>
+
          <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
             <a href="#infomodal" id="infoBtn" class="btn-floating btn-large blue modal-trigger">
                <i class="large material-icons">info</i>
@@ -93,25 +99,25 @@
                <li>Placing men on vacant points</li>
                <li>Moving men to adjacent points (optional phase)</li>
                <li>Moving men to any vacant point when a player has been reduced to three men</li>
-               <h5>Phase 1: Placing pieces</h5> Nine Men's Morris starts on an empty board. The game begins with an empty board. The players determine who plays first, then take turns placing their men one per play on empty points. If a player is able to place three of his pieces in
+               <h6>Phase 1: Placing pieces</h6> Nine Men's Morris starts on an empty board. The game begins with an empty board. The players determine who plays first, then take turns placing their men one per play on empty points. If a player is able to place three of his pieces in
                a straight line, vertically or horizontally, he has formed a mill and may remove one of his opponent's pieces from the board and the game. Any piece can be chosen for the removal, but a piece not in an opponent's mill must be selected,
                if possible.
-               <h5>Phase 2: Moving pieces</h5> Players continue to alternate moves, this time moving a man to an adjacent point. A piece may not "jump" another piece. Players continue to try to form mills and remove their opponent's pieces in the same manner as in phase one. A player
+               <h6>Phase 2: Moving pieces</h6> Players continue to alternate moves, this time moving a man to an adjacent point. A piece may not "jump" another piece. Players continue to try to form mills and remove their opponent's pieces in the same manner as in phase one. A player
                may "break" a mill by moving one of his pieces out of an existing mill, then moving the piece back to form the same mill a second time (or any number of times), each time removing one of his opponent's men. The act of removing an opponent's
                man is sometimes called "pounding" the opponent. When one player has been reduced to three men, phase three begins.
-               <h5>Phase 3: "Flying"</h5> When a player is reduced to three pieces, there is no longer a limitation on that player of moving to only adjacent points: The player's men may "fly", "hop",[4][5] or "jump"[6] from any point to any vacant point. Some rules sources say
+               <h6>Phase 3: "Flying"</h6> When a player is reduced to three pieces, there is no longer a limitation on that player of moving to only adjacent points: The player's men may "fly", "hop",[4][5] or "jump"[6] from any point to any vacant point. Some rules sources say
                this is the way the game is played,[5][6] some treat it as a variation,[4][7][8][9] and some don't mention it at all.[10] A 19th-century games manual calls this the "truly rustic mode of playing the game".[4] Flying was introduced to compensate
                when the weaker side is one man away from losing the game.
-               <h4>Copyrights</h4>
-               <h5>Icons</h5>
+               <h5>Copyrights</h5>
+               <h6>Icons</h6>
                <div>Icons made by <a href="http://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"
                       title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-               <h5>Sounds</h5>
+               <h6>Sounds</h6>
                <ul>
                   <li><a href="http://soundbible.com/1705-Click2.html">Sebastian</a></li>
                   <li><a href="http://soundbible.com/1294-Button-Click-Off.html">Mike Koenig</a></li>
                </ul>
-               <h5>Music</h5> Music from Jukedeck - create your own at <a href="http://jukedeck.com">http://jukedeck.com.</a>
+               <h6>Music</h6> Music from Jukedeck - create your own at <a href="http://jukedeck.com">http://jukedeck.com.</a>
 
 
          </div>
@@ -208,10 +214,10 @@
          controller.setDrawController(drawController);
 
          var newGameBtn = document.getElementById('newGameBtn');
-         /*newGameBtn.addEventListener("click", function() {
+         newGameBtn.addEventListener("click", function() {
             game.newGame();
             drawControler.redraw(true);
-         });*/
+         });
 
          var menutoggle = document.getElementById('menutoggle');
 
@@ -243,6 +249,8 @@
          document.getElementById("sidebar").style.width = "250px";
          document.getElementById("nav-right").style.paddingRight = "250px";
          document.getElementById("infoBtn").style.marginRight = "250px";
+         document.getElementById("newGameBtn").style.marginRight = "250px";
+
          menuOpen = true;
       }
 
@@ -252,6 +260,7 @@
          document.getElementById("sidebar").style.width = "0";
          document.getElementById("nav-right").style.paddingRight = "0";
          document.getElementById("infoBtn").style.marginRight = "24px";
+         document.getElementById("newGameBtn").style.marginRight = "24px";
 
          menuOpen = false;
       }
