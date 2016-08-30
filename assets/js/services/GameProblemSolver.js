@@ -526,13 +526,24 @@ function GameProblemSolver(game) {
      */
     this.getMoveUpCoords = function(z, y, x, field) {
         if (x == 1) {
-            if ((z > 0) && !field[z - 1][y][x]) {
-                return {
-                    x: x,
-                    y: y,
-                    z: z - 1
-                };
+            if (y == 0) {
+                if ((z > 0) && !field[z - 1][y][x]) {
+                    return {
+                        x: x,
+                        y: y,
+                        z: z - 1
+                    };
+                }
+            } else if (y == 2) {
+                if ((z < 2) && !field[z + 1][y][x]) {
+                    return {
+                        x: x,
+                        y: y,
+                        z: z + 1
+                    };
+                }
             }
+
         } else if ((y > 0) && !field[z][y - 1][x]) {
             return {
                 x: x,
@@ -555,13 +566,24 @@ function GameProblemSolver(game) {
      */
     this.getMoveDownCoords = function(z, y, x, field) {
         if (x == 1) {
-            if ((z < 2) && !field[z + 1][y][x]) {
-                return {
-                    x: x,
-                    y: y,
-                    z: z + 1
-                };
+            if (y == 0) {
+                if ((z < 2) && !field[z + 1][y][x]) {
+                    return {
+                        x: x,
+                        y: y,
+                        z: z + 1
+                    };
+                }
+            } else if (y == 2) {
+                if ((z > 0) && !field[z - 1][y][x]) {
+                    return {
+                        x: x,
+                        y: y,
+                        z: z - 1
+                    };
+                }
             }
+
         } else if ((y < 2) && !field[z][y + 1][x]) {
             return {
                 x: x,
@@ -584,13 +606,24 @@ function GameProblemSolver(game) {
      */
     this.getMoveRightCoords = function(z, y, x, field) {
         if (y == 1) {
-            if ((z < 2) && !field[z + 1][y][x]) {
-                return {
-                    x: x,
-                    y: y,
-                    z: z + 1
-                };
+            if (x == 0) {
+                if ((z < 2) && !field[z + 1][y][x]) {
+                    return {
+                        x: x,
+                        y: y,
+                        z: z + 1
+                    };
+                }
+            } else if (x == 2) {
+                if ((z > 0) && !field[z - 1][y][x]) {
+                    return {
+                        x: x,
+                        y: y,
+                        z: z - 1
+                    };
+                }
             }
+
         } else if ((x < 2) && !field[z][y][x + 1]) {
             return {
                 x: x + 1,
@@ -613,12 +646,23 @@ function GameProblemSolver(game) {
      */
     this.getMoveLeftCoords = function(z, y, x, field) {
         if (y == 1) {
-            if ((z > 0) && !field[z - 1][y][x]) {
-                return {
-                    x: x,
-                    y: y,
-                    z: z - 1
-                };
+            // left side
+            if (x == 0) {
+                if ((z > 0) && !field[z - 1][y][x]) {
+                    return {
+                        x: x,
+                        y: y,
+                        z: z - 1
+                    };
+                }
+            } else if (x == 2) { // right side
+                if ((z < 2) && !field[z + 1][y][x]) {
+                    return {
+                        x: x,
+                        y: y,
+                        z: z + 1
+                    };
+                }
             }
         } else if ((x > 0) && !field[z][y][x - 1]) {
             return {
