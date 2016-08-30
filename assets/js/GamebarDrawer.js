@@ -19,8 +19,6 @@ function GamebarDrawer(gbar) {
             var p1 = mGamebar.getPlayerActionFrom();
             var p2 = mGamebar.getPlayerActionAffected();
 
-            console.log(mPlayerImg);
-
             if (p1) {
                 if (p1.isCPU()) {
 
@@ -43,10 +41,7 @@ function GamebarDrawer(gbar) {
 
             mText = mText + "</p>";
         }
-        console.log(mSidebar.innerHTML);
-        console.log(mText);
         mSidebar.innerHTML += mText;
-        console.log(mSidebar.innerHTML);
     }
 
 }

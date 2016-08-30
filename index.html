@@ -66,7 +66,15 @@
          <canvas id="game" width="600" height="600" tabindex="1">
             <h1>To play this game Javascript must be activated!</h1>
          </canvas>
+
+         <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a class="btn-floating btn-large red">
+               <i class="large material-icons">mode_edit</i>
+            </a>
+         </div>
       </div>
+
+
 
    </div>
 
@@ -130,10 +138,7 @@
 
          var canvas = document.getElementById("game");
 
-         console.log(document.body.clientWidth);
-         console.log(canvas.width);
          canvas.width = document.body.clientWidth; //document.width is obsolete
-         console.log(canvas.width);
          canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
 
          var p1 = new Player('Mr. Test');
@@ -157,20 +162,18 @@
          controller.setDrawController(drawController);
 
          var newGameBtn = document.getElementById('newGameBtn');
-         console.log(newGameBtn);
          /*newGameBtn.addEventListener("click", function() {
             game.newGame();
             drawControler.redraw(true);
          });*/
 
          var menutoggle = document.getElementById('menutoggle');
-         console.log(menutoggle);
+
          var sidebar = document.getElementById('sidebar');
          menutoggle.addEventListener("click", function() {
 
             if (!menuOpen) {
                openNav();
-               console.log(document.getElementById("sidebar").style.width);
             } else {
                closeNav();
             }
@@ -190,7 +193,6 @@
 
       /* Set the width of the side navigation to 250px */
       function openNav() {
-         console.log(document.getElementById("sidebar").style.width);
          document.getElementById("sidebar").style.width = "250px";
          document.getElementById("nav-right").style.paddingRight = "250px";
          menuOpen = true;
@@ -209,7 +211,6 @@
          var musicSwitch = document.getElementById("myonoffswitch");
          var songplayer = document.getElementById("songplayer");
 
-         console.log(musicOn);
          if (!musicOn) {
             songplayer.pause();
             musicSwitch.checked = false;

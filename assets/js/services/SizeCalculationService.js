@@ -7,11 +7,8 @@ function SizeCalculationService(canvas, gf) {
         var topNav = document.getElementById("topnav");
         var sidebar = document.getElementById("sidebar");
 
-        console.log(sidebar.offsetWidth);
-
         mCanvas.width = document.body.clientWidth - sidebar.offsetWidth;
         mCanvas.height = gamefield.clientHeight - topNav.clientHeight;
-        console.log(mCanvas.width);
 
         //var mCanvasHeight = Math.min(window.innerHeight, document.body.clientHeight);
 
