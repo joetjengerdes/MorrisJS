@@ -152,7 +152,7 @@ function Game(gsb, player1, player2) {
         if (!mCurrentTurn.isCPU()) return;
 
         var move = mArtificialIntelligenceService.getBestMove(mGamefield);
-        //console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
+        console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
         if (self.isPlacingPhase()) {
             var vertices = mGamefield.getVertices();
             for (var i = 0; i < vertices.length; i++) {

@@ -1,8 +1,7 @@
 function ArtificialIntelligenceService(game) {
     var mGame = game;
-    var mMoves = [];
     var mField = mGame.getGamefield().cloneField();
-    var mDepth = 4;
+    var mDepth = 6;
     var mBestMove;
     var mCurrentPlayer; // is neccessary because we are simulating the turns
 
@@ -108,7 +107,7 @@ function ArtificialIntelligenceService(game) {
          * evaluate the number of morris which are opened. this is important
          * because the player can remove a token at his next turn.
          */
-        var numberOfOpenMorrisWeight = [0.00, 0.02, .04];
+        var numberOfOpenMorrisWeight = [0.00, 0.02, 0.04];
         var numberOfOpenMorrisCurrentPlayer = gameProblemSolver.numberOfOpenMorris(mCurrentPlayer, mField);
         var numberOfOpenMorrisOpponentPlayer = gameProblemSolver.numberOfOpenMorris(opponentPlayer, mField);
 
@@ -158,13 +157,14 @@ function ArtificialIntelligenceService(game) {
     function initMoves() {
         var problemSolver = mGame.getGameProblemSolver();
         var gamefield = mGame.getGamefield();
+        var moves = [];
         //TODO: Was ist wenn der nächste zug nicht mehr placing phase ist. mGame ändert sihc nicht!
         if (mGame.isPlacingPhase()) {
             var vertices = gamefield.getVertices();
             for (var z = 0; z < vertices.length; z++) {
-                if (!problemSolver.isTokenOnField(z)) {
+                if (!problemSolver.isTokenOnField(z, mField)) {
                     var obj = mGame.convertVertexPosToArrayPos(z);
-                    mMoves.push({
+                    moves.push({
                         src: null,
                         dst: obj
                     });
@@ -178,7 +178,7 @@ function ArtificialIntelligenceService(game) {
                         if (token && (token.getPlayer() === mCurrentPlayer)) {
                             var upCords = problemSolver.getMoveUpCoords(z, y, x, mField)
                             if (upCords) {
-                                mMoves.push({
+                                moves.push({
                                     src: {
                                         x: x,
                                         y: y,
@@ -189,7 +189,7 @@ function ArtificialIntelligenceService(game) {
                             }
                             var downCords = problemSolver.getMoveDownCoords(z, y, x, mField)
                             if (downCords) {
-                                mMoves.push({
+                                moves.push({
                                     src: {
                                         x: x,
                                         y: y,
@@ -200,7 +200,7 @@ function ArtificialIntelligenceService(game) {
                             }
                             var rightCords = problemSolver.getMoveRightCoords(z, y, x, mField)
                             if (rightCords) {
-                                mMoves.push({
+                                moves.push({
                                     src: {
                                         x: x,
                                         y: y,
@@ -211,7 +211,7 @@ function ArtificialIntelligenceService(game) {
                             }
                             var leftCords = problemSolver.getMoveLeftCoords(z, y, x, mField)
                             if (leftCords) {
-                                mMoves.push({
+                                moves.push({
                                     src: {
                                         x: x,
                                         y: y,
@@ -225,6 +225,7 @@ function ArtificialIntelligenceService(game) {
                 }
             }
         }
+        return moves;
     }
 
 
@@ -254,7 +255,6 @@ function ArtificialIntelligenceService(game) {
     function undoMove(move) {
         changePlayer();
         if (move.src) {
-            // is not visible. x,y is not neccessary
             var token = new PlayerToken(mCurrentPlayer);
             mField[move.src.z][move.src.y][move.src.x] = token;
         }
@@ -262,6 +262,30 @@ function ArtificialIntelligenceService(game) {
             mField[move.dst.z][move.dst.y][move.dst.x] = null;
         }
     }
+    /*
+    int miniMax(int spieler, int tiefe,
+                int alpha, int beta) {
+       if (tiefe == 0 or keineZuegeMehr(spieler))
+          return bewerten(spieler);
+       int maxWert = alpha;
+       generiereMoeglicheZuege(spieler);
+       while (noch Zug da) {
+          fuehreNaechstenZugAus();
+          int wert = -miniMax(-spieler, tiefe-1,
+                              -beta, -maxWert);
+          macheZugRueckgaengig();
+          if (wert > maxWert) {
+             maxWert = wert;
+             if (maxWert >= beta)
+                break;
+             if (tiefe == anfangstiefe)
+                gespeicherterZug = Zug;
+          }
+       }
+       return maxWert;
+    }
+
+    */
 
     function alphaBeta(depth, alpha, beta) {
         if (depth == 0) {
@@ -270,26 +294,43 @@ function ArtificialIntelligenceService(game) {
 
         var PVfound = false;
         var max = Number.NEGATIVE_INFINITY;
-        initMoves();
-        while (mMoves.length > 0) {
-            var currentMove = mMoves.pop();
+        //var max = alpha;
+        var moves = initMoves();
+        while (moves.length > 0) {
+            var currentMove = moves.pop();
             doNextMove(currentMove);
+
             if (PVfound) {
                 var val = -alphaBeta(depth - 1, -alpha - 1, -alpha);
                 if (val > alpha && val < beta)
                     val = -alphaBeta(depth - 1, -beta, -val);
-            } else
+            } else {
                 val = -alphaBeta(depth - 1, -beta, -alpha);
+            }
+
+
+
+
+            //var val = -alphaBeta(depth - 1, -beta, -max);
             undoMove(currentMove);
             if (val > max) {
-                if (val >= beta)
+                if (val >= beta) {
                     return val;
+                }
                 max = val;
-                mBestMove = currentMove;
+                // start depth
+                if (depth == mDepth) {
+
+                    mBestMove = currentMove;
+                    console.log("VAL: " + val);
+                    console.log("currentMove: (z y x) " + currentMove.dst.z + " " +
+                        currentMove.dst.y + " " + currentMove.dst.x);
+                }
                 if (val > alpha) {
                     alpha = val;
                     PVfound = true;
                 }
+
             }
         }
         return max;

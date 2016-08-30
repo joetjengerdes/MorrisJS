@@ -428,10 +428,13 @@ function GameProblemSolver(game) {
         return true;
     }
 
-    this.isTokenOnField = function(vertIndex) {
+    this.isTokenOnField = function(vertIndex, field) {
+        if (!field) {
+            field = mField;
+        }
         var coord = mGame.convertVertexPosToArrayPos(vertIndex);
 
-        if (mField[coord.z][coord.y][coord.x]) {
+        if (field[coord.z][coord.y][coord.x]) {
             return true;
         }
         return false;
