@@ -4,6 +4,8 @@ function ArtificialIntelligenceService(game) {
     var mField = mGame.getGamefield().cloneField();
     var mDepth = 5;
     var mBestMove;
+    var mCurrentPlayer; // is neccessary because we are simulating the turns
+
     //TODO: PROBLEM: welcher SPIELER ist an der reihe
 
     /**
@@ -126,11 +128,10 @@ function ArtificialIntelligenceService(game) {
      * @return {Array}  list with moves
      */
     function initMoves() {
-
+        var problemSolver = mGame.getGameProblemSolver();
         var gamefield = mGame.getGamefield();
         if (mGame.isPlacingPhase()) {
             var vertices = gamefield.getVertices();
-            var problemSolver = mGame.getGameProblemSolver();
             for (var z = 0; z < vertices.length; z++) {
                 if (problemSolver.isTokenOnField(z)) {
                     var obj = mGame.convertVertexPosToArrayPos(z);
@@ -268,7 +269,7 @@ function ArtificialIntelligenceService(game) {
                 mBestMove = currentMove;
                 if (val > alpha) {
                     alpha = val;
-                    PVfound = TRUE;
+                    PVfound = true;
                 }
             }
         }
@@ -277,6 +278,7 @@ function ArtificialIntelligenceService(game) {
 
     this.getBestMove = function(gameField) {
         mField = gameField.cloneField();
+        mCurrentPlayer = mGame.getCurrentPlayer();
         var val = alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
         console.log("VAL: " + val);
         return mBestMove;

@@ -372,7 +372,7 @@ function GameProblemSolver(game) {
             if (z == 1) {
                 token = mField[z + 1][y][x];
                 if (!token || (token.getPlayer() !== player)) {
-                    token = clonedField[z - 1][y][x];
+                    token = mField[z - 1][y][x];
                     if (!token || (token.getPlayer() !== player)) {
                         return false;
                     }
