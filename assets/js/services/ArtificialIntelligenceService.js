@@ -5,9 +5,6 @@ function ArtificialIntelligenceService(game) {
     var mDepth = 4;
     var mBestMove;
     var mCurrentPlayer; // is neccessary because we are simulating the turns
-    var self = this;
-
-
 
     //TODO: PROBLEM: welcher SPIELER ist an der reihe
     //
@@ -42,8 +39,8 @@ function ArtificialIntelligenceService(game) {
         var gameProblemSolver = mGame.getGameProblemSolver();
         var opponentPlayer = getOtherPlayer();
 
-        var numberOfTokenCurrentPlayer = gameProblemSolver.getNumberOfToken(mCurrentPlayer);
-        var numberOfTokenOpponentPlayer = gameProblemSolver.getNumberOfToken(opponentPlayer);
+        var numberOfTokenCurrentPlayer = gameProblemSolver.getNumberOfToken(mCurrentPlayer, mField);
+        var numberOfTokenOpponentPlayer = gameProblemSolver.getNumberOfToken(opponentPlayer, mField);
 
         /**
 
@@ -55,9 +52,13 @@ function ArtificialIntelligenceService(game) {
          */
         var numberOfTokenWeight = [0.00, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35];
         // minToken = 3, maxToken = 9; 3 token represents the first index.
-        result += numberOfTokenWeight[numberOfTokenCurrentPlayer - 3];
+        if (numberOfTokenCurrentPlayer >= 3) {
+            result += numberOfTokenWeight[numberOfTokenCurrentPlayer - 3];
+        }
         // for the opponent
-        result -= numberOfTokenWeight[numberOfTokenOpponentPlayer - 3];
+        if (numberOfTokenOpponentPlayer >= 3) {
+            result -= numberOfTokenWeight[numberOfTokenOpponentPlayer - 3];
+        }
 
         /**
          * number of moves
@@ -87,8 +88,8 @@ function ArtificialIntelligenceService(game) {
          * evaluate the number of morris of each player
          */
         var numberOfMorrisWeight = [0.00, 0.01, 0.02];
-        var numberOfMorrisCurrentPlayer = gameProblemSolver.numberOfMorris(mCurrentPlayer);
-        var numberOfMorrisOpponentPlayer = gameProblemSolver.numberOfMorris(opponentPlayer);
+        var numberOfMorrisCurrentPlayer = gameProblemSolver.numberOfMorris(mCurrentPlayer, mField);
+        var numberOfMorrisOpponentPlayer = gameProblemSolver.numberOfMorris(opponentPlayer, mField);
 
         if (numberOfMorrisCurrentPlayer >= 2) {
             result += numberOfMorrisWeight[2];
@@ -108,8 +109,8 @@ function ArtificialIntelligenceService(game) {
          * because the player can remove a token at his next turn.
          */
         var numberOfOpenMorrisWeight = [0.00, 0.02, .04];
-        var numberOfOpenMorrisCurrentPlayer = gameProblemSolver.numberOfOpenMorris(mCurrentPlayer);
-        var numberOfOpenMorrisOpponentPlayer = gameProblemSolver.numberOfOpenMorris(opponentPlayer);
+        var numberOfOpenMorrisCurrentPlayer = gameProblemSolver.numberOfOpenMorris(mCurrentPlayer, mField);
+        var numberOfOpenMorrisOpponentPlayer = gameProblemSolver.numberOfOpenMorris(opponentPlayer, mField);
 
         if (numberOfOpenMorrisCurrentPlayer >= 2) {
             result += numberOfOpenMorrisWeight[2];
@@ -124,8 +125,10 @@ function ArtificialIntelligenceService(game) {
         }
 
         var numberOfPossibleMovesWeight = [0.00, 0.02, 0.04, 0.08, 0.16];
-        var numberOfPossibleMovesCurrentPlayer = gameProblemSolver.numberOfPossibleMoves(mCurrentPlayer);
-        var numberOfPossibleMovesOpponentPlayer = gameProblemSolver.numberOfPossibleMoves(opponentPlayer);
+        var numberOfPossibleMovesCurrentPlayer = gameProblemSolver.numberOfPossibleMoves(mCurrentPlayer,
+            mGame.getGamefield().cloneField(mField));
+        var numberOfPossibleMovesOpponentPlayer = gameProblemSolver.numberOfPossibleMoves(opponentPlayer,
+            mGame.getGamefield().cloneField(mField));
 
         // calculate which player has more possibilitys
         var difference = numberOfPossibleMovesCurrentPlayer - numberOfPossibleMovesOpponentPlayer;
@@ -164,7 +167,7 @@ function ArtificialIntelligenceService(game) {
                     mMoves.push({
                         src: null,
                         dst: obj
-                    }); // TODO: WELCHER SPIELER FEHLT
+                    });
                 }
             }
         } else {
