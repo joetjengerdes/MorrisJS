@@ -37,9 +37,12 @@ function GameController(game, stbar) {
         if (selectedVertex == -1) return;
 
         mGame.doAction(selectedVertex);
-
-
         mDrawController.redraw();
+
+        setTimeout(function() {
+            mGame.doTurnCPU();
+            mDrawController.redraw();
+        }, 300);
     }
 
     function getVerticeIndexOfCoords(x, y) {
