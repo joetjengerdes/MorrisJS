@@ -150,26 +150,21 @@ function Game(gsb, player1, player2) {
         if (!mCurrentTurn.isCPU()) return;
 
         var move = mArtificialIntelligenceService.getBestMove(mGamefield);
-        //console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
+        console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
         if (self.isPlacingPhase()) {
             var vertices = mGamefield.getVertices();
             for (var i = 0; i < vertices.length; i++) {
                 //var coord = mGame.convertVertexPosToArrayPos(i);
-                //console.log(coord);
-                if (!mGameProblemSolver.isTokenOnField(i)) {
-                    //console.log(mGame.getGamefield().field[coord.z][coord.y][coord.x]);
-                    self.createToken(i, true);
-                    //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
-
-                    if (mWaitForRemoveToken) {
-                        var vertices = mGamefield.getVertices();
-                        for (var i = 0; i < vertices.length; i++) {
-                            if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
-                                break;
+                        if (mWaitForRemoveToken) {
+                            var vertices = mGamefield.getVertices();
+                            for (var i = 0; i < vertices.length; i++) {
+                                if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
+                                    break;
+                                }
                             }
+                            //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
                         }
-                    }
-                    self.changeTurn();
+                        self.changeTurn();
                     break;
                 }
             }
@@ -186,7 +181,7 @@ function Game(gsb, player1, player2) {
                 var moves = mGameProblemSolver.getPossibleMoves(i);
                 if (moves.length > 0) {
                     console.log("AUFRUG MOVE CPU");
-                    console.log("from " + i + " to " + moves[0]);
+                    //console.log("from " + i + " to " + moves[0]);
                     if (self.moveToken(i, moves[0])) {
                         if (mWaitForRemoveToken) {
                             var vertices = mGamefield.getVertices();
