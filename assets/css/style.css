@@ -1,135 +1,154 @@
 html {
-  height: 100%;
+    height: 100%;
 }
-
 body {
-  height: 100%;
-   padding: 0;
-   margin: 0;
-   overflow: hidden;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
 }
-
 div#wrapper {
-   height: 100%;
-   width: 100%;
+    height: 100%;
+    width: 100%;
 }
-
 #gamefield {
-  width: 100%;
-  height: 100%;
-  border-bottom: 2px solid red;
-  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
--moz-box-sizing: border-box;    /* Firefox, other Gecko */
-box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border-bottom: 2px solid red;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
-
+#infomodal {
+    top: 10%;
+}
+#infoBtn {
+    transition: 0.5s;
+}
 #game {
-   display: block;
-   border: 1px solid black;
-   background-image: url('../img/bg.jpg');
-   background-size: cover;
+    display: block;
+    border: 1px solid black;
+    background-image: url('../img/bg.jpg');
+    background-size: cover;
 }
-
 #game h1 {
-  background: white;
-  padding: 4em;
-  text-align: center;
+    background: white;
+    padding: 4em;
+    text-align: center;
 }
-
-li.music > div.switch > label {
-  color: white;
-  padding-right: 1em;
+li.music> div.switch> label {
+    color: white;
+    padding-right: 1em;
 }
-
 #statusbar {
-  width: 20%;
-  height: 60%;
-  position: absolute;
-  left: 1%;
-  top: 20%;
-  z-index: 10;
-  background-color: white;
-  border-radius: 2em;
-  padding: 1em;
-  box-shadow: 2px 2px grey;
+    width: 20%;
+    height: 60%;
+    position: absolute;
+    left: 1%;
+    top: 20%;
+    z-index: 10;
+    background-color: white;
+    border-radius: 2em;
+    padding: 1em;
+    box-shadow: 2px 2px grey;
 }
-
 #newGameConfirm {
-  position: absolute;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
 }
-
 #sidebar {
-    height: 100%; /* 100% Full-height */
-    width: 0; /* 0 width - change this with JavaScript */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    height: 100%;
+    width: 0;
+    /* changed this with JavaScript */
+    position: fixed;
+    z-index: 1;
     top: 0;
     right: 0;
     background-color: #FFF;
-    overflow-x: hidden; /* Disable horizontal scroll */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+    transition: 0.5s;
+    /* 0.5 second transition effect to slide in the sidenav */
     border-left: 1px solid grey;
 }
-
 #sidebar img {
-  float: left;
-  padding-right: 0.5em;
+    float: left;
+    padding-right: 0.5em;
 }
-
-#sidebar > #sidebar-inner {
-  padding: 1em;
+#sidebar> #sidebar-inner {
+    padding: 1em;
 }
-
-#topnav > .nav-wrapper > #nav-right {
-  transition: 0.5s;
+#topnav> .nav-wrapper> #nav-right {
+    transition: 0.5s;
 }
-
 .onoffswitch {
-    position: relative; width: 90px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    position: relative;
+    width: 90px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 .onoffswitch-checkbox {
     display: none;
 }
 .onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 2px solid #999999; border-radius: 20px;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid #999999;
+    border-radius: 20px;
 }
 .onoffswitch-inner {
-    display: block; width: 200%; margin-left: -100%;
+    display: block;
+    width: 200%;
+    margin-left: -100%;
     transition: margin 0.3s ease-in 0s;
 }
 .onoffswitch-inner:before, .onoffswitch-inner:after {
-    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
-    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    display: block;
+    float: left;
+    width: 50%;
+    height: 30px;
+    padding: 0;
+    line-height: 30px;
+    font-size: 14px;
+    color: white;
+    font-family: Trebuchet, Arial, sans-serif;
+    font-weight: bold;
     box-sizing: border-box;
 }
 .onoffswitch-inner:before {
     content: "ON";
     padding-left: 10px;
-    background-color: #34A7C1; color: #FFFFFF;
+    background-color: #34A7C1;
+    color: #FFFFFF;
 }
 .onoffswitch-inner:after {
     content: "OFF";
     padding-right: 10px;
-    background-color: #EEEEEE; color: #999999;
+    background-color: #EEEEEE;
+    color: #999999;
     text-align: right;
 }
 .onoffswitch-switch {
-    display: block; width: 18px; margin: 6px;
+    display: block;
+    width: 18px;
+    margin: 6px;
     background: #FFFFFF;
-    position: absolute; top: 0; bottom: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
     right: 56px;
-    border: 2px solid #999999; border-radius: 20px;
+    border: 2px solid #999999;
+    border-radius: 20px;
     transition: all 0.3s ease-in 0s;
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+.onoffswitch-checkbox:checked+ .onoffswitch-label .onoffswitch-inner {
     margin-left: 0;
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+.onoffswitch-checkbox:checked+ .onoffswitch-label .onoffswitch-switch {
     right: 0px;
 }
