@@ -127,18 +127,18 @@ function GameProblemSolver(game) {
      */
     this.numberOfMoves = function(player, field) {
         if (!field) {
-            mField = mGame.getGamefield().getField();
+            field = mField;
         }
         var num = 0;
-        for (var z = 0; z < mField.length; z++) {
-            for (var y = 0; y < mField[0].length; y++) {
-                for (var x = 0; x < mField[0][0].length; x++) {
-                    var token = mField[z][y][x];
+        for (var z = 0; z < field.length; z++) {
+            for (var y = 0; y < field[0].length; y++) {
+                for (var x = 0; x < field[0][0].length; x++) {
+                    var token = field[z][y][x];
                     if (token && (token.getPlayer() === player)) {
-                        if (this.canMoveUp(z, y, x, mField)) num++;
-                        if (this.canMoveDown(z, y, x, mField)) num++;
-                        if (this.canMoveRight(z, y, x, mField)) num++;
-                        if (this.canMoveLeft(z, y, x, mField)) num++;
+                        if (this.canMoveUp(z, y, x, field)) num++;
+                        if (this.canMoveDown(z, y, x, field)) num++;
+                        if (this.canMoveRight(z, y, x, field)) num++;
+                        if (this.canMoveLeft(z, y, x, field)) num++;
                     }
                 }
             }
@@ -153,12 +153,15 @@ function GameProblemSolver(game) {
      * @param  {Player} player description
      * @return {int}        number of token
      */
-    this.numberOfToken = function(player) {
+    this.numberOfToken = function(player, field) {
+        if (!field) {
+            field = mField;
+        }
         var num = 0;
-        for (var z = 0; z < mField.length; z++) {
-            for (var y = 0; y < mField[0].length; y++) {
-                for (var x = 0; x < mField[0][0].length; x++) {
-                    var token = mField[z][y][x];
+        for (var z = 0; z < field.length; z++) {
+            for (var y = 0; y < field[0].length; y++) {
+                for (var x = 0; x < field[0][0].length; x++) {
+                    var token = field[z][y][x];
                     if (token && (token.getPlayer() === player)) {
                         num++;
                     }
@@ -175,8 +178,10 @@ function GameProblemSolver(game) {
      * @param  {type} player description
      * @return {int}        number of moves
      */
-    this.numberOfPossibleMoves = function(player) {
-        var clonedField = mGame.getGamefield().cloneField();
+    this.numberOfPossibleMoves = function(player, clonedField) {
+        if (!clonedField) {
+            clonedField = mGame.getGamefield().cloneField();;
+        }
         var num = 0;
         for (var z = 0; z < clonedField.length; z++) {
             for (var y = 0; y < clonedField[0].length; y++) {
@@ -191,32 +196,35 @@ function GameProblemSolver(game) {
         return this.numberOfMoves(player, clonedField);
     }
 
-    this.numberOfMorris = function(player) {
+    this.numberOfMorris = function(player, field) {
+        if (!field) {
+            field = mField;
+        }
         var num = 0;
         var z01 = true;
         var z10 = true;
         var z21 = true;
         var z12 = true;
-        for (var z = 0; z < mField.length; z++) {
+        for (var z = 0; z < field.length; z++) {
             var left = true;
             var top = true;
             var bottom = true;
             var right = true;
 
-            for (var i = 0; i < mField[0][0].length; i++) {
-                var token = mField[z][i][0];
+            for (var i = 0; i < field[0][0].length; i++) {
+                var token = field[z][i][0];
                 if (!token || (token.getPlayer() !== player)) {
                     left = false;
                 }
-                token = mField[z][0][i];
+                token = field[z][0][i];
                 if (!token || (token.getPlayer() !== player)) {
                     top = false;
                 }
-                token = mField[z][2][i];
+                token = field[z][2][i];
                 if (!token || (token.getPlayer() !== player)) {
                     bottom = false;
                 }
-                token = mField[z][i][2];
+                token = field[z][i][2];
                 if (!token || (token.getPlayer() !== player)) {
                     right = false;
                 }
@@ -227,19 +235,19 @@ function GameProblemSolver(game) {
             if (bottom) num++;
             if (right) num++;
 
-            token = mField[z][0][1];
+            token = field[z][0][1];
             if (!token || (token.getPlayer() !== player)) {
                 z01 = false;
             }
-            token = mField[z][1][0];
+            token = field[z][1][0];
             if (!token || (token.getPlayer() !== player)) {
                 z10 = false;
             }
-            token = mField[z][2][1];
+            token = field[z][2][1];
             if (!token || (token.getPlayer() !== player)) {
                 z21 = false;
             }
-            token = mField[z][1][2];
+            token = field[z][1][2];
             if (!token || (token.getPlayer() !== player)) {
                 z12 = false;
             }
@@ -251,7 +259,11 @@ function GameProblemSolver(game) {
         return num;
     }
 
-    this.numberOfOpenMorris = function(player) {
+    this.numberOfOpenMorris = function(player, field) {
+        if (!field) {
+            field = mField;
+        }
+
         var num = 0;
         var z01 = true;
         var z10 = true;
@@ -261,7 +273,7 @@ function GameProblemSolver(game) {
         var z10Undef = false;
         var z21Undef = false;
         var z12Undef = false;
-        for (var z = 0; z < mField.length; z++) {
+        for (var z = 0; z < field.length; z++) {
             var left = true;
             var top = true;
             var bottom = true;
@@ -271,21 +283,21 @@ function GameProblemSolver(game) {
             var bottomUndef = false;
             var rightUndef = false;
 
-            for (var i = 0; i < mField[0][0].length; i++) {
+            for (var i = 0; i < field[0][0].length; i++) {
 
-                var flags = checkNeighbours(player, checkNeighboursY, z, i, 0, leftUndef)
+                var flags = checkNeighbours(player, checkNeighboursY, z, i, 0, leftUndef, field)
                 left = flags[0];
                 leftUndef = flags[1];
 
-                flags = checkNeighbours(player, checkNeighboursY, z, i, 2, rightUndef)
+                flags = checkNeighbours(player, checkNeighboursY, z, i, 2, rightUndef, field)
                 right = flags[0];
                 rightUndef = flags[1];
 
-                flags = checkNeighbours(player, checkNeighboursX, z, 0, i, topUndef)
+                flags = checkNeighbours(player, checkNeighboursX, z, 0, i, topUndef, field)
                 top = flags[0];
                 topUndef = flags[1];
 
-                flags = checkNeighbours(player, checkNeighboursX, z, 2, i, bottomUndef)
+                flags = checkNeighbours(player, checkNeighboursX, z, 2, i, bottomUndef, field)
                 bottom = flags[0];
                 bottomUndef = flags[1];
 
@@ -297,20 +309,20 @@ function GameProblemSolver(game) {
             if (bottom && bottomUndef) num++;
 
             // Morris of the z-axis
-            flags = checkNeighbours(player, checkNeighboursZ, z, 0, 1, z01Undef)
+            flags = checkNeighbours(player, checkNeighboursZ, z, 0, 1, z01Undef, field)
             z01 = flags[0];
             z01Undef = flags[1];
 
 
-            flags = checkNeighbours(player, checkNeighboursZ, z, 1, 0, z10Undef)
+            flags = checkNeighbours(player, checkNeighboursZ, z, 1, 0, z10Undef, field)
             z10 = flags[0];
             z10Undef = flags[1];
 
-            flags = checkNeighbours(player, checkNeighboursZ, z, 2, 1, z21Undef)
+            flags = checkNeighbours(player, checkNeighboursZ, z, 2, 1, z21Undef, field)
             z21 = flags[0];
             z21Undef = flags[1];
 
-            flags = checkNeighbours(player, checkNeighboursZ, z, 1, 2, z12Undef)
+            flags = checkNeighbours(player, checkNeighboursZ, z, 1, 2, z12Undef, field)
             z12 = flags[0];
             z12Undef = flags[1];
         }
@@ -321,8 +333,9 @@ function GameProblemSolver(game) {
         return num;
     }
 
-    function checkNeighbours(player, callback, z, y, x, undefinedFlag) {
-        var token = mField[z][y][x];
+    function checkNeighbours(player, callback, z, y, x, undefinedFlag, field) {
+
+        var token = field[z][y][x];
         var openMorrisFlag = true;;
         if (!token) {
             // first time undefined
@@ -330,7 +343,7 @@ function GameProblemSolver(game) {
                 openMorrisFlag = false;
             } else {
                 undefinedFlag = true;
-                openMorrisFlag = callback(player, z, y, x);
+                openMorrisFlag = callback(player, z, y, x, field);
             }
         } else if (token.getPlayer() !== player) {
             openMorrisFlag = false;
@@ -338,26 +351,26 @@ function GameProblemSolver(game) {
         return [openMorrisFlag, undefinedFlag];
     }
 
-    function checkNeighboursX(player, z, y, x) {
+    function checkNeighboursX(player, z, y, x, field) {
         // x is in the middle
         if (x == 1) {
             // z is in the middle. check z0 and z1.
             if (z == 1) {
-                var token = mField[z + 1][y][x];
+                var token = field[z + 1][y][x];
                 if (!token || (token.getPlayer() !== player)) {
-                    token = mField[z - 1][y][x];
+                    token = field[z - 1][y][x];
                     if (!token || (token.getPlayer() !== player)) {
                         return false;
                     }
                 }
             } else { // check z- (z-1)
-                var token = mField[z - (z - 1)][y][x];
+                var token = field[z - (z - 1)][y][x];
                 if (!token || (token.getPlayer() !== player)) {
                     return false;
                 }
             }
         } else { // just check y1
-            var token = mField[z][1][x];
+            var token = field[z][1][x];
             if (!token || (token.getPlayer() !== player)) {
                 return false;
             }
@@ -365,26 +378,26 @@ function GameProblemSolver(game) {
         return true;
     }
 
-    function checkNeighboursY(player, z, y, x) {
+    function checkNeighboursY(player, z, y, x, field) {
         //is y in the middle
         if (y == 1) {
             // z is in the middle. check z0 and z1.
             if (z == 1) {
-                token = mField[z + 1][y][x];
+                token = field[z + 1][y][x];
                 if (!token || (token.getPlayer() !== player)) {
-                    token = mField[z - 1][y][x];
+                    token = field[z - 1][y][x];
                     if (!token || (token.getPlayer() !== player)) {
                         return false;
                     }
                 }
             } else { // check z- (z-1)
-                token = mField[z - (z - 1)][y][x];
+                token = field[z - (z - 1)][y][x];
                 if (!token || (token.getPlayer() !== player)) {
                     return false;
                 }
             }
         } else { // just check x1
-            token = mField[z][y][1];
+            token = field[z][y][1];
             if (!token || (token.getPlayer() !== player)) {
                 return false;
             }
@@ -392,21 +405,21 @@ function GameProblemSolver(game) {
         return true;
     }
 
-    function checkNeighboursZ(player, z, y, x) {
+    function checkNeighboursZ(player, z, y, x, field) {
         //is y
         if (y == 1) {
-            token = mField[z][y + 1][x];
+            token = field[z][y + 1][x];
             if (!token || (token.getPlayer() !== player)) {
-                token = mField[z][y - 1][x];
+                token = field[z][y - 1][x];
                 if (!token || (token.getPlayer() !== player)) {
                     return false;
                 }
             }
 
         } else if (x == 1) { // is x
-            token = mField[z][y][x + 1];
+            token = field[z][y][x + 1];
             if (!token || (token.getPlayer() !== player)) {
-                token = mField[z][y][x - 1];
+                token = field[z][y][x - 1];
                 if (!token || (token.getPlayer() !== player)) {
                     return false;
                 }

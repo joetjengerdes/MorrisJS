@@ -75,8 +75,18 @@ function GameField() {
         mVertices = [];
     }
 
-    this.cloneField = function() {
-        var clone = mField.map(function(arr) {
+
+    /**
+     * cloneField - clones the Field of GameField or clones the field in the parameter.
+     *
+     * @param  {type} field field to clone or undefinded
+     * @return {type}       cloned field.     
+     */
+    this.cloneField = function(field) {
+        if (!field) {
+            field = mField;
+        }
+        var clone = field.map(function(arr) {
             return arr.map(function(arr2) {
                 return arr2.slice(0);
             });

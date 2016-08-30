@@ -2,33 +2,31 @@ function ArtificialIntelligenceService(game) {
     var mGame = game;
     var mMoves = [];
     var mField = mGame.getGamefield().cloneField();
-    var mDepth = 5;
+    var mDepth = 4;
     var mBestMove;
     var mCurrentPlayer; // is neccessary because we are simulating the turns
-    var self = this;
-
-
 
     //TODO: PROBLEM: welcher SPIELER ist an der reihe
-
+    //
     /**
-     * getField - returns the field of the AIService
+     * getOtherPlayer - get the opponent of the current player.
      *
-     * @return {PlayerToken[]}  field with PlayerToken
+     * @return {Player}  other player
      */
-    this.getField = function() {
-        return mField;
+    function getOtherPlayer() {
+        // mGame.getCurrentPlayer() does not change. We just use the function
+        // to get the players in this simulation.
+        return (mCurrentPlayer === mGame.getCurrentPlayer()) ?
+            mGame.getOpponentPlayer() : mGame.getCurrentPlayer();
     }
 
-
     /**
-     * getCurrentPlayer - returns the current Player of the AIService.
-     *
-     * @return {Player}  the current Player
+     * changePlayer - change the player for the simulation.
      */
-    this.getCurrentPlayer = function() {
-        return mCurrentPlayer;
+    function changePlayer() {
+        mCurrentPlayer = getOtherPlayer();
     }
+
 
     /**
      * evaluate - ... the current gamefield and return a "score". this score indicates
@@ -39,9 +37,10 @@ function ArtificialIntelligenceService(game) {
     function evaluate() {
         var result = 0;
         var gameProblemSolver = mGame.getGameProblemSolver();
+        var opponentPlayer = getOtherPlayer();
 
-        var numberOfTokenCurrentPlayer = gameProblemSolver.getNumberOfToken(mGame.getCurrentPlayer());
-        var numberOfTokenOpponentPlayer = gameProblemSolver.getNumberOfToken(mGame.getOpponentPlayer());
+        var numberOfTokenCurrentPlayer = gameProblemSolver.getNumberOfToken(mCurrentPlayer, mField);
+        var numberOfTokenOpponentPlayer = gameProblemSolver.getNumberOfToken(opponentPlayer, mField);
 
         /**
 
@@ -53,16 +52,20 @@ function ArtificialIntelligenceService(game) {
          */
         var numberOfTokenWeight = [0.00, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35];
         // minToken = 3, maxToken = 9; 3 token represents the first index.
-        result += numberOfTokenWeight[numberOfTokenCurrentPlayer - 3];
+        if (numberOfTokenCurrentPlayer >= 3) {
+            result += numberOfTokenWeight[numberOfTokenCurrentPlayer - 3];
+        }
         // for the opponent
-        result -= numberOfTokenWeight[numberOfTokenOpponentPlayer - 3];
+        if (numberOfTokenOpponentPlayer >= 3) {
+            result -= numberOfTokenWeight[numberOfTokenOpponentPlayer - 3];
+        }
 
         /**
          * number of moves
          */
         var numberOfMovesWeight = [0.00, 0.10, 0.15, 0.20, 0.25, 0.30]
-        var numberOfMovesCurrentPlayer = gameProblemSolver.numberOfMoves(mGame.getCurrentPlayer(), mField);
-        var numberOfMovesOpponentPlayer = gameProblemSolver.numberOfMoves(mGame.getOpponentPlayer(), mField);
+        var numberOfMovesCurrentPlayer = gameProblemSolver.numberOfMoves(mCurrentPlayer, mField);
+        var numberOfMovesOpponentPlayer = gameProblemSolver.numberOfMoves(opponentPlayer, mField);
 
         /**
          * if the number of the current player is larger than 10, the index is 5.
@@ -85,8 +88,8 @@ function ArtificialIntelligenceService(game) {
          * evaluate the number of morris of each player
          */
         var numberOfMorrisWeight = [0.00, 0.01, 0.02];
-        var numberOfMorrisCurrentPlayer = gameProblemSolver.numberOfMorris(mGame.getCurrentPlayer());
-        var numberOfMorrisOpponentPlayer = gameProblemSolver.numberOfMorris(mGame.getOpponentPlayer());
+        var numberOfMorrisCurrentPlayer = gameProblemSolver.numberOfMorris(mCurrentPlayer, mField);
+        var numberOfMorrisOpponentPlayer = gameProblemSolver.numberOfMorris(opponentPlayer, mField);
 
         if (numberOfMorrisCurrentPlayer >= 2) {
             result += numberOfMorrisWeight[2];
@@ -106,8 +109,8 @@ function ArtificialIntelligenceService(game) {
          * because the player can remove a token at his next turn.
          */
         var numberOfOpenMorrisWeight = [0.00, 0.02, .04];
-        var numberOfOpenMorrisCurrentPlayer = gameProblemSolver.numberOfOpenMorris(mGame.getCurrentPlayer());
-        var numberOfOpenMorrisOpponentPlayer = gameProblemSolver.numberOfOpenMorris(mGame.getOpponentPlayer());
+        var numberOfOpenMorrisCurrentPlayer = gameProblemSolver.numberOfOpenMorris(mCurrentPlayer, mField);
+        var numberOfOpenMorrisOpponentPlayer = gameProblemSolver.numberOfOpenMorris(opponentPlayer, mField);
 
         if (numberOfOpenMorrisCurrentPlayer >= 2) {
             result += numberOfOpenMorrisWeight[2];
@@ -122,8 +125,10 @@ function ArtificialIntelligenceService(game) {
         }
 
         var numberOfPossibleMovesWeight = [0.00, 0.02, 0.04, 0.08, 0.16];
-        var numberOfPossibleMovesCurrentPlayer = gameProblemSolver.numberOfPossibleMoves(mGame.getCurrentPlayer());
-        var numberOfPossibleMovesOpponentPlayer = gameProblemSolver.numberOfPossibleMoves(mGame.getOpponentPlayer());
+        var numberOfPossibleMovesCurrentPlayer = gameProblemSolver.numberOfPossibleMoves(mCurrentPlayer,
+            mGame.getGamefield().cloneField(mField));
+        var numberOfPossibleMovesOpponentPlayer = gameProblemSolver.numberOfPossibleMoves(opponentPlayer,
+            mGame.getGamefield().cloneField(mField));
 
         // calculate which player has more possibilitys
         var difference = numberOfPossibleMovesCurrentPlayer - numberOfPossibleMovesOpponentPlayer;
@@ -162,7 +167,7 @@ function ArtificialIntelligenceService(game) {
                     mMoves.push({
                         src: null,
                         dst: obj
-                    }); // TODO: WELCHER SPIELER FEHLT
+                    });
                 }
             }
         } else {
@@ -238,17 +243,6 @@ function ArtificialIntelligenceService(game) {
             mField[move.dst.z][move.dst.y][move.dst.x] = token;
         }
         changePlayer();
-    }
-
-
-    /**
-     * changePlayer - change the player for the simulation.
-     */
-    function changePlayer() {
-        // mGame.getCurrentPlayer() does not change. We just use the function
-        // to get the player in order to change the current player in this simulation.
-        mCurrentPlayer = (mCurrentPlayer === mGame.getCurrentPlayer()) ?
-            mGame.getOpponentPlayer() : mGame.getCurrentPlayer();
     }
 
 

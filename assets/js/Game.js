@@ -173,7 +173,9 @@ function Game(gsb, player1, player2) {
                         mGameStatusBar.setText(mCurrentTurn.getName() +
                             " removed a token of " + this.getOpponentPlayer().getName(),
                             false, mCurrentTurn, this.getOpponentPlayer());
-                    }
+                   
+//TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
+ }
                     self.changeTurn();
                     break;
                 }
@@ -191,7 +193,7 @@ function Game(gsb, player1, player2) {
                 var moves = mGameProblemSolver.getPossibleMoves(i);
                 if (moves.length > 0) {
                     console.log("AUFRUG MOVE CPU");
-                    console.log("from " + i + " to " + moves[0]);
+                    //console.log("from " + i + " to " + moves[0]);
                     if (self.moveToken(i, moves[0])) {
                         if (mWaitForRemoveToken) {
                             var vertices = mGamefield.getVertices();
