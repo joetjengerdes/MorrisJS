@@ -2,134 +2,239 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>Mühle-Spiel</title>
-    <script src="assets/js/PlayerToken.js"></script>
-    <script src="assets/js/Player.js"></script>
-    <script src="assets/js/Game.js"></script>
-    <script src="assets/js/GameField.js"></script>
-    <script src="assets/js/Vertex.js"></script>
-    <script src="assets/js/GameStatusBar.js"></script>
-    <script src="assets/js/EventController.js"></script>
-    <script src="assets/js/GameController.js"></script>
-    <script src="assets/js/DrawController.js"></script>
-    <script src="assets/js/SoundController.js"></script>
-    <script src="assets/js/services/SizeCalculationService.js"></script>
-    <script src="assets/js/services/GameProblemSolver.js"></script>
-    <script src="assets/js/services/ArtificialIntelligenceService.js"></script>
-    <link href="assets/css/style.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Montserrat|Sail|Concert+One" rel="stylesheet" type="text/css">
+   <meta charset="utf-8">
+   <title>Mühle-Spiel</title>
+   <script src="assets/js/PlayerToken.js"></script>
+   <script src="assets/js/Player.js"></script>
+   <script src="assets/js/Game.js"></script>
+   <script src="assets/js/GameField.js"></script>
+   <script src="assets/js/Vertex.js"></script>
+   <script src="assets/js/GameStatusBar.js"></script>
+   <script src="assets/js/EventController.js"></script>
+   <script src="assets/js/GameController.js"></script>
+   <script src="assets/js/DrawController.js"></script>
+   <script src="assets/js/SoundController.js"></script>
+   <script src="assets/js/services/SizeCalculationService.js"></script>
+   <script src="assets/js/services/GameProblemSolver.js"></script>
+   <script src="assets/js/services/ArtificialIntelligenceService.js"></script>
+   <link href="assets/css/style.css" rel="stylesheet" type="text/css">
+   <!--Import Google Icon Font-->
+   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
 </head>
 
 <body onload>
-    <div id="wrapper">
-        <canvas id="game" width="600" height="600" tabindex="1">
+   <div id="wrapper">
+
+      <nav id="topnav">
+         <div class="nav-wrapper teal">
+            <a href="#" class="brand-logo">Nine Men's Morris Online</a>
+            <ul id="nav-right" class="right hide-on-med-and-down">
+               <li class="music">
+                  <!-- Switch -->
+                  <div class="switch">
+                     <label>
+                        Music Off
+                        <input id="myonoffswitch" type="checkbox" checked>
+                        <span class="lever"></span> Music On
+                     </label>
+                  </div>
+               </li>
+               <li>
+                  <a id="menutoggle" href="javascript:void(0)">
+                     <i class="material-icons">menu</i>
+                  </a>
+               </li>
+            </ul>
+         </div>
+      </nav>
+
+      <div id="sidebar">
+         <div id="sidebar-inner">
+            bla
+         </div>
+      </div>
+
+      <div id="gamefield">
+         <canvas id="game" width="600" height="600" tabindex="1">
             <h1>To play this game Javascript must be activated!</h1>
-        </canvas>
-    </div>
-    <audio id="songplayer" autoplay loop>
-        <source src="assets/music/bg.mp3" type="audio/mpeg" />
-    </audio>
+         </canvas>
+      </div>
 
-    <audio id="click">
-        <source src="assets/sounds/click.mp3" type="audio/mpeg" />
-    </audio>
+   </div>
 
-    <audio id="clickoff">
-        <source src="assets/sounds/click-off.mp3" type="audio/mpeg" />
-    </audio>
+   <audio id="songplayer" autoplay loop>
+      <source src="assets/music/bg.mp3" type="audio/mpeg" />
+   </audio>
 
-    <div class="music">
-        <label>Music</label>
-        <div id="music-switch" class="onoffswitch">
-            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-            <label class="onoffswitch-label" for="myonoffswitch">
-                <span class="onoffswitch-inner"></span>
-                <span class="onoffswitch-switch"></span>
-            </label>
-        </div>
-    </div>
+   <audio id="click">
+      <source src="assets/sounds/click.mp3" type="audio/mpeg" />
+   </audio>
 
-    <script>
-        var musicOn;
+   <audio id="clickoff">
+      <source src="assets/sounds/click-off.mp3" type="audio/mpeg" />
+   </audio>
 
-        (function() {
+   <!--
+   <div class="music">
+      <label>Music</label>
+      <div id="music-switch" class="onoffswitch">
+         <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+         <label class="onoffswitch-label" for="myonoffswitch">
+            <span class="onoffswitch-inner"></span>
+            <span class="onoffswitch-switch"></span>
+         </label>
+      </div>
+   </div>-->
+   <!--
+   <div id="statusbar">
+      <button id="newGameBtn" class="waves-effect waves-light btn">
+         New Game
+      </button>
+   </div>-->
 
-            musicOn = readCookie("musicOn");
+   <!--
+   <div id="newGameConfirm" class="row">
+      <div class="col s12 m6">
+         <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+               <span class="card-title">Card Title</span>
+               <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+            </div>
+            <div class="card-action">
+               <a href="#">This is a link</a>
+               <a href="#">This is a link</a>
+            </div>
+         </div>
+      </div>
+   </div>-->
 
-            console.log(musicOn);
-            doMusicControls();
+   <script>
+      var musicOn;
+      var menuOpen = false;
+
+      document.addEventListener("DOMContentLoaded", function(event) {
+
+         musicOn = readCookie("musicOn");
+
+         console.log(musicOn);
+         doMusicControls();
 
 
 
-            var canvas = document.getElementById("game");
+         var canvas = document.getElementById("game");
 
-            canvas.width = document.body.clientWidth; //document.width is obsolete
-            canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
+         console.log(document.body.clientWidth);
+         console.log(canvas.width);
+         canvas.width = document.body.clientWidth; //document.width is obsolete
+         console.log(canvas.width);
+         canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
 
-            var p1 = new Player('Mr. Test');
-            //console.log(p1.isVisible());
-            var gameStatusBar = new GameStatusBar();
-            var game = new Game(gameStatusBar, p1);
-
-
-            var eventController = new EventController(canvas, game.getGamefield());
-            var controller = new GameController(game, gameStatusBar);
-            eventController.setGameController(controller);
+         var p1 = new Player('Mr. Test');
+         //console.log(p1.isVisible());
+         var gameStatusBar = new GameStatusBar();
+         var game = new Game(gameStatusBar, p1);
 
 
-            var drawControler = new DrawController(canvas, game.getGamefield(), gameStatusBar);
+         var eventController = new EventController(canvas, game.getGamefield());
+         var controller = new GameController(game, gameStatusBar);
+         eventController.setGameController(controller);
 
-            eventController.setDrawController(drawControler);
 
-            controller.setDrawController(drawControler);
+         var drawController = new DrawController(canvas, game.getGamefield(), gameStatusBar);
 
-            // this is the second start, first is done in Game.js. second
-            // start causes the 2nd player to start
-            //game.newGame();
+         eventController.setDrawController(drawController);
 
-            //controller.init();
-        })()
+         controller.setDrawController(drawController);
 
-        function doMusicControls() {
-            var musicSwitch = document.getElementById("myonoffswitch");
-            var songplayer = document.getElementById("songplayer");
+         var newGameBtn = document.getElementById('newGameBtn');
+         console.log(newGameBtn);
+         /*newGameBtn.addEventListener("click", function() {
+            game.newGame();
+            drawControler.redraw(true);
+         });*/
 
-            console.log(musicOn);
-            if (!musicOn) {
-                songplayer.pause();
-                musicSwitch.checked = false;
+         var menutoggle = document.getElementById('menutoggle');
+         console.log(menutoggle);
+         var sidebar = document.getElementById('sidebar');
+         menutoggle.addEventListener("click", function() {
+
+            if (!menuOpen) {
+               openNav();
+               console.log(document.getElementById("sidebar").style.width);
+            } else {
+               closeNav();
             }
+            // timeout needed for css transition time
+            setTimeout(function() {
+               eventController.getSizeCalculationService().calculate();
+               drawController.redraw(true);
+            }, 500);
+         });
 
-            musicSwitch.addEventListener('change', function(e) {
-                musicOn = !musicOn;
-                if (musicOn) {
-                    songplayer.play();
-                } else {
-                    songplayer.pause();
-                }
-                writeCookie("musicOn", musicOn);
-            });
-        };
+         // this is the second start, first is done in Game.js. second
+         // start causes the 2nd player to start
+         //game.newGame();
 
-        function readCookie(key) {
-            if (document.cookie) {
-                var start = document.cookie.indexOf(key + "=") + key.length + 1;
-                var end = document.cookie.indexOf(",");
-                if (end == -1) {
-                    end = document.cookie.length;
-                }
-                return document.cookie.substring(start, end) == "true" ? true : false;
+         //controller.init();
+      });
+
+      /* Set the width of the side navigation to 250px */
+      function openNav() {
+         console.log(document.getElementById("sidebar").style.width);
+         document.getElementById("sidebar").style.width = "250px";
+         document.getElementById("nav-right").style.paddingRight = "250px";
+         menuOpen = true;
+      }
+
+      /* Set the width of the side navigation to 0 */
+      function closeNav() {
+         document.getElementById("sidebar").style.width;
+         document.getElementById("sidebar").style.width = "0";
+         document.getElementById("nav-right").style.paddingRight = "0";
+
+         menuOpen = false;
+      }
+
+      function doMusicControls() {
+         var musicSwitch = document.getElementById("myonoffswitch");
+         var songplayer = document.getElementById("songplayer");
+
+         console.log(musicOn);
+         if (!musicOn) {
+            songplayer.pause();
+            musicSwitch.checked = false;
+         }
+
+         musicSwitch.addEventListener('change', function(e) {
+            musicOn = !musicOn;
+            if (musicOn) {
+               songplayer.play();
+            } else {
+               songplayer.pause();
             }
-            return true;
-        }
+            writeCookie("musicOn", musicOn);
+         });
+      };
 
-        function writeCookie(key, value) {
-            var expireDate = new Date(new Date() + 1000 * 60 * 60 * 24 * 365);
-            document.cookie = key + "=" + value + ", expires=" +
-                expireDate.toGMTString() + "; path=/";
-        }
-    </script>
+      function readCookie(key) {
+         if (document.cookie) {
+            var start = document.cookie.indexOf(key + "=") + key.length + 1;
+            var end = document.cookie.indexOf(",");
+            if (end == -1) {
+               end = document.cookie.length;
+            }
+            return document.cookie.substring(start, end) == "true" ? true : false;
+         }
+         return true;
+      }
+
+      function writeCookie(key, value) {
+         var expireDate = new Date(new Date() + 1000 * 60 * 60 * 24 * 365);
+         document.cookie = key + "=" + value + ", expires=" +
+            expireDate.toGMTString() + "; path=/";
+      }
+   </script>
 </body>
 
 </html>

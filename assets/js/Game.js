@@ -52,6 +52,11 @@ function Game(gsb, player1, player2) {
         } else {
             mCurrentTurn = mPlayer2;
         }
+        console.log(mCurrentTurn.isCPU());
+
+        if (mCurrentTurn.isCPU()) {
+            this.doTurnCPU();
+        }
     }
 
     /**
@@ -142,22 +147,47 @@ function Game(gsb, player1, player2) {
     }
 
     this.doTurnCPU = function() {
-        if (mCurrentTurn.isCPU()) {
-            // do nothing: it's CPUs turn and user tried to do s.th.
-            // TODO: remove test
+        if (!mCurrentTurn.isCPU()) return;
 
-            var move = mArtificialIntelligenceService.getBestMove(mGamefield);
-            //console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
-            if (self.isPlacingPhase()) {
-                var vertices = mGamefield.getVertices();
-                for (var i = 0; i < vertices.length; i++) {
-                    //var coord = mGame.convertVertexPosToArrayPos(i);
-                    //console.log(coord);
-                    if (!mGameProblemSolver.isTokenOnField(i)) {
-                        //console.log(mGame.getGamefield().field[coord.z][coord.y][coord.x]);
-                        self.createToken(i, true);
-                        //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
+        var move = mArtificialIntelligenceService.getBestMove(mGamefield);
+        //console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
+        if (self.isPlacingPhase()) {
+            var vertices = mGamefield.getVertices();
+            for (var i = 0; i < vertices.length; i++) {
+                //var coord = mGame.convertVertexPosToArrayPos(i);
+                //console.log(coord);
+                if (!mGameProblemSolver.isTokenOnField(i)) {
+                    //console.log(mGame.getGamefield().field[coord.z][coord.y][coord.x]);
+                    self.createToken(i, true);
+                    //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
 
+                    if (mWaitForRemoveToken) {
+                        var vertices = mGamefield.getVertices();
+                        for (var i = 0; i < vertices.length; i++) {
+                            if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
+                                break;
+                            }
+                        }
+                    }
+                    self.changeTurn();
+                    break;
+                }
+            }
+        } else {
+            var vertices = mGamefield.getVertices();
+            for (var i = 0; i < vertices.length; i++) {
+
+                var coords = self.convertVertexPosToArrayPos(i);
+                var field = mGamefield.getField();
+                if (!mGameProblemSolver.isTokenOnField(i) ||
+                    field[coords.z][coords.y][coords.x].getPlayer() !== mCurrentTurn) {
+                    continue;
+                }
+                var moves = mGameProblemSolver.getPossibleMoves(i);
+                if (moves.length > 0) {
+                    console.log("AUFRUG MOVE CPU");
+                    console.log("from " + i + " to " + moves[0]);
+                    if (self.moveToken(i, moves[0])) {
                         if (mWaitForRemoveToken) {
                             var vertices = mGamefield.getVertices();
                             for (var i = 0; i < vertices.length; i++) {
@@ -165,42 +195,15 @@ function Game(gsb, player1, player2) {
                                     break;
                                 }
                             }
+                            //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
                         }
                         self.changeTurn();
-                        break;
                     }
-                }
-            } else {
-                var vertices = mGamefield.getVertices();
-                for (var i = 0; i < vertices.length; i++) {
-
-                    var coords = self.convertVertexPosToArrayPos(i);
-                    var field = mGamefield.getField();
-                    if (!mGameProblemSolver.isTokenOnField(i) ||
-                        field[coords.z][coords.y][coords.x].getPlayer() !== mCurrentTurn) {
-                        continue;
-                    }
-                    var moves = mGameProblemSolver.getPossibleMoves(i);
-                    if (moves.length > 0) {
-                        console.log("AUFRUG MOVE CPU");
-                        console.log("from " + i + " to " + moves[0]);
-                        if (self.moveToken(i, moves[0])) {
-                            if (mWaitForRemoveToken) {
-                                var vertices = mGamefield.getVertices();
-                                for (var i = 0; i < vertices.length; i++) {
-                                    if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
-                                        break;
-                                    }
-                                }
-                                //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
-                            }
-                            self.changeTurn();
-                        }
-                        break;
-                    }
+                    break;
                 }
             }
         }
+
     }
 
 

@@ -25,6 +25,10 @@ function EventController(canvas, gamefield) {
         return mDrawController;
     }
 
+    this.getSizeCalculationService = function() {
+        return mSizeCalculationService;
+    }
+
     function initController() {
         canvas.addEventListener('selectstart', function(e) {
             e.preventDefault();

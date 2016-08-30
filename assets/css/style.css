@@ -1,4 +1,9 @@
+html {
+  height: 100%;
+}
+
 body {
+  height: 100%;
    padding: 0;
    margin: 0;
    overflow: hidden;
@@ -9,9 +14,17 @@ div#wrapper {
    width: 100%;
 }
 
+#gamefield {
+  width: 100%;
+  height: 100%;
+  border-bottom: 2px solid red;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+box-sizing: border-box;
+}
+
 #game {
    display: block;
-   margin: auto;
    border: 1px solid black;
    background-image: url('../img/bg.jpg');
    background-size: cover;
@@ -23,11 +36,53 @@ div#wrapper {
   text-align: center;
 }
 
-div.music {
-  position: absolute;
-  right: 2em;
-  top: 1em;
+li.music > div.switch > label {
+  color: white;
+  padding-right: 1em;
 }
+
+#statusbar {
+  width: 20%;
+  height: 60%;
+  position: absolute;
+  left: 1%;
+  top: 20%;
+  z-index: 10;
+  background-color: white;
+  border-radius: 2em;
+  padding: 1em;
+  box-shadow: 2px 2px grey;
+}
+
+#newGameConfirm {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+#sidebar {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    right: 0;
+    background-color: #FFF;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+#sidebar > #sidebar-inner {
+  padding: 1em;
+}
+
+#topnav > .nav-wrapper > #nav-right {
+  transition: 0.5s;
+}
+
 .onoffswitch {
     position: relative; width: 90px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
