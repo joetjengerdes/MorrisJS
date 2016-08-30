@@ -5,8 +5,30 @@ function ArtificialIntelligenceService(game) {
     var mDepth = 5;
     var mBestMove;
     var mCurrentPlayer; // is neccessary because we are simulating the turns
+    var self = this;
+
+
 
     //TODO: PROBLEM: welcher SPIELER ist an der reihe
+
+    /**
+     * getField - returns the field of the AIService
+     *
+     * @return {PlayerToken[]}  field with PlayerToken
+     */
+    this.getField = function() {
+        return mField;
+    }
+
+
+    /**
+     * getCurrentPlayer - returns the current Player of the AIService.
+     *
+     * @return {Player}  the current Player
+     */
+    this.getCurrentPlayer = function() {
+        return mCurrentPlayer;
+    }
 
     /**
      * evaluate - ... the current gamefield and return a "score". this score indicates
@@ -22,6 +44,7 @@ function ArtificialIntelligenceService(game) {
         var numberOfTokenOpponentPlayer = gameProblemSolver.getNumberOfToken(mGame.getOpponentPlayer());
 
         /**
+
          * weight:
          * 3 Token: 0.00
          * 4 Token: 0.10
@@ -130,15 +153,16 @@ function ArtificialIntelligenceService(game) {
     function initMoves() {
         var problemSolver = mGame.getGameProblemSolver();
         var gamefield = mGame.getGamefield();
+        //TODO: Was ist wenn der nächste zug nicht mehr placing phase ist. mGame ändert sihc nicht!
         if (mGame.isPlacingPhase()) {
             var vertices = gamefield.getVertices();
             for (var z = 0; z < vertices.length; z++) {
-                if (problemSolver.isTokenOnField(z)) {
+                if (!problemSolver.isTokenOnField(z)) {
                     var obj = mGame.convertVertexPosToArrayPos(z);
                     mMoves.push({
                         src: null,
                         dst: obj
-                    }); // TODO: WELCHER SPILER FEHLT
+                    }); // TODO: WELCHER SPIELER FEHLT
                 }
             }
         } else {
@@ -146,61 +170,49 @@ function ArtificialIntelligenceService(game) {
                 for (var y = 0; y < mField[0].length; y++) {
                     for (var x = 0; x < mField[0][0].length; x++) {
                         var token = mField[z][y][x];
-                        if (token && (token.getPlayer() === mGame.getCurrentPlayer())) {
-                            if (problemSolver.canMoveUp(z, y, x)) {
+                        if (token && (token.getPlayer() === mCurrentPlayer)) {
+                            var upCords = problemSolver.getMoveUpCoords(z, y, x, mField)
+                            if (upCords) {
                                 mMoves.push({
                                     src: {
                                         x: x,
                                         y: y,
                                         z: z
                                     },
-                                    dst: {
-                                        x: x,
-                                        y: y - 1,
-                                        z: z
-                                    }
+                                    dst: upCords
                                 });
                             }
-                            if (problemSolver.canMoveDown(z, y, x)) {
+                            var downCords = problemSolver.getMoveDownCoords(z, y, x, mField)
+                            if (downCords) {
                                 mMoves.push({
                                     src: {
                                         x: x,
                                         y: y,
                                         z: z
                                     },
-                                    dst: {
-                                        x: x,
-                                        y: y + 1,
-                                        z: z
-                                    }
+                                    dst: downCords
                                 });
                             }
-                            if (problemSolver.canMoveRight(z, y, x)) {
+                            var rightCords = problemSolver.getMoveRightCoords(z, y, x, mField)
+                            if (rightCords) {
                                 mMoves.push({
                                     src: {
                                         x: x,
                                         y: y,
                                         z: z
                                     },
-                                    dst: {
-                                        x: x + 1,
-                                        y: y,
-                                        z: z
-                                    }
+                                    dst: rightCords
                                 });
                             }
-                            if (problemSolver.canMoveLeft(z, y, x)) {
+                            var leftCords = problemSolver.getMoveLeftCoords(z, y, x, mField)
+                            if (leftCords) {
                                 mMoves.push({
                                     src: {
                                         x: x,
                                         y: y,
                                         z: z
                                     },
-                                    dst: {
-                                        x: x + 1,
-                                        y: y,
-                                        z: z
-                                    }
+                                    dst: leftCords
                                 });
                             }
                         }
@@ -222,9 +234,21 @@ function ArtificialIntelligenceService(game) {
         }
         if (move.dst) {
             // is not visible. x,y is not neccessary
-            var token = new PlayerToken(mGame.getCurrentPlayer());
+            var token = new PlayerToken(mCurrentPlayer);
             mField[move.dst.z][move.dst.y][move.dst.x] = token;
         }
+        changePlayer();
+    }
+
+
+    /**
+     * changePlayer - change the player for the simulation.
+     */
+    function changePlayer() {
+        // mGame.getCurrentPlayer() does not change. We just use the function
+        // to get the player in order to change the current player in this simulation.
+        mCurrentPlayer = (mCurrentPlayer === mGame.getCurrentPlayer()) ?
+            mGame.getOpponentPlayer() : mGame.getCurrentPlayer();
     }
 
 
@@ -234,9 +258,10 @@ function ArtificialIntelligenceService(game) {
      * @param  {obj} move object with coordinates.
      */
     function undoMove(move) {
+        changePlayer();
         if (move.src) {
             // is not visible. x,y is not neccessary
-            var token = new PlayerToken(mGame.getCurrentPlayer());
+            var token = new PlayerToken(mCurrentPlayer);
             mField[move.src.z][move.src.y][move.src.x] = token;
         }
         if (move.dst) {
@@ -276,6 +301,13 @@ function ArtificialIntelligenceService(game) {
         return max;
     }
 
+
+    /**
+     * getBestMove - calculate the best Opportunity and return the move.
+     *
+     * @param  {type} gameField needs the gamefield to calculate the moves.
+     * @return {obj}           obj with coordinates for the move
+     */
     this.getBestMove = function(gameField) {
         mField = gameField.cloneField();
         mCurrentPlayer = mGame.getCurrentPlayer();
@@ -283,4 +315,6 @@ function ArtificialIntelligenceService(game) {
         console.log("VAL: " + val);
         return mBestMove;
     }
+
+
 }
