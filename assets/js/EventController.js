@@ -30,12 +30,12 @@ function EventController(canvas, gamefield) {
     }
 
     function initController() {
-        canvas.addEventListener('selectstart', function(e) {
+        /*canvas.addEventListener('selectstart', function(e) {
             e.preventDefault();
             return false;
-        }, false);
+        }, false);*/
 
-        canvas.addEventListener('mouseup', function(e) {
+        $('#game').click(function(e) {
             var mouse = getMouse(e);
             var x = mouse.x;
             var y = mouse.y;
@@ -43,7 +43,7 @@ function EventController(canvas, gamefield) {
             mGameController.doAction(mouse.x, mouse.y);
         });
 
-        window.onresize = function() {
+        $(window).resize(function() {
             if (mResizeTimeout != null) {
                 clearTimeout(mResizeTimeout);
             }
@@ -53,9 +53,9 @@ function EventController(canvas, gamefield) {
                 // resizes the statusbox at the bottom
                 $('#statusbox').width($('#game').width());
             }, 200);
-        }
+        });
 
-        canvas.addEventListener('mousemove', function(e) {
+        $('#game').mousemove(function(e) {
             if (mMouseMoveTimeout != null) {
                 clearTimeout(mMouseMoveTimeout);
             }

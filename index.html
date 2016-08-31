@@ -155,7 +155,7 @@
       var menuOpen = false;
       var modalDisplayed = false;
 
-      document.addEventListener("DOMContentLoaded", function(event) {
+      $(document).ready(function(event) {
 
          $('.modal-trigger').leanModal();
 
@@ -164,7 +164,7 @@
          doMusicControls();
 
 
-         var canvas = ('#game');
+         var canvas = document.getElementById('game');
 
          canvas.width = document.body.clientWidth; //document.width is obsolete
          canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
@@ -235,19 +235,19 @@
 
       function doMusicControls() {
          var musicSwitch = $('#myonoffswitch');
-         var songplayer = $('songplayer');
+         var songplayer = $('#songplayer');
 
          if (!musicOn) {
-            songplayer.pause();
+            songplayer.trigger('pause');
             musicSwitch.checked = false;
          }
 
-         musicSwitch.addEventListener('change', function(e) {
+         musicSwitch.change(function(e) {
             musicOn = !musicOn;
             if (musicOn) {
-               songplayer.play();
+               songplayer.trigger('play');
             } else {
-               songplayer.pause();
+               songplayer.trigger('pause');
             }
             writeCookie("musicOn", musicOn);
          });
