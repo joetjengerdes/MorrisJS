@@ -188,7 +188,7 @@ function Game(gsb, player1, player2) {
         // is placingphase
         if (mMode == 1) {
             mTokensPlaced++;
-            mGameStatusBar.setText("Placed a token", 'actionDone', mCurrentPlayer);
+            mGameStatusBar.setText("Placed a token: " + mCurrentPlayer.getName(), 'actionDone', mCurrentPlayer);
             if (mTokensPlaced >= MAX_TOKEN_TO_PLACE) {
                 mMode = 2;
             }

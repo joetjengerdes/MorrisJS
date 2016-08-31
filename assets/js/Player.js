@@ -48,7 +48,6 @@ function Player(playerName) {
      */
     this.setName = function(newName) {
         mPlayerName = newName;
-        console.log(newName);
     }
 
     /**
