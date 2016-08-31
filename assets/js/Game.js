@@ -148,72 +148,120 @@ function Game(gsb, player1, player2) {
     }
 
     function checkIfEnemyCannotMove() {
-        // TODO
+        if (mGameProblemSolver.numberOfMoves(this.getOpponentPlayer()) == 0) {
+            return true;
+        }
         return false;
     }
 
     this.doTurnCPU = function() {
         if (!mCurrentTurn.isCPU()) return;
 
-        //var move = mArtificialIntelligenceService.getBestMove(mGamefield);
-        //console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
+
+        var move = mArtificialIntelligenceService.getBestMove(mGamefield);
+        console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
+        var i = this.convertArrayPosToVertexPos(move.dst.z, move.dst.y, move.dst.x);
         if (self.isPlacingPhase()) {
-            var vertices = mGamefield.getVertices();
-            for (var i = 0; i < vertices.length; i++) {
-                //var coord = mGame.convertVertexPosToArrayPos(i);
-                //console.log(coord);
-                if (!mGameProblemSolver.isTokenOnField(i)) {
-                    //console.log(mGame.getGamefield().field[coord.z][coord.y][coord.x]);
-                    self.createToken(i, true);
-                    //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
+            if (!mGameProblemSolver.isTokenOnField(i)) {
 
-                    if (mWaitForRemoveToken) {
-                        var vertices = mGamefield.getVertices();
-                        for (var i = 0; i < vertices.length; i++) {
-                            if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
-                                break;
-                            }
+                self.createToken(i, true);
+
+                if (mWaitForRemoveToken) {
+                    var vertices = mGamefield.getVertices();
+                    for (var i = 0; i < vertices.length; i++) {
+                        if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
+                            break;
                         }
-                        mGameStatusBar.setText(mCurrentTurn.getName() +
-                            " removed a token of " + this.getOpponentPlayer().getName(),
-                            false, mCurrentTurn, this.getOpponentPlayer());
-
-                        //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
                     }
-                    self.changeTurn();
-                    break;
+                    mGameStatusBar.setText(mCurrentTurn.getName() +
+                        " removed a token of " + this.getOpponentPlayer().getName(),
+                        false, mCurrentTurn, this.getOpponentPlayer());
+
+                    //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
                 }
+                self.changeTurn();
             }
         } else {
-            var vertices = mGamefield.getVertices();
-            for (var i = 0; i < vertices.length; i++) {
+            var field = mGamefield.getField();
 
-                var coords = self.convertVertexPosToArrayPos(i);
-                var field = mGamefield.getField();
-                if (!mGameProblemSolver.isTokenOnField(i) ||
-                    field[coords.z][coords.y][coords.x].getPlayer() !== mCurrentTurn) {
-                    continue;
-                }
-                var moves = mGameProblemSolver.getPossibleMoves(i);
-                if (moves.length > 0) {
-                    console.log("AUFRUG MOVE CPU");
-                    //console.log("from " + i + " to " + moves[0]);
-                    if (self.moveToken(i, moves[0])) {
-                        if (mWaitForRemoveToken) {
-                            var vertices = mGamefield.getVertices();
-                            for (var i = 0; i < vertices.length; i++) {
-                                if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
-                                    break;
-                                }
-                            }
-                            //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
+            var src = this.convertArrayPosToVertexPos(move.src.z, move.src.y, move.src.x);
+
+            console.log("AUFRUG MOVE CPU");
+            //console.log("from " + i + " to " + moves[0]);
+            if (self.moveToken(src, i)) {
+                if (mWaitForRemoveToken) {
+                    var vertices = mGamefield.getVertices();
+                    for (var i = 0; i < vertices.length; i++) {
+                        if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
+                            break;
                         }
-                        self.changeTurn();
                     }
-                    break;
+                    //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
                 }
+                self.changeTurn();
             }
+
         }
+
+        /*
+                if (self.isPlacingPhase()) {
+                    var vertices = mGamefield.getVertices();
+                    for (var i = 0; i < vertices.length; i++) {
+                        //var coord = mGame.convertVertexPosToArrayPos(i);
+                        //console.log(coord);
+                        if (!mGameProblemSolver.isTokenOnField(i)) {
+                            //console.log(mGame.getGamefield().field[coord.z][coord.y][coord.x]);
+                            self.createToken(i, true);
+                            //drawController.drawVertex(vertices[i].x, vertices[i].y, "#00FF00");
+
+                            if (mWaitForRemoveToken) {
+                                var vertices = mGamefield.getVertices();
+                                for (var i = 0; i < vertices.length; i++) {
+                                    if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
+                                        break;
+                                    }
+                                }
+                                mGameStatusBar.setText(mCurrentTurn.getName() +
+                                    " removed a token of " + this.getOpponentPlayer().getName(),
+                                    false, mCurrentTurn, this.getOpponentPlayer());
+
+                                //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
+                            }
+                            self.changeTurn();
+                            break;
+                        }
+                    }
+                } else {
+                    var vertices = mGamefield.getVertices();
+                    for (var i = 0; i < vertices.length; i++) {
+
+                        var coords = self.convertVertexPosToArrayPos(i);
+                        var field = mGamefield.getField();
+                        if (!mGameProblemSolver.isTokenOnField(i) ||
+                            field[coords.z][coords.y][coords.x].getPlayer() !== mCurrentTurn) {
+                            continue;
+                        }
+                        var moves = mGameProblemSolver.getPossibleMoves(i);
+                        if (moves.length > 0) {
+                            console.log("AUFRUG MOVE CPU");
+                            //console.log("from " + i + " to " + moves[0]);
+                            if (self.moveToken(i, moves[0])) {
+                                if (mWaitForRemoveToken) {
+                                    var vertices = mGamefield.getVertices();
+                                    for (var i = 0; i < vertices.length; i++) {
+                                        if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
+                                            break;
+                                        }
+                                    }
+                                    //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
+                                }
+                                self.changeTurn();
+                            }
+                            break;
+                        }
+                    }
+                }
+                */
 
     }
 
