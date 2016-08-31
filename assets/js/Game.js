@@ -123,7 +123,7 @@ function Game(gsb, player1, player2) {
         mCurrentTurn = mCurrentTurn === mPlayer1 ? mPlayer2 : mPlayer1;
         if (mMode == 1) {
             mTokensPlaced++;
-            mGameStatusBar.setText("Placed a token", false, mCurrentTurn);
+            mGameStatusBar.setText("Placed a token", false, this.getOpponentPlayer());
             if (mTokensPlaced >= MAX_TOKEN_TO_PLACE) {
                 mMode = 2;
             }

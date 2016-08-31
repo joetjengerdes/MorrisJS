@@ -21,7 +21,6 @@ function GamebarDrawer(gbar) {
 
             if (p1) {
                 if (p1.isCPU()) {
-
                     mText = mText + mCpuImg;
                 } else {
                     mText = mText + mPlayerImg;
