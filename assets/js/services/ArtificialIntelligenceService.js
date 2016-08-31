@@ -6,6 +6,10 @@ function ArtificialIntelligenceService(game) {
     var mCurrentPlayer; // is neccessary because we are simulating the turns
     var mCounterTokenPlaced = 0;
 
+    this.setDepth = function(value) {
+        mDepth = value;
+    }
+
     //TODO: PROBLEM: welcher SPIELER ist an der reihe
     //
     /**

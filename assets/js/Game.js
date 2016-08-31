@@ -17,9 +17,24 @@ function Game(gsb, player1, player2) {
     var mError;
 
 
+    this.setDifficulty = function(diff) {
+        console.log(diff);
+        switch (diff) {
+            case 'easy':
+                mArtificialIntelligenceService.setDepth(2);
+                break;
+            case 'middle':
+                mArtificialIntelligenceService.setDepth(3);
+                break;
+            case 'hard':
+                mArtificialIntelligenceService.setDepth(4);
+                break;
+        }
+    }
+
     /**
      * getNumberTokenPlaced - this function return the number of placed token.
-     * this is important for the placing phase.    
+     * this is important for the placing phase.
      *
      * @return {type}  description
      */

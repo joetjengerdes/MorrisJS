@@ -111,16 +111,16 @@
             <br /> And select a difficulty
             <form action="#">
                <p>
-                  <input class="with-gap" name="group1" type="radio" id="test1" />
-                  <label for="test1">Easy</label>
+                  <input class="with-gap" name="group1" type="radio" id="easy" />
+                  <label for="easy">Easy</label>
                </p>
                <p>
-                  <input class="with-gap" name="group1" type="radio" id="test2" checked/>
-                  <label for="test2">Middle</label>
+                  <input class="with-gap" name="group1" type="radio" id="middle" checked/>
+                  <label for="middle">Middle</label>
                </p>
                <p>
-                  <input class="with-gap" name="group1" type="radio" id="test3" />
-                  <label for="test3">Hard</label>
+                  <input class="with-gap" name="group1" type="radio" id="hard" />
+                  <label for="hard">Hard</label>
                </p>
             </form>
             <br />
@@ -190,6 +190,7 @@
       var menuOpen = false;
       var modalDisplayed = false;
       var gP1;
+      var gGame;
 
       $(document).ready(function(event) {
 
@@ -215,14 +216,14 @@
          //console.log(p1.isVisible());
          var gameStatusBar = new GameStatusBar();
          var gbDrawer = new GamebarDrawer(gameStatusBar);
-         var game = new Game(gameStatusBar, gP1);
+         gGame = new Game(gameStatusBar, gP1);
 
-         var eventController = new EventController(canvas, game.getGamefield());
-         var controller = new GameController(game, gameStatusBar);
+         var eventController = new EventController(canvas, gGame.getGamefield());
+         var controller = new GameController(gGame, gameStatusBar);
          eventController.setGameController(controller);
 
 
-         var drawController = new DrawController(canvas, game.getGamefield());
+         var drawController = new DrawController(canvas, gGame.getGamefield());
 
          eventController.setDrawController(drawController);
 
@@ -233,7 +234,7 @@
 
          $('#newGameBtn').click(function() {
             $('#newGameBtn').addClass('disabled');
-            game.newGame();
+            gGame.newGame();
             drawController.redraw(true);
             setTimeout(function() {
                $('#newGameBtn').removeClass('disabled');
@@ -276,7 +277,7 @@
       function doStartButtons() {
          $('#newGameBtn').click(function() {
             $('#newGameBtn').addClass('disabled');
-            game.newGame();
+            gGame.newGame();
             drawController.redraw(true);
             setTimeout(function() {
                $('#newGameBtn').removeClass('disabled');
@@ -284,7 +285,14 @@
          });
 
          $('#settingsConfirmBtn').click(function() {
-            // TODO: save difficulty
+            if ($('#easy').is(':checked')) {
+               gGame.setDifficulty('easy');
+            } else if ($('#middle').is(':checked')) {
+               gGame.setDifficulty('middle');
+            } else {
+               gGame.setDifficulty('hard');
+            }
+
             gP1.setName($('#username').val());
             $('#settingsModal').closeModal();
          });
