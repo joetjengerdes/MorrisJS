@@ -1,10 +1,20 @@
+/**
+ * Gamefield represents the gamefield of the game, it holds
+ * datas for the size, the vertices and a field. The field
+ * is a 3d array of tokens
+ */
 function GameField() {
+    // size of the gamefield
     var mWidth = 600;
     var mHeight = 600;
+    // space between the rings
     var mSpaceBetween = 100;
     var mCircleSize = 5;
     var mLineWidth = 5;
-    var mLeftOffset = 200; // Offset from left border to gamefield
+    // Offset from left border to gamefield
+    var mLeftOffset = 200;
+    // all vertices of the game, vertices are the place
+    // where tokens can be placed
     var mVertices = [];
     var mField = new Array(3);
 
