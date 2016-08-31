@@ -61,7 +61,7 @@ function Game(gsb, player1, player2) {
                 mArtificialIntelligenceService.setDepth(4);
                 break;
         }
-    }
+    };
 
     /**
      * getNumberTokenPlaced - this function return the number of placed token.
@@ -71,7 +71,7 @@ function Game(gsb, player1, player2) {
      */
     this.getNumberTokenPlaced = function() {
         return mTokensPlaced;
-    }
+    };
 
     /**
      * initGame - This function initializes a the game object and sets member.
@@ -82,13 +82,12 @@ function Game(gsb, player1, player2) {
     this.initGame = function(p1, p2) {
         mPlayer1 = p1;
         mPlayer2 = p2 || new Player("CPU");
-
         mGamefield = new GameField();
         mGameProblemSolver = new GameProblemSolver(this);
         this.newGame();
         mArtificialIntelligenceService = new ArtificialIntelligenceService(this);
         mSoundController = new SoundController();
-    }
+    };
 
 
     /**
@@ -109,7 +108,7 @@ function Game(gsb, player1, player2) {
         mPlayer2.setGame(this);
         mGamefield.setToDefault();
 
-        if (mStartingPlayer == null || mStartingPlayer === mPlayer2) {
+        if (mStartingPlayer === null || mStartingPlayer === mPlayer2) {
             mCurrentPlayer = mPlayer1;
             mStartingPlayer = mPlayer1;
         } else {
@@ -123,7 +122,7 @@ function Game(gsb, player1, player2) {
             mGameStatusBar.setText('It\'s your turn. Place a token!');
         }
         mGameStatusBar.setText("New game started!", 'general');
-    }
+    };
 
     /**
      * This function returns if the current phase
@@ -133,7 +132,7 @@ function Game(gsb, player1, player2) {
      */
     this.isPlacingPhase = function() {
         return mMode == 1;
-    }
+    };
 
     /**
      * This function returns if the current phase
@@ -143,15 +142,15 @@ function Game(gsb, player1, player2) {
      */
     this.isNormalPhase = function() {
         return mMode == 2;
-    }
+    };
 
     /**
      * This function returns if the game already ended
      * @return {Boolean} true if it's ended, otherwise false
      */
     this.hasEnded = function() {
-        return mMode == 0;
-    }
+        return mMode === 0;
+    };
 
     /**
      * This function return if player1 is the next player
@@ -160,7 +159,7 @@ function Game(gsb, player1, player2) {
     this.isPlayerOneTurn = function() {
         //console.log(currentTurn);
         return mCurrentPlayer !== 'undefinied' && mCurrentPlayer === mPlayer1;
-    }
+    };
 
     /**
      * Return the current Player
@@ -168,7 +167,7 @@ function Game(gsb, player1, player2) {
      */
     this.getCurrentPlayer = function() {
         return mCurrentPlayer;
-    }
+    };
 
     /**
      * Return the enemy player
@@ -176,7 +175,7 @@ function Game(gsb, player1, player2) {
      */
     this.getOpponentPlayer = function() {
         return mCurrentPlayer === mPlayer1 ? mPlayer2 : mPlayer1;
-    }
+    };
 
     /**
      * This function is called if a player ends his turn (and the next player
@@ -201,14 +200,14 @@ function Game(gsb, player1, player2) {
             mGameStatusBar.setText("Select token which you want to move.", 'doAction', this.getOpponentPlayer());
         }
         mCurrentPlayer = mCurrentPlayer === mPlayer1 ? mPlayer2 : mPlayer1;
-    }
+    };
 
     /**
      * Function to set that the current player won the game.
      * This will be printed and the gamemode will be set to end
      */
     function currentPlayerWonGame() {
-        mError = "Game ended: " + mCurrentPlayer.getName() + " won!", 'actionDone', mCurrentPlayer;
+        mError = "Game ended: " + mCurrentPlayer.getName() + " won!";
         mMode = 0;
         mGameStatusBar.setText(mCurrentPlayer.getName() + " won!", 'actionDone', mCurrentPlayer);
         mGameStatusBar.setText("Game ended!", 'general');
@@ -219,7 +218,7 @@ function Game(gsb, player1, player2) {
      * @return {Boolean} true if he cannot move, otherwise false
      */
     function checkIfEnemyCannotMove() {
-        if (mGameProblemSolver.numberOfMoves(self.getOpponentPlayer()) == 0) {
+        if (mGameProblemSolver.numberOfMoves(self.getOpponentPlayer()) === 0) {
             return true;
         }
         return false;
@@ -234,14 +233,15 @@ function Game(gsb, player1, player2) {
         if (!mCurrentPlayer.isCPU()) return;
 
         var move = mArtificialIntelligenceService.getBestMove(mGamefield);
-        var i = this.convertArrayPosToVertexPos(move.dst.z, move.dst.y, move.dst.x);
+        var index = this.convertArrayPosToVertexPos(move.dst.z, move.dst.y, move.dst.x);
+        var vertices = mGamefield.getVertices();
         if (self.isPlacingPhase()) {
-            if (!mGameProblemSolver.isTokenOnField(i)) {
+            if (!mGameProblemSolver.isTokenOnField(index)) {
 
-                self.createToken(i, true);
+                self.createToken(index, true);
 
                 if (mWaitForRemoveToken) {
-                    var vertices = mGamefield.getVertices();
+
                     for (var i = 0; i < vertices.length; i++) {
                         if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
                             break;
@@ -259,11 +259,10 @@ function Game(gsb, player1, player2) {
 
             var src = this.convertArrayPosToVertexPos(move.src.z, move.src.y, move.src.x);
 
-            if (self.moveToken(src, i)) {
+            if (self.moveToken(src, index)) {
                 if (mWaitForRemoveToken) {
-                    var vertices = mGamefield.getVertices();
-                    for (var i = 0; i < vertices.length; i++) {
-                        if (mGameProblemSolver.isTokenOnField(i) && self.removeToken(i)) {
+                    for (var j = 0; j < vertices.length; j++) {
+                        if (mGameProblemSolver.isTokenOnField(j) && self.removeToken(j)) {
                             break;
                         }
                     }
@@ -273,7 +272,7 @@ function Game(gsb, player1, player2) {
 
         }
 
-    }
+    };
 
 
     /**
@@ -297,7 +296,7 @@ function Game(gsb, player1, player2) {
             mCurrentPlayer.placeToken();
         }
         mSoundController.playMoveSound();
-    }
+    };
 
     /**
      * Returns if the player has to remove a token
@@ -305,7 +304,7 @@ function Game(gsb, player1, player2) {
      */
     this.hasPlayerToRemoveToken = function() {
         return mWaitForRemoveToken;
-    }
+    };
 
     /**
      * Returns if a token is selected
@@ -313,7 +312,7 @@ function Game(gsb, player1, player2) {
      */
     this.isTokenSelected = function() {
         return mSelectedPlayerToken;
-    }
+    };
 
     /**
      * Return the error or null if there isn't one
@@ -321,7 +320,7 @@ function Game(gsb, player1, player2) {
      */
     this.getError = function() {
         return mError;
-    }
+    };
 
     /**
      * Does the human action. Checks which game mode is
@@ -383,7 +382,7 @@ function Game(gsb, player1, player2) {
                 }
             }
         }
-    }
+    };
 
     /**
      * Selects a token
@@ -453,7 +452,7 @@ function Game(gsb, player1, player2) {
         mSoundController.playTokenStealSound();
 
         return true;
-    }
+    };
 
 
     /**
@@ -481,7 +480,7 @@ function Game(gsb, player1, player2) {
             mGameStatusBar.setText(mCurrentPlayer.getName() + " moved", 'actionDone', mCurrentPlayer);
             return true;
         }
-    }
+    };
 
     /**
      * This function converts a vertex id to the position in the 3d array
@@ -505,7 +504,7 @@ function Game(gsb, player1, player2) {
             y: y,
             z: z
         };
-    }
+    };
 
     /**
      * This function converts the position in the 3d array to a vertex id
@@ -516,14 +515,14 @@ function Game(gsb, player1, player2) {
      */
     this.convertArrayPosToVertexPos = function(z, y, x) {
         var base = z * 8;
-        var diff = y * 3 + x
+        var diff = y * 3 + x;
         if (diff > 4) {
             diff--;
         }
         var pos = base + diff;
 
         return pos;
-    }
+    };
 
     /**
      * Return true if the player needs to remove a token
@@ -531,7 +530,7 @@ function Game(gsb, player1, player2) {
      */
     this.getRemoveFlag = function() {
         return mWaitForRemoveToken;
-    }
+    };
 
     /**
      * Returns the gamefield of the game
@@ -539,7 +538,7 @@ function Game(gsb, player1, player2) {
      */
     this.getGamefield = function() {
         return mGamefield;
-    }
+    };
 
     /**
      * Return the gameProblemSolver
@@ -547,7 +546,7 @@ function Game(gsb, player1, player2) {
      */
     this.getGameProblemSolver = function() {
         return mGameProblemSolver;
-    }
+    };
 
     this.initGame(player1, player2);
 

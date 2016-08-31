@@ -5,8 +5,6 @@
 function GameController(game, stbar) {
     // reference of the game
     var mGame = game;
-    // self reference
-    var mController = this;
     // refenrece of the event controller
     var mEventController = null;
     // refenrece of the drawController
@@ -20,7 +18,7 @@ function GameController(game, stbar) {
      */
     this.getGame = function() {
         return mGame;
-    }
+    };
 
     /**
      * Sets the draw controller
@@ -28,7 +26,7 @@ function GameController(game, stbar) {
      */
     this.setDrawController = function(drawController_) {
         mDrawController = drawController_;
-    }
+    };
 
     /**
      * Gets the draw controller
@@ -36,7 +34,7 @@ function GameController(game, stbar) {
      */
     this.getDrawController = function() {
         return mDrawController;
-    }
+    };
 
     /**
      * Sets the event controller
@@ -44,7 +42,7 @@ function GameController(game, stbar) {
      */
     this.setEventController = function(eventController) {
         mEventController = eventController;
-    }
+    };
 
     /**
      * Returns the eventcontroller
@@ -52,7 +50,7 @@ function GameController(game, stbar) {
      */
     this.getEventController = function() {
         return mEventController;
-    }
+    };
 
     /**
      * This function is called if a persons clicks on
@@ -98,7 +96,7 @@ function GameController(game, stbar) {
         }, 1);
 
 
-    }
+    };
 
     /**
      * Gets the vertex id of the given coordinates,

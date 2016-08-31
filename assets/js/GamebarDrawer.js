@@ -33,7 +33,7 @@ function GamebarDrawer(gbar) {
         } else {
             bottomBarEvent();
         }
-    }
+    };
 
     function sidebarEvent() {
         // text to display, which can contains
