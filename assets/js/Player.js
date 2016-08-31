@@ -1,35 +1,61 @@
+/**
+ * Player represents a player in the game, this
+ * can be a human player or a computer controlled
+ * player (CPU).
+ * @param {String} playerName the name of the player
+ */
 function Player(playerName) {
-    var mCpu = 0; // 0 for human, 1 for cpus
+    // flag if the player is a cpu or a human player
+    var mCpu = false;
+    // name of the player
     var mPlayerName = playerName;
+    // the color of the tokens
     var mColor = "hsla(0, 100%, 50%, 1)";
     // counter for the tokens the player currently has on the field
     var mTokenCount = 0;
+    // reference of the game
     var mGame;
 
+    /**
+     * Return the name of the player
+     * @return {String} name of the player
+     */
     this.getName = function() {
         return mPlayerName;
     }
 
+    /**
+     * Resets the count of the tokens for the player to zero
+     */
     this.resetTokenCount = function() {
         mTokenCount = 0;
     }
 
-    this.getPlayerName = function() {
-        return mPlayerName;
-    }
-
+    /**
+     * Return true if the player is a cpu
+     * @return {Boolean} true if cpu, false if human
+     */
     this.isCPU = function() {
-        return mCpu == 1;
+        return mCpu;
     }
 
+    /** Sets the player to be a cpu controlled player */
     this.setCpu = function() {
-        mCpu = 1;
+        mCpu = true;
     }
 
+    /**
+     * Sets the color of the player
+     * @param {String} color of the tokens
+     */
     this.setColor = function(color) {
         mColor = color;
     }
 
+    /**
+     * Return the color of the player tokens
+     * @return {String} the color of the player tokens
+     */
     this.getColor = function() {
         return mColor;
     }
