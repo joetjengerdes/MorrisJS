@@ -11,6 +11,9 @@ function GameProblemSolver(game) {
         if (!field) {
             field = mField;
         }
+        console.log("NUM OPEN MORRIS " + mGame.getCurrentPlayer().getName() +
+            " - " + this.numberOfOpenMorris(mGame.getCurrentPlayer()));
+        //console.log("NUM OPEN MORRIS"+ numberOfOpenMorris(mCurrentPlayer));
         var vertexId = token.getVertexIndex();
         var coords = mGame.convertVertexPosToArrayPos(vertexId);
         return this.hasMorrisAtCoords(coords, field);
@@ -293,20 +296,20 @@ function GameProblemSolver(game) {
 
             for (var i = 0; i < field[0][0].length; i++) {
 
-                var flags = checkNeighbours(player, checkNeighboursY, z, i, 0, leftUndef, field)
-                left = flags[0];
+                var flags = checkNeighbours(player, checkNeighboursY, z, i, 0, leftUndef, field);
+                left = left && flags[0];
                 leftUndef = flags[1];
 
-                flags = checkNeighbours(player, checkNeighboursY, z, i, 2, rightUndef, field)
-                right = flags[0];
+                flags = checkNeighbours(player, checkNeighboursY, z, i, 2, rightUndef, field);
+                right = right && flags[0];
                 rightUndef = flags[1];
 
-                flags = checkNeighbours(player, checkNeighboursX, z, 0, i, topUndef, field)
-                top = flags[0];
+                flags = checkNeighbours(player, checkNeighboursX, z, 0, i, topUndef, field);
+                top = top && flags[0];
                 topUndef = flags[1];
 
-                flags = checkNeighbours(player, checkNeighboursX, z, 2, i, bottomUndef, field)
-                bottom = flags[0];
+                flags = checkNeighbours(player, checkNeighboursX, z, 2, i, bottomUndef, field);
+                bottom = bottom && flags[0];
                 bottomUndef = flags[1];
 
             }
@@ -318,20 +321,20 @@ function GameProblemSolver(game) {
 
             // Morris of the z-axis
             flags = checkNeighbours(player, checkNeighboursZ, z, 0, 1, z01Undef, field)
-            z01 = flags[0];
+            z01 = z01 && flags[0];
             z01Undef = flags[1];
 
 
             flags = checkNeighbours(player, checkNeighboursZ, z, 1, 0, z10Undef, field)
-            z10 = flags[0];
+            z10 = z10 && flags[0];
             z10Undef = flags[1];
 
             flags = checkNeighbours(player, checkNeighboursZ, z, 2, 1, z21Undef, field)
-            z21 = flags[0];
+            z21 = z21 && flags[0];
             z21Undef = flags[1];
 
             flags = checkNeighbours(player, checkNeighboursZ, z, 1, 2, z12Undef, field)
-            z12 = flags[0];
+            z12 = z12 && flags[0];
             z12Undef = flags[1];
         }
         if (z01 && z01Undef) num++;

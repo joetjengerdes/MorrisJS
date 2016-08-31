@@ -110,7 +110,6 @@ function ArtificialIntelligenceService(game) {
         var numberOfOpenMorrisWeight = [0.00, 0.02, 0.04];
         var numberOfOpenMorrisCurrentPlayer = gameProblemSolver.numberOfOpenMorris(mCurrentPlayer, mField);
         var numberOfOpenMorrisOpponentPlayer = gameProblemSolver.numberOfOpenMorris(opponentPlayer, mField);
-
         if (numberOfOpenMorrisCurrentPlayer >= 2) {
             result += numberOfOpenMorrisWeight[2];
         } else {
@@ -150,6 +149,51 @@ function ArtificialIntelligenceService(game) {
 
 
     /**
+     * addMoves - creates the list for the move for given by parameter. check the case if a
+     * move makes a morris and create a moves for every token the opponent owns.
+     * it is neccessary to evaluate and remove the best token.
+     *
+     * @param  {obj} source  coords of the source positino
+     * @param  {obj} destination coords of the destination position
+     * @return {[obj]} list with moves
+     */
+
+    function addMoves(source, destination) {
+        var moves = [];
+        if (destination) {
+            if (mGame.getGameProblemSolver().hasMorrisAtCoords(destination, mField)) {
+                // add a move for every token that can be removed
+                for (var z = 0; z < mField.length; z++) {
+                    for (var y = 0; y < mField[0].length; y++) {
+                        for (var x = 0; x < mField[0][0].length; x++) {
+                            var token = mField[z][y][x];
+                            if (token && (token.getPlayer() === getOtherPlayer())) {
+                                moves.push({
+                                    src: source,
+                                    dst: destination,
+                                    // remove token
+                                    rm: {
+                                        x: x,
+                                        y: y,
+                                        z: z
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            } else {
+                moves.push({
+                    src: source,
+                    dst: destination
+                });
+            }
+        }
+        return moves;
+    }
+
+
+    /**
      * initMoves - Create a list with the possible moves.
      *
      * @return {Array}  list with moves
@@ -163,11 +207,9 @@ function ArtificialIntelligenceService(game) {
             var vertices = gamefield.getVertices();
             for (var z = 0; z < vertices.length; z++) {
                 if (!problemSolver.isTokenOnField(z, mField)) {
-                    var obj = mGame.convertVertexPosToArrayPos(z);
-                    moves.push({
-                        src: null,
-                        dst: obj
-                    });
+                    var destination = mGame.convertVertexPosToArrayPos(z);
+                    // placing -> no source
+                    moves = moves.concat(addMoves(null, destination));
                 }
             }
         } else {
@@ -175,51 +217,24 @@ function ArtificialIntelligenceService(game) {
                 for (var y = 0; y < mField[0].length; y++) {
                     for (var x = 0; x < mField[0][0].length; x++) {
                         var token = mField[z][y][x];
+                        var source = {
+                            x: x,
+                            y: y,
+                            z: z
+                        }
                         if (token && (token.getPlayer() === mCurrentPlayer)) {
                             var upCords = problemSolver.getMoveUpCoords(z, y, x, mField)
-                            if (upCords) {
-                                moves.push({
-                                    src: {
-                                        x: x,
-                                        y: y,
-                                        z: z
-                                    },
-                                    dst: upCords
-                                });
-                            }
+                            moves = moves.concat(addMoves(source, upCords));
+
                             var downCords = problemSolver.getMoveDownCoords(z, y, x, mField)
-                            if (downCords) {
-                                moves.push({
-                                    src: {
-                                        x: x,
-                                        y: y,
-                                        z: z
-                                    },
-                                    dst: downCords
-                                });
-                            }
+                            moves = moves.concat(addMoves(source, downCords));
+
                             var rightCords = problemSolver.getMoveRightCoords(z, y, x, mField)
-                            if (rightCords) {
-                                moves.push({
-                                    src: {
-                                        x: x,
-                                        y: y,
-                                        z: z
-                                    },
-                                    dst: rightCords
-                                });
-                            }
+                            moves = moves.concat(addMoves(source, rightCords));
+
                             var leftCords = problemSolver.getMoveLeftCoords(z, y, x, mField)
-                            if (leftCords) {
-                                moves.push({
-                                    src: {
-                                        x: x,
-                                        y: y,
-                                        z: z
-                                    },
-                                    dst: leftCords
-                                });
-                            }
+                            moves = moves.concat(addMoves(source, leftCords));
+
                         }
                     }
                 }
@@ -227,6 +242,8 @@ function ArtificialIntelligenceService(game) {
         }
         return moves;
     }
+
+
 
 
     /**
@@ -242,6 +259,9 @@ function ArtificialIntelligenceService(game) {
             // is not visible. x,y is not neccessary
             var token = new PlayerToken(mCurrentPlayer);
             mField[move.dst.z][move.dst.y][move.dst.x] = token;
+        }
+        if (move.rm) {
+            mField[move.rm.z][move.rm.y][move.rm.x] = null;
         }
         changePlayer();
     }
@@ -260,6 +280,10 @@ function ArtificialIntelligenceService(game) {
         }
         if (move.dst) {
             mField[move.dst.z][move.dst.y][move.dst.x] = null;
+        }
+        if (move.rm) {
+            var token = new PlayerToken(getOtherPlayer());
+            mField[move.rm.z][move.rm.y][move.rm.x] = token;
         }
     }
     /*
