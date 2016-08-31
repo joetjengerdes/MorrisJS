@@ -24,7 +24,7 @@ function Player(playerName) {
      */
     this.getHighlightingColor = function() {
         return mHighlightingColor;
-    }
+    };
 
     /**
      * Sets the highlighting color
@@ -32,7 +32,7 @@ function Player(playerName) {
      */
     this.setHightlightingColor = function(c) {
         mHighlightingColor = c;
-    }
+    };
 
     /**
      * Return the name of the player
@@ -40,7 +40,7 @@ function Player(playerName) {
      */
     this.getName = function() {
         return mPlayerName;
-    }
+    };
 
     /**
      * Sets a new name
@@ -48,14 +48,14 @@ function Player(playerName) {
      */
     this.setName = function(newName) {
         mPlayerName = newName;
-    }
+    };
 
     /**
      * Resets the count of the tokens for the player to zero
      */
     this.resetTokenCount = function() {
         mTokenCount = 0;
-    }
+    };
 
     /**
      * Return true if the player is a cpu
@@ -63,12 +63,12 @@ function Player(playerName) {
      */
     this.isCPU = function() {
         return mCpu;
-    }
+    };
 
     /** Sets the player to be a cpu controlled player */
     this.setCpu = function() {
         mCpu = true;
-    }
+    };
 
     /**
      * Sets the color of the player
@@ -76,7 +76,7 @@ function Player(playerName) {
      */
     this.setColor = function(color) {
         mColor = color;
-    }
+    };
 
     /**
      * Return the color of the player tokens
@@ -84,7 +84,7 @@ function Player(playerName) {
      */
     this.getColor = function() {
         return mColor;
-    }
+    };
 
     /**
      * Sets the game the to player where he participates
@@ -92,21 +92,21 @@ function Player(playerName) {
      */
     this.setGame = function(game) {
         mGame = game;
-    }
+    };
 
     /**
      * Called when a player places a token
      */
     this.placeToken = function() {
         mTokenCount++;
-    }
+    };
 
     /**
      * Called when a player lost a token (stolen from the other place)
      */
     this.lostToken = function() {
         mTokenCount--;
-    }
+    };
 
     /**
      * Return true, if the player only has 3 tokens left, so he can jump
@@ -115,7 +115,7 @@ function Player(playerName) {
      */
     this.canJump = function() {
         return mTokenCount == 3 && !mGame.isPlacingPhase();
-    }
+    };
 
     /**
      * Return true, if the player has lost the game. If the game is still
@@ -124,6 +124,6 @@ function Player(playerName) {
      */
     this.hasLost = function() {
         return mTokenCount < 3 && !mGame.isPlacingPhase();
-    }
+    };
 
 }

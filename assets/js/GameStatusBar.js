@@ -39,81 +39,77 @@ function GameStatusBar() {
         for (var i = 0; i < mTextChangedListener.length; i++) {
             mTextChangedListener[i].statusBarTextChanged();
         }
-    }
+    };
 
     this.isGeneralEvent = function() {
         return mEventType == 'general';
-    }
+    };
 
     this.isDoActionEvent = function() {
         return mEventType == 'doAction';
-    }
+    };
 
     this.isActionDoneEvent = function() {
         return mEventType == 'actionDone';
-    }
+    };
 
     this.getPlayerActionFrom = function() {
         return mPlayerActionFrom;
-    }
+    };
 
     this.getPlayerActionAffected = function() {
         return mPlayerActionAffected;
-    }
-
-    this.getActionDescription = function() {
-        return mDescription;
-    }
+    };
 
     this.getText = function() {
         return mText;
-    }
+    };
 
     this.addTextChangedListener = function(listener) {
         mTextChangedListener.push(listener);
-    }
+    };
 
     this.getHeight = function() {
         return mHeight;
-    }
+    };
 
     this.getBackgroundColor = function() {
         return mBackgroundColor;
-    }
+    };
 
     this.getFontColor = function() {
         return mFontColor;
-    }
+    };
 
     this.getFontSize = function() {
         return mFontSize;
-    }
+    };
 
     this.getFontFamily = function() {
         return mFontFamily;
-    }
+    };
 
     this.setHeight = function(height) {
         mHeight = height;
-    }
+    };
 
     this.setBackgroundColor = function(bgc) {
         mBackgroundColor = bgc;
-    }
+    };
 
     this.setFontColor = function(fontColor) {
         mFontColor = fontColor;
-    }
+    };
 
     this.setFontSize = function(fontsize) {
         if (fontsize < 0) {
             throw "must be greater equal 0";
         }
         mFontSize = fontsize;
-    }
+    };
 
     this.setFontFamily = function(fontfamily) {
         mFontFamily = fontfamily;
-    }
+    };
 
 }

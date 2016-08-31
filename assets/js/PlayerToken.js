@@ -18,7 +18,7 @@ function PlayerToken(p) {
      */
     this.getColor = function() {
         return mPlayer.getColor();
-    }
+    };
 
     /**
      * Return the owner of the token
@@ -26,7 +26,7 @@ function PlayerToken(p) {
      */
     this.getPlayer = function() {
         return mPlayer;
-    }
+    };
 
     /**
      * Returns whether the token is selected or not
@@ -34,21 +34,21 @@ function PlayerToken(p) {
      */
     this.isSelected = function() {
         return mSelected;
-    }
+    };
 
     /**
      * Selects the token
      */
     this.select = function() {
         mSelected = true;
-    }
+    };
 
     /**
      * Unselects the token
      */
     this.unselect = function() {
         mSelected = false;
-    }
+    };
 
     /**
      * Get the vertex id of the token
@@ -56,7 +56,7 @@ function PlayerToken(p) {
      */
     this.getVertexIndex = function() {
         return mVertexId;
-    }
+    };
 
     /**
      * Sets the vertex id
@@ -64,5 +64,5 @@ function PlayerToken(p) {
      */
     this.setVertexIndex = function(vertexIndex) {
         mVertexId = vertexIndex;
-    }
+    };
 }

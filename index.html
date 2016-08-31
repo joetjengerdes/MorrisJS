@@ -194,6 +194,7 @@
       var modalDisplayed = false;
       var gP1;
       var gGame;
+      var drawController;
 
       $(document).ready(function(event) {
 
@@ -226,7 +227,7 @@
          eventController.setGameController(controller);
 
 
-         var drawController = new DrawController(canvas, gGame.getGamefield());
+         drawController = new DrawController(canvas, gGame.getGamefield());
 
          eventController.setDrawController(drawController);
 

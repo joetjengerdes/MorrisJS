@@ -18,7 +18,7 @@ function SoundController() {
         moveElem.pause();
         moveElem.currentTime = 0;
         moveElem.play();
-    }
+    };
 
     /**
      * This function plays the sound if s.o. lost a token
@@ -27,6 +27,6 @@ function SoundController() {
         tokenElem.pause();
         tokenElem.currentTime = 0;
         tokenElem.play();
-    }
+    };
 
 }

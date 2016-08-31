@@ -21,7 +21,7 @@ function Vertex(x, y, circleSize) {
      */
     this.getX = function() {
         return mX;
-    }
+    };
 
     /**
      * Gets the y coordinate of the vertex
@@ -29,7 +29,7 @@ function Vertex(x, y, circleSize) {
      */
     this.getY = function() {
         return mY;
-    }
+    };
 
     /**
      * Gets the size of the vertex
@@ -37,7 +37,7 @@ function Vertex(x, y, circleSize) {
      */
     this.getCircleSize = function() {
         return mCircleSize;
-    }
+    };
 
     /**
      * Sets the fill color
@@ -45,7 +45,7 @@ function Vertex(x, y, circleSize) {
      */
     this.setFill = function(color) {
         mFill = color;
-    }
+    };
 
     /**
      * Gets the fill color
@@ -53,7 +53,7 @@ function Vertex(x, y, circleSize) {
      */
     this.getFill = function() {
         return mFill;
-    }
+    };
 
     /**
      * Checks if there is a vertex on the given coordinates
@@ -69,6 +69,6 @@ function Vertex(x, y, circleSize) {
             }
         }
         return false;
-    }
+    };
 
 }
