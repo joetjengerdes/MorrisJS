@@ -4,14 +4,19 @@ function ArtificialIntelligenceService(game) {
     var mDepth = 4;
     var mBestMove;
     var mCurrentPlayer; // is neccessary because we are simulating the turns
-    var mCounterTokenPlaced = 0;
+    var mCounterTokenPlaced = 0; // neccessary for checking the end of the placing phase.
 
+
+    /**
+     * setDepth - set the depth. the higher the better for the move searching.
+     *
+     * @param  {type} value description
+     * @return {type}       description
+     */
     this.setDepth = function(value) {
         mDepth = value;
     }
 
-    //TODO: PROBLEM: welcher SPIELER ist an der reihe
-    //
     /**
      * getOtherPlayer - get the opponent of the current player.
      *
@@ -345,32 +350,15 @@ function ArtificialIntelligenceService(game) {
         }
     }
 
-    function miniMax(tiefe,
-        alpha, beta) {
-        var spieler = mCurrentPlayer;
-        if (tiefe == 0)
-            return evaluate();
-        var maxWert = alpha;
-        var moves = initMoves();
-        while (moves.length > 0) {
-            var currentMove = moves.pop();
-            doNextMove(currentMove);
-            var wert = -miniMax(tiefe - 1, -beta, -maxWert);
 
-            undoMove(currentMove);
-            if (wert > maxWert) {
-                maxWert = wert;
-                if (maxWert >= beta)
-                    break;
-                if (tiefe == mDepth)
-                    mBestMove = currentMove;
-            }
-        }
-        return maxWert;
-    }
-
-
-
+    /**
+     * alphaBeta - we use alpha beta pruning to get the best move.
+     *
+     * @param  {int} depth depth to search
+     * @param  {int} alpha alpha
+     * @param  {int} beta  beta value
+     * @return {int}       returns the max value
+     */
     function alphaBeta(depth, alpha, beta) {
         if (depth == 0 || (mGame.isPlacingPhase() && (mGame.getNumberTokenPlaced() + mCounterTokenPlaced) == 18)) {
             return evaluate();
