@@ -25,6 +25,14 @@ function Player(playerName) {
     }
 
     /**
+     * Sets a new name
+     * @param {String} newName new name for the player
+     */
+    this.setName = function(newName) {
+        mPlayerName = newName;
+    }
+
+    /**
      * Resets the count of the tokens for the player to zero
      */
     this.resetTokenCount = function() {

@@ -189,6 +189,7 @@
       var musicOn;
       var menuOpen = false;
       var modalDisplayed = false;
+      var gP1;
 
       $(document).ready(function(event) {
 
@@ -208,14 +209,11 @@
          canvas.width = document.body.clientWidth; //document.width is obsolete
          canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
 
-         var p1 = new Player('Mr. Test');
+         gP1 = new Player('Mr. Test');
          //console.log(p1.isVisible());
          var gameStatusBar = new GameStatusBar();
          var gbDrawer = new GamebarDrawer(gameStatusBar);
-         var game = new Game(gameStatusBar, p1);
-
-
-
+         var game = new Game(gameStatusBar, gP1);
 
          var eventController = new EventController(canvas, game.getGamefield());
          var controller = new GameController(game, gameStatusBar);
@@ -285,6 +283,7 @@
 
          $('#settingsConfirmBtn').click(function() {
             // TODO: save difficulty
+            gP1.setName($('#username').val());
             $('#settingsModal').closeModal();
          });
       }
