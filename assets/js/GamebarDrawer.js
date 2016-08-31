@@ -41,6 +41,8 @@ function GamebarDrawer(gbar) {
             mText = mText + "</p>";
         }
         mSidebar.innerHTML += mText;
+        var sidebarOuter = document.getElementById("sidebar");
+        sidebarOuter.scrollTop = sidebarOuter.scrollHeight;
     }
 
 }
