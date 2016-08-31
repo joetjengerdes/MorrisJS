@@ -59,9 +59,11 @@ function Game(gsb, player1, player2) {
         }
 
         if (mCurrentPlayer.isCPU()) {
+            mGameStatusBar.setText('It\'s CPU\'s turn!');
             this.doTurnCPU();
+            mGameStatusBar.setText('It\'s your turn. Place a token!');
         }
-        mGameStatusBar.setText("New game started!", true);
+        mGameStatusBar.setText("New game started!", 'general');
     }
 
     /**
@@ -119,7 +121,7 @@ function Game(gsb, player1, player2) {
         // is placingphase
         if (mMode == 1) {
             mTokensPlaced++;
-            mGameStatusBar.setText("Placed a token", false, mCurrentPlayer);
+            mGameStatusBar.setText("Placed a token", 'actionDone', mCurrentPlayer);
             if (mTokensPlaced >= MAX_TOKEN_TO_PLACE) {
                 mMode = 2;
             }
@@ -129,7 +131,7 @@ function Game(gsb, player1, player2) {
                 currentPlayerWonGame();
                 return;
             }
-            mGameStatusBar.setText("Select token which you want to move.", false, this.getOpponentPlayer());
+            mGameStatusBar.setText("Select token which you want to move.", 'doAction', this.getOpponentPlayer());
         }
         mCurrentPlayer = mCurrentPlayer === mPlayer1 ? mPlayer2 : mPlayer1;
     }
@@ -144,8 +146,8 @@ function Game(gsb, player1, player2) {
 
     function currentPlayerWonGame() {
         mMode = 0;
-        mGameStatusBar.setText(mCurrentPlayer.getName() + " won!", false, mCurrentPlayer);
-        mGameStatusBar.setText("Game ended!", true);
+        mGameStatusBar.setText(mCurrentPlayer.getName() + " won!", 'actionDone', mCurrentPlayer);
+        mGameStatusBar.setText("Game ended!", 'general');
     }
 
     function checkIfEnemyCannotMove() {
@@ -176,7 +178,7 @@ function Game(gsb, player1, player2) {
                     }
                     mGameStatusBar.setText(mCurrentPlayer.getName() +
                         " removed a token of " + this.getOpponentPlayer().getName(),
-                        false, mCurrentPlayer, this.getOpponentPlayer());
+                        'actionDone', mCurrentPlayer, this.getOpponentPlayer());
 
                     //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
                 }
@@ -290,13 +292,21 @@ function Game(gsb, player1, player2) {
         mSoundController.playMoveSound();
     }
 
+    this.hasPlayerToRemoveToken = function() {
+        return mWaitForRemoveToken;
+    }
+
+    this.isTokenSelected = function() {
+        return mSelectedPlayerToken;
+    }
+
     this.doAction = function(selectedVertex) {
         // player has a morris
         if (mWaitForRemoveToken) {
             if (this.removeToken(selectedVertex)) {
                 mGameStatusBar.setText(mCurrentPlayer.getName() +
                     " removed a token of " + this.getOpponentPlayer().getName(),
-                    false, mCurrentPlayer, this.getOpponentPlayer());
+                    'actionDone', mCurrentPlayer, this.getOpponentPlayer());
                 this.changeTurn();
             }
         } else {
@@ -329,7 +339,7 @@ function Game(gsb, player1, player2) {
                             this.changeTurn();
                         } else {
                             mGameStatusBar.setText("It's " + mCurrentPlayer.getName() +
-                                "'s turn. Click the token you want to remove");
+                                "'s turn. Click the token you want to remove", 'doAction');
                         }
                     }
                     unselectSelectedToken();

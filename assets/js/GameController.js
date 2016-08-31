@@ -2,12 +2,13 @@
  * Gamecontroller is used to control the game
  * @param {Game} game  the game controlled by the controller
  */
-function GameController(game) {
+function GameController(game, stbar) {
     // reference of the game
     var mGame = game;
     var mController = this;
     var mEventController = null;
     var mDrawController = null;
+    var mGameStatusBar = stbar;
 
     this.getGame = function() {
         return mGame;
@@ -40,11 +41,29 @@ function GameController(game) {
 
         mGame.doAction(selectedVertex);
         mDrawController.redraw();
+        if (!mGame.isPlayerOneTurn()) {
+            mGameStatusBar.setText('It\'s CPU\'s turn!', 'doAction');
+        }
 
         setTimeout(function() {
+
             mGame.doTurnCPU();
             mDrawController.redraw();
+
+            if (mGame.isPlacingPhase()) {
+                if (mGame.hasPlayerToRemoveToken()) {
+                    mGameStatusBar.setText('You have to remove a token!', 'doAction');
+                } else {
+                    mGameStatusBar.setText('It\'s your turn. Place a token!', 'doAction');
+                }
+            } else if (mGame.isNormalPhase()) {
+                if (mGame.isTokenSelected()) {
+                    mGameStatusBar.setText('Move the token or select another', 'doAction');
+                }
+            }
         }, 300);
+
+
     }
 
     function getVerticeIndexOfCoords(x, y) {

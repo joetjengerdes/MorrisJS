@@ -9,7 +9,7 @@ function GamebarDrawer(gbar) {
     var mGamebar = gbar;
     // add this as a listener to get notified
     // if there are changes
-    mGamebar.setTextChangedListener(this);
+    mGamebar.addTextChangedListener(this);
     // HTMLElement of the sidebar-inner, here is the
     // place where the content goes
     var mSidebar = document.getElementById("sidebar-inner");
@@ -18,6 +18,9 @@ function GamebarDrawer(gbar) {
     var mCpuImg = "<img src=\"assets/img/cpu.png\"></img>";
     var mPlayerImg = "<img src=\"assets/img/player.png\"></img>";
 
+    // box on the bottom of the field
+    var bottomBar = $('#statusbox');
+
     /**
      * This function is called when the statusbar text
      * changes. It adds the events to it and scrolls to
@@ -25,6 +28,14 @@ function GamebarDrawer(gbar) {
      * window height can display).
      */
     this.statusBarTextChanged = function() {
+        if (mGamebar.isGeneralEvent() || mGamebar.isActionDoneEvent()) {
+            sidebarEvent();
+        } else {
+            bottomBarEvent();
+        }
+    }
+
+    function sidebarEvent() {
         // text to display, which can contains
         // html elements
         var text = "<p>";
@@ -59,6 +70,10 @@ function GamebarDrawer(gbar) {
         // autoscroll to bottom
         var sidebarOuter = document.getElementById("sidebar");
         sidebarOuter.scrollTop = sidebarOuter.scrollHeight;
+    }
+
+    function bottomBarEvent() {
+        bottomBar.html(mGamebar.getText());
     }
 
 }

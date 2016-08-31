@@ -9,14 +9,18 @@ function GameStatusBar() {
     var mFontColor = "black";
     var mFontSize = "16px";
     var mFontFamily = "Arial";
-    // a general event is "win", "lose", etc.
-    var mGeneralEvent = false;
-    // the listener which should be notified by change
-    var mTextChangedListener;
+    // the listeners which should be notified by change
+    var mTextChangedListener = [];
     // the player which did the action
-    var mPlayerActionFrom
-        // the player wihch is affected by the action
+    var mPlayerActionFrom;
+    // the player wihch is affected by the action
     var mPlayerActionAffected;
+
+    // the type of the event. It can be 'error', 'general', 'actionDone',
+    // 'doAction'. Whereas error represents errors like you tried to remove
+    // an enemy token, general is for game events like 'game started', 'actionDone'
+    // is for the history and 'doAction' is what the player has to do next
+    var mEventType;
 
     /**
      * Sets the text and notfies the listener about the change
@@ -26,19 +30,27 @@ function GameStatusBar() {
      * @param {Player} player2 player which is affected by the action, undefinied
      * if there is none affected
      */
-    this.setText = function(newText, general, player1, player2) {
+    this.setText = function(newText, eventType, player1, player2) {
         mText = newText;
-        mGeneralEvent = general;
+        mEventType = eventType;
         mPlayerActionFrom = player1;
         mPlayerActionAffected = player2;
 
-        if (mTextChangedListener) {
-            mTextChangedListener.statusBarTextChanged();
+        for (var i = 0; i < mTextChangedListener.length; i++) {
+            mTextChangedListener[i].statusBarTextChanged();
         }
     }
 
     this.isGeneralEvent = function() {
-        return mGeneralEvent;
+        return mEventType == 'general';
+    }
+
+    this.isDoActionEvent = function() {
+        return mEventType == 'doAction';
+    }
+
+    this.isActionDoneEvent = function() {
+        return mEventType == 'actionDone';
     }
 
     this.getPlayerActionFrom = function() {
@@ -57,8 +69,8 @@ function GameStatusBar() {
         return mText;
     }
 
-    this.setTextChangedListener = function(listener) {
-        mTextChangedListener = listener;
+    this.addTextChangedListener = function(listener) {
+        mTextChangedListener.push(listener);
     }
 
     this.getHeight = function() {

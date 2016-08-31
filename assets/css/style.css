@@ -18,6 +18,9 @@ div#wrapper {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 #infomodal {
     top: 10%;
@@ -160,4 +163,7 @@ li.music> div.switch> label {
 }
 .onoffswitch-checkbox:checked+ .onoffswitch-label .onoffswitch-switch {
     right: 0px;
+}
+0px;
+
 }
