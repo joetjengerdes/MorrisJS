@@ -94,6 +94,41 @@
          &copy; Jannis Ötjengerdes & Timo Stüber
       </div>
 
+
+      <!-- Modal Structure -->
+      <div id="settingsModal" class="modal modal-fixed-footer">
+         <div class="modal-content">
+
+            <h5>Welcome!</h5> To play this game, please select a username first.
+            <br />
+
+            <div class="input-field">
+               <input id="username" type="text" autocomplete="off" value="Mr. Test" class="validate valid">
+               <label for="username">Username</label>
+            </div>
+
+            <span id="inputError" class="error"></span>
+            <br /> And select a difficulty
+            <form action="#">
+               <p>
+                  <input class="with-gap" name="group1" type="radio" id="test1" />
+                  <label for="test1">Easy</label>
+               </p>
+               <p>
+                  <input class="with-gap" name="group1" type="radio" id="test2" checked/>
+                  <label for="test2">Middle</label>
+               </p>
+               <p>
+                  <input class="with-gap" name="group1" type="radio" id="test3" />
+                  <label for="test3">Hard</label>
+               </p>
+            </form>
+            <br />
+            <a id="settingsConfirmBtn" class="waves-effect waves-light btn">Start game!</a>
+         </div>
+      </div>
+
+
       <!-- Modal Structure -->
       <div id="infomodal" class="modal modal-fixed-footer">
          <div class="modal-content">
@@ -158,11 +193,14 @@
       $(document).ready(function(event) {
 
          $('.modal-trigger').leanModal();
+         $('#settingsModal').openModal();
+
 
          musicOn = readCookie("musicOn");
          console.log(musicOn);
 
          doMusicControls();
+
 
 
          var canvas = document.getElementById('game');
@@ -190,6 +228,9 @@
 
          controller.setDrawController(drawController);
 
+         doValidation();
+         doStartButtons();
+
          $('#newGameBtn').click(function() {
             $('#newGameBtn').addClass('disabled');
             game.newGame();
@@ -215,6 +256,39 @@
          });
 
       });
+
+      function doValidation() {
+         $('#username').keyup(function() {
+            if ($(this).val().trim().length > 3) {
+               $(this).removeClass('invalid');
+               $(this).addClass('valid');
+               $('#inputError').html('')
+               $('#settingsConfirmBtn').removeClass('disabled');
+            } else {
+               $(this).removeClass('valid');
+               $(this).addClass('invalid');
+               $('#inputError').html('username too short!')
+               $('#settingsConfirmBtn').addClass('disabled');
+            }
+         });
+      }
+
+      function doStartButtons() {
+         $('#newGameBtn').click(function() {
+            $('#newGameBtn').addClass('disabled');
+            game.newGame();
+            drawController.redraw(true);
+            setTimeout(function() {
+               $('#newGameBtn').removeClass('disabled');
+            }, 2000);
+         });
+
+         $('#settingsConfirmBtn').click(function() {
+            // TODO: save difficulty
+            $('#settingsModal').closeModal();
+         });
+      }
+
 
       /* Set the width of the side navigation to 250px */
       function openNav() {
