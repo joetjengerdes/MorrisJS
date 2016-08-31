@@ -172,6 +172,7 @@ function Game(gsb, player1, player2) {
     }
 
     function currentPlayerWonGame() {
+        mError = "Game ended: " + mCurrentPlayer.getName() + " won!", 'actionDone', mCurrentPlayer;
         mMode = 0;
         mGameStatusBar.setText(mCurrentPlayer.getName() + " won!", 'actionDone', mCurrentPlayer);
         mGameStatusBar.setText("Game ended!", 'general');
