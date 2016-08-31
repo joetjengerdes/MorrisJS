@@ -52,6 +52,15 @@ li.music> div.switch> label {
     padding: 1em;
     box-shadow: 2px 2px grey;
 }
+#statusbox {
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: 0.5s;
+}
 #newGameConfirm {
     position: absolute;
     margin-left: auto;

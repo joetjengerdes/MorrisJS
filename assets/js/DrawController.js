@@ -103,20 +103,21 @@ function DrawController(canvas, gf) {
         var w = mGamefield.getWidth();
         var spaceBetween = mGamefield.getSpaceBetween();
         var leftOffset = mGamefield.getLeftOffset();
+        var offset = 60;
 
         drawFieldPart(mCtx, 0, 0, h, w);
         drawFieldPart(mCtx, spaceBetween, spaceBetween, h - spaceBetween, w - spaceBetween);
         drawFieldPart(mCtx, 2 * spaceBetween, 2 * spaceBetween, h - 2 * spaceBetween, w - 2 * spaceBetween);
 
         // von links bis mitte
-        drawLine(mCtx, leftOffset + 0 + 50, ((h + 0) / 2), leftOffset + spaceBetween * 2 + 50, ((h + 0) / 2));
+        drawLine(mCtx, leftOffset + 0 + offset, ((h + 0) / 2), leftOffset + spaceBetween * 2 + offset, ((h + 0) / 2));
         // von rechts bis mitte
-        drawLine(mCtx, leftOffset + w - 50, ((h + 0) / 2), leftOffset + w - spaceBetween * 2 - 50, ((h + 0) / 2));
+        drawLine(mCtx, leftOffset + w - offset, ((h + 0) / 2), leftOffset + w - spaceBetween * 2 - offset, ((h + 0) / 2));
 
         // von oben bis mitte
-        drawLine(mCtx, leftOffset + (w / 2), 50, leftOffset + (w / 2), spaceBetween * 2 + 50);
+        drawLine(mCtx, leftOffset + (w / 2), offset, leftOffset + (w / 2), spaceBetween * 2 + offset);
         // von unten bis mitte
-        drawLine(mCtx, leftOffset + (w / 2), h - 50, leftOffset + (w / 2), h - 50 - spaceBetween * 2);
+        drawLine(mCtx, leftOffset + (w / 2), h - offset, leftOffset + (w / 2), h - offset - spaceBetween * 2);
 
         for (i = 0; i < mGamefield.getVertices().length; i++) {
             mGamefield.getVertices()[i].draw(mCtx);
@@ -154,7 +155,7 @@ function DrawController(canvas, gf) {
      * @param  {Integer} wTo         ring to
      * @param  {Number} [offset=50] Offset between the other "rings"
      */
-    function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {
+    function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 60) {
 
         var leftOffset = mGamefield.getLeftOffset();
         var circleSize = Math.round(mGamefield.getCircleSize());
