@@ -478,6 +478,7 @@ function Game(gsb, player1, player2) {
             !(field[objTo.z][objTo.y][objTo.x])) {
             field[objFrom.z][objFrom.y][objFrom.x] = null;
             this.createToken(posTo);
+            mGameStatusBar.setText(mCurrentPlayer.getName() + " moved", 'actionDone', mCurrentPlayer);
             return true;
         }
     }
