@@ -1,7 +1,7 @@
 function ArtificialIntelligenceService(game) {
     var mGame = game;
     var mField = mGame.getGamefield().cloneField();
-    var mDepth = 6;
+    var mDepth = 4;
     var mBestMove;
     var mCurrentPlayer; // is neccessary because we are simulating the turns
 
@@ -242,6 +242,19 @@ function ArtificialIntelligenceService(game) {
             // is not visible. x,y is not neccessary
             var token = new PlayerToken(mCurrentPlayer);
             mField[move.dst.z][move.dst.y][move.dst.x] = token;
+            if (mGameProblemSolver.hasMorris(token, mField)) {
+                // add moves with removed token from opponent
+                for (var z = 0; z < mField.length; z++) {
+                    for (var y = 0; y < mField[0].length; y++) {
+                        for (var x = 0; x < mField[0][0].length; x++) {
+                            var token = mField[z][y][x];
+                            if (token && (token.getPlayer() === getOtherPlayer())) {
+                                move.add
+                            }
+                        }
+                    }
+                }
+            }
         }
         changePlayer();
     }
@@ -315,6 +328,7 @@ function ArtificialIntelligenceService(game) {
             undoMove(currentMove);
             if (val > max) {
                 if (val >= beta) {
+                    if (depth == mDepth) console.log("val >= beta");
                     return val;
                 }
                 max = val;

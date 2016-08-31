@@ -7,27 +7,32 @@ function GameProblemSolver(game) {
      * @param  {PlayerToken} token description
      * @return {Boolean}       is there a morris
      */
-    this.hasMorris = function(token) {
+    this.hasMorris = function(token, field) {
+        if (!field) {
+            field = mField;
+        }
         var vertexId = token.getVertexIndex();
-
-        // TODO: rausnehmen nach dem testen
-        //console.log("CurrenPlayers OpenMorris: " + this.numberOfOpenMorris(mGame.getCurrentPlayer()));
-        //console.log("OpponentPlayers OpenMorris: " + this.numberOfOpenMorris(mGame.getOpponentPlayer()));
-
         var coords = mGame.convertVertexPosToArrayPos(vertexId);
+        return hasMorrisAtCoords(coords, field);
 
+    }
+
+    this.hasMorrisAtCoords = function(coords, field) {
+        if (!field) {
+            field = mField;
+        }
         // row
-        var secondToken = mField[coords.z][coords.y][(coords.x + 1) % 3];
-        var thirdToken = mField[coords.z][coords.y][(coords.x + 2) % 3];
-        var currentToken = mField[coords.z][coords.y][coords.x];
+        var secondToken = field[coords.z][coords.y][(coords.x + 1) % 3];
+        var thirdToken = field[coords.z][coords.y][(coords.x + 2) % 3];
+        var currentToken = field[coords.z][coords.y][coords.x];
         if (hasSamePlayer(currentToken, secondToken, thirdToken)) {
             return true;
         }
 
         // column
-        secondToken = mField[coords.z][(coords.y + 1) % 3][coords.x]
-        thirdToken = mField[coords.z][(coords.y + 2) % 3][coords.x]
-        currentToken = mField[coords.z][coords.y][coords.x]
+        secondToken = field[coords.z][(coords.y + 1) % 3][coords.x]
+        thirdToken = field[coords.z][(coords.y + 2) % 3][coords.x]
+        currentToken = field[coords.z][coords.y][coords.x]
         if (hasSamePlayer(currentToken, secondToken, thirdToken)) {
             return true;
         }
@@ -42,7 +47,10 @@ function GameProblemSolver(game) {
             }
         }
         return false;
+
     }
+
+
 
     this.getAllTokenNotInMorris = function(player) {
         var tokensNotInMorris = [];
