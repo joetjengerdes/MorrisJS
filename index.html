@@ -160,6 +160,7 @@
          $('.modal-trigger').leanModal();
 
          musicOn = readCookie("musicOn");
+         console.log(musicOn);
 
          doMusicControls();
 
@@ -239,7 +240,7 @@
 
          if (!musicOn) {
             songplayer.trigger('pause');
-            musicSwitch.checked = false;
+            musicSwitch.prop('checked', false);
          }
 
          musicSwitch.change(function(e) {
