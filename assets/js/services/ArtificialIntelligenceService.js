@@ -227,7 +227,6 @@ function ArtificialIntelligenceService(game) {
         var problemSolver = mGame.getGameProblemSolver();
         var gamefield = mGame.getGamefield();
         var moves = [];
-        //TODO: Was ist wenn der nächste zug nicht mehr placing phase ist. mGame ändert sihc nicht!
 
         for (var z = 0; z < mField.length; z++) {
             for (var y = 0; y < mField[0].length; y++) {
@@ -247,21 +246,45 @@ function ArtificialIntelligenceService(game) {
                     } else {
                         if (token && (token.getPlayer() === mCurrentPlayer)) {
                             var source = {
-                                x: x,
-                                y: y,
-                                z: z
+                                    x: x,
+                                    y: y,
+                                    z: z
+                                }
+                                // can jump everywhere
+                            var numberOfToken = problemSolver.getNumberOfToken(mCurrentPlayer, mField);
+                            if (numberOfToken == 3) {
+                                for (var zj = 0; zj < mField.length; zj++) {
+                                    for (var yj = 0; yj < mField[0].length; yj++) {
+                                        for (var xj = 0; xj < mField[0][0].length; xj++) {
+                                            // this field is not used
+                                            if (xj == 1 && yj == 1) {
+                                                continue;
+                                            }
+                                            var token = mField[zj][yj][xj];
+                                            if (!token) {
+                                                var destination = {
+                                                    x: xj,
+                                                    y: yj,
+                                                    z: zj
+                                                }
+                                                moves = moves.concat(addMoves(source, destination));
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                var upCords = problemSolver.getMoveUpCoords(z, y, x, mField)
+                                moves = moves.concat(addMoves(source, upCords));
+
+                                var downCords = problemSolver.getMoveDownCoords(z, y, x, mField)
+                                moves = moves.concat(addMoves(source, downCords));
+
+                                var rightCords = problemSolver.getMoveRightCoords(z, y, x, mField)
+                                moves = moves.concat(addMoves(source, rightCords));
+
+                                var leftCords = problemSolver.getMoveLeftCoords(z, y, x, mField)
+                                moves = moves.concat(addMoves(source, leftCords));
                             }
-                            var upCords = problemSolver.getMoveUpCoords(z, y, x, mField)
-                            moves = moves.concat(addMoves(source, upCords));
-
-                            var downCords = problemSolver.getMoveDownCoords(z, y, x, mField)
-                            moves = moves.concat(addMoves(source, downCords));
-
-                            var rightCords = problemSolver.getMoveRightCoords(z, y, x, mField)
-                            moves = moves.concat(addMoves(source, rightCords));
-
-                            var leftCords = problemSolver.getMoveLeftCoords(z, y, x, mField)
-                            moves = moves.concat(addMoves(source, leftCords));
 
                         }
                     }
@@ -349,7 +372,7 @@ function ArtificialIntelligenceService(game) {
 
 
     function alphaBeta(depth, alpha, beta) {
-        if (depth == 0 || (mGame.isPlacingPhase() && (mGame.getNumberTokenPlaced() + mCounterTokenPlaced))) {
+        if (depth == 0 || (mGame.isPlacingPhase() && (mGame.getNumberTokenPlaced() + mCounterTokenPlaced) == 18)) {
             return evaluate();
         }
 
@@ -412,7 +435,7 @@ function ArtificialIntelligenceService(game) {
         mField = gameField.cloneField();
         mCurrentPlayer = mGame.getCurrentPlayer();
         //var val = alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
-        var val = miniMax(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+        var val = alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
         console.log("VAL: " + val);
         return mBestMove;
     }
