@@ -1,3 +1,8 @@
+/**
+ * ArtificialIntelligenceService - class for searching the best move.
+ *
+ * @param  {Game} game game with all informations.
+ */
 function ArtificialIntelligenceService(game) {
     var mGame = game;
     var mField = mGame.getGamefield().cloneField();
