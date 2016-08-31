@@ -20,7 +20,7 @@ function ArtificialIntelligenceService(game) {
      */
     this.setDepth = function(value) {
         mDepth = value;
-    }
+    };
 
     /**
      * getOtherPlayer - get the opponent of the current player.
@@ -77,7 +77,7 @@ function ArtificialIntelligenceService(game) {
         /**
          * number of moves
          */
-        var numberOfMovesWeight = [0.00, 0.10, 0.15, 0.20, 0.25, 0.30]
+        var numberOfMovesWeight = [0.00, 0.10, 0.15, 0.20, 0.25, 0.30];
         var numberOfMovesCurrentPlayer = gameProblemSolver.numberOfMoves(mCurrentPlayer, mField);
         var numberOfMovesOpponentPlayer = gameProblemSolver.numberOfMoves(opponentPlayer, mField);
 
@@ -123,7 +123,8 @@ function ArtificialIntelligenceService(game) {
          * evaluate the number of morris which are opened. this is important
          * because the player can remove a token at his next turn.
          */
-        var numberOfOpenMorrisWeight = [0.00, 0.02, 0.04];
+        var numberOfOpenMorrisWeight = [0.00, 0.2, 0.4];
+        //  var numberOfOpenMorrisWeight = [0.00, 0.02, 0.04];
         var numberOfOpenMorrisCurrentPlayer = gameProblemSolver.numberOfOpenMorris(mCurrentPlayer, mField);
         var numberOfOpenMorrisOpponentPlayer = gameProblemSolver.numberOfOpenMorris(opponentPlayer, mField);
 
@@ -235,7 +236,6 @@ function ArtificialIntelligenceService(game) {
      */
     function initMoves() {
         var problemSolver = mGame.getGameProblemSolver();
-        var gamefield = mGame.getGamefield();
         var moves = [];
 
         for (var z = 0; z < mField.length; z++) {
@@ -251,16 +251,16 @@ function ArtificialIntelligenceService(game) {
                             x: x,
                             y: y,
                             z: z
-                        }
+                        };
                         moves = moves.concat(addMoves(null, destination));
                     } else {
                         if (token && (token.getPlayer() === mCurrentPlayer)) {
                             var source = {
-                                    x: x,
-                                    y: y,
-                                    z: z
-                                }
-                                // can jump everywhere
+                                x: x,
+                                y: y,
+                                z: z
+                            };
+                            // can jump everywhere
                             var numberOfToken = problemSolver.getNumberOfToken(mCurrentPlayer, mField);
                             if (numberOfToken == 3) {
                                 for (var zj = 0; zj < mField.length; zj++) {
@@ -270,29 +270,29 @@ function ArtificialIntelligenceService(game) {
                                             if (xj == 1 && yj == 1) {
                                                 continue;
                                             }
-                                            var token = mField[zj][yj][xj];
+                                            token = mField[zj][yj][xj];
                                             if (!token) {
                                                 var destination = {
                                                     x: xj,
                                                     y: yj,
                                                     z: zj
-                                                }
+                                                };
                                                 moves = moves.concat(addMoves(source, destination));
                                             }
                                         }
                                     }
                                 }
                             } else {
-                                var upCords = problemSolver.getMoveUpCoords(z, y, x, mField)
+                                var upCords = problemSolver.getMoveUpCoords(z, y, x, mField);
                                 moves = moves.concat(addMoves(source, upCords));
 
-                                var downCords = problemSolver.getMoveDownCoords(z, y, x, mField)
+                                var downCords = problemSolver.getMoveDownCoords(z, y, x, mField);
                                 moves = moves.concat(addMoves(source, downCords));
 
-                                var rightCords = problemSolver.getMoveRightCoords(z, y, x, mField)
+                                var rightCords = problemSolver.getMoveRightCoords(z, y, x, mField);
                                 moves = moves.concat(addMoves(source, rightCords));
 
-                                var leftCords = problemSolver.getMoveLeftCoords(z, y, x, mField)
+                                var leftCords = problemSolver.getMoveLeftCoords(z, y, x, mField);
                                 moves = moves.concat(addMoves(source, leftCords));
                             }
 
@@ -365,7 +365,7 @@ function ArtificialIntelligenceService(game) {
      * @return {int}       returns the max value
      */
     function alphaBeta(depth, alpha, beta) {
-        if (depth == 0 || (mGame.isPlacingPhase() && (mGame.getNumberTokenPlaced() + mCounterTokenPlaced) == 18)) {
+        if (depth === 0 || (mGame.isPlacingPhase() && (mGame.getNumberTokenPlaced() + mCounterTokenPlaced) == 18)) {
             return evaluate();
         }
 
@@ -379,7 +379,6 @@ function ArtificialIntelligenceService(game) {
             doNextMove(currentMove);
             if (PVfound) {
                 var val = -alphaBeta(depth - 1, -alpha - 1, -alpha);
-                //  var val = -alphaBeta(depth - 1, -alpha - 1, -alpha);
                 if (val > alpha && val < beta) {
                     val = -alphaBeta(depth - 1, -beta, -val);
                 }
@@ -387,7 +386,6 @@ function ArtificialIntelligenceService(game) {
                 val = -alphaBeta(depth - 1, -beta, -alpha);
             }
 
-            //var val = -alphaBeta(depth - 1, -beta, -max);
             undoMove(currentMove);
             if (val > max) {
                 if (val >= beta) {
@@ -420,9 +418,7 @@ function ArtificialIntelligenceService(game) {
         mField = gameField.cloneField();
         mCurrentPlayer = mGame.getCurrentPlayer();
 
-        var val = alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+        alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
         return mBestMove;
-    }
-
-
+    };
 }

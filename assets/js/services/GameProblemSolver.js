@@ -21,7 +21,7 @@ function GameProblemSolver(game) {
         var coords = mGame.convertVertexPosToArrayPos(vertexId);
         return this.hasMorrisAtCoords(coords, field);
 
-    }
+    };
 
 
     /**
@@ -44,9 +44,9 @@ function GameProblemSolver(game) {
         }
 
         // column
-        secondToken = field[coords.z][(coords.y + 1) % 3][coords.x]
-        thirdToken = field[coords.z][(coords.y + 2) % 3][coords.x]
-        currentToken = field[coords.z][coords.y][coords.x]
+        secondToken = field[coords.z][(coords.y + 1) % 3][coords.x];
+        thirdToken = field[coords.z][(coords.y + 2) % 3][coords.x];
+        currentToken = field[coords.z][coords.y][coords.x];
         if (hasSamePlayer(currentToken, secondToken, thirdToken)) {
             return true;
         }
@@ -61,8 +61,7 @@ function GameProblemSolver(game) {
             }
         }
         return false;
-
-    }
+    };
 
 
 
@@ -83,7 +82,7 @@ function GameProblemSolver(game) {
             }
         }
         return tokensNotInMorris;
-    }
+    };
 
 
     /**
@@ -112,7 +111,7 @@ function GameProblemSolver(game) {
      */
     this.getNumberOfToken = function(player) {
         return this.getAllTokenOfPlayer(player).length;
-    }
+    };
 
     /**
      * This functions returns all tokens the given player owns as
@@ -132,7 +131,7 @@ function GameProblemSolver(game) {
             }
         }
         return tokens;
-    }
+    };
 
     /**
      * canMakeMoves - Can a player move a token
@@ -141,10 +140,10 @@ function GameProblemSolver(game) {
      * @return {Boolean}        description
      */
     this.canMakeMoves = function(player) {
-        if (numberOfMoves() > 0) return true;
+        if (this.numberOfMoves() > 0) return true;
 
         return false;
-    }
+    };
 
 
     /**
@@ -173,7 +172,7 @@ function GameProblemSolver(game) {
             }
         }
         return num;
-    }
+    };
 
 
     /**
@@ -198,7 +197,7 @@ function GameProblemSolver(game) {
             }
         }
         return num;
-    }
+    };
 
 
     /**
@@ -209,9 +208,8 @@ function GameProblemSolver(game) {
      */
     this.numberOfPossibleMoves = function(player, clonedField) {
         if (!clonedField) {
-            clonedField = mGame.getGamefield().cloneField();;
+            clonedField = mGame.getGamefield().cloneField();
         }
-        var num = 0;
         for (var z = 0; z < clonedField.length; z++) {
             for (var y = 0; y < clonedField[0].length; y++) {
                 for (var x = 0; x < clonedField[0][0].length; x++) {
@@ -223,7 +221,7 @@ function GameProblemSolver(game) {
             }
         }
         return this.numberOfMoves(player, clonedField);
-    }
+    };
 
 
     /**
@@ -272,7 +270,7 @@ function GameProblemSolver(game) {
             if (bottom) num++;
             if (right) num++;
 
-            token = field[z][0][1];
+            var token = field[z][0][1];
             if (!token || (token.getPlayer() !== player)) {
                 z01 = false;
             }
@@ -294,7 +292,7 @@ function GameProblemSolver(game) {
         if (z21) num++;
         if (z12) num++;
         return num;
-    }
+    };
 
 
     /**
@@ -356,20 +354,20 @@ function GameProblemSolver(game) {
             if (bottom && bottomUndef) num++;
 
             // Morris of the z-axis
-            flags = checkNeighbours(player, checkNeighboursZ, z, 0, 1, z01Undef, field)
+            var flags = checkNeighbours(player, checkNeighboursZ, z, 0, 1, z01Undef, field);
             z01 = z01 && flags[0];
             z01Undef = flags[1];
 
 
-            flags = checkNeighbours(player, checkNeighboursZ, z, 1, 0, z10Undef, field)
+            flags = checkNeighbours(player, checkNeighboursZ, z, 1, 0, z10Undef, field);
             z10 = z10 && flags[0];
             z10Undef = flags[1];
 
-            flags = checkNeighbours(player, checkNeighboursZ, z, 2, 1, z21Undef, field)
+            flags = checkNeighbours(player, checkNeighboursZ, z, 2, 1, z21Undef, field);
             z21 = z21 && flags[0];
             z21Undef = flags[1];
 
-            flags = checkNeighbours(player, checkNeighboursZ, z, 1, 2, z12Undef, field)
+            flags = checkNeighbours(player, checkNeighboursZ, z, 1, 2, z12Undef, field);
             z12 = z12 && flags[0];
             z12Undef = flags[1];
         }
@@ -378,7 +376,7 @@ function GameProblemSolver(game) {
         if (z21 && z21Undef) num++;
         if (z12 && z12Undef) num++;
         return num;
-    }
+    };
 
     /**
      * checkNeighbours - checks if the neighbour of token at
@@ -396,7 +394,7 @@ function GameProblemSolver(game) {
     function checkNeighbours(player, callback, z, y, x, undefinedFlag, field) {
 
         var token = field[z][y][x];
-        var openMorrisFlag = true;;
+        var openMorrisFlag = true;
         if (!token) {
             // first time undefined
             if (undefinedFlag) {
@@ -464,7 +462,7 @@ function GameProblemSolver(game) {
         if (y == 1) {
             // z is in the middle. check z0 and z1.
             if (z == 1) {
-                token = field[z + 1][y][x];
+                var token = field[z + 1][y][x];
                 if (!token || (token.getPlayer() !== player)) {
                     token = field[z - 1][y][x];
                     if (!token || (token.getPlayer() !== player)) {
@@ -472,13 +470,13 @@ function GameProblemSolver(game) {
                     }
                 }
             } else { // check z- (z-1)
-                token = field[z - (z - 1)][y][x];
+                var token = field[z - (z - 1)][y][x];
                 if (!token || (token.getPlayer() !== player)) {
                     return false;
                 }
             }
         } else { // just check x1
-            token = field[z][y][1];
+            var token = field[z][y][1];
             if (!token || (token.getPlayer() !== player)) {
                 return false;
             }
@@ -500,7 +498,7 @@ function GameProblemSolver(game) {
     function checkNeighboursZ(player, z, y, x, field) {
         //is y
         if (y == 1) {
-            token = field[z][y + 1][x];
+            var token = field[z][y + 1][x];
             if (!token || (token.getPlayer() !== player)) {
                 token = field[z][y - 1][x];
                 if (!token || (token.getPlayer() !== player)) {
@@ -509,7 +507,7 @@ function GameProblemSolver(game) {
             }
 
         } else if (x == 1) { // is x
-            token = field[z][y][x + 1];
+            var token = field[z][y][x + 1];
             if (!token || (token.getPlayer() !== player)) {
                 token = field[z][y][x - 1];
                 if (!token || (token.getPlayer() !== player)) {
@@ -539,7 +537,7 @@ function GameProblemSolver(game) {
             return true;
         }
         return false;
-    }
+    };
 
     /**
      * The functions returns all possible places of the given vertIndex where
@@ -577,7 +575,7 @@ function GameProblemSolver(game) {
         }
 
         return moves;
-    }
+    };
 
     /**
      * Returns if a token can move up from the given coordinates. It can only
@@ -590,7 +588,7 @@ function GameProblemSolver(game) {
      */
     this.canMoveUp = function(z, y, x, field) {
         return this.getMoveUpCoords(z, y, x, field) ? true : false;
-    }
+    };
 
     /**
      * Returns if a token can move down from the given coordinates. It can only
@@ -603,7 +601,7 @@ function GameProblemSolver(game) {
      */
     this.canMoveDown = function(z, y, x, field) {
         return this.getMoveDownCoords(z, y, x, field) ? true : false;
-    }
+    };
 
     /**
      * Returns if a token can move right from the given coordinates. It can only
@@ -616,7 +614,7 @@ function GameProblemSolver(game) {
      */
     this.canMoveRight = function(z, y, x, field) {
         return this.getMoveRightCoords(z, y, x, field) ? true : false;
-    }
+    };
 
     /**
      * Returns if a token can move left from the given coordinates. It can only
@@ -629,7 +627,7 @@ function GameProblemSolver(game) {
      */
     this.canMoveLeft = function(z, y, x, field) {
         return this.getMoveLeftCoords(z, y, x, field) ? true : false;
-    }
+    };
 
     /**
      * Returns the coordinates of the field above, if there is a field and
@@ -643,7 +641,7 @@ function GameProblemSolver(game) {
      */
     this.getMoveUpCoords = function(z, y, x, field) {
         if (x == 1) {
-            if (y == 0) {
+            if (y === 0) {
                 if ((z > 0) && !field[z - 1][y][x]) {
                     return {
                         x: x,
@@ -669,7 +667,7 @@ function GameProblemSolver(game) {
             };
         }
         return null;
-    }
+    };
 
     /**
      * Returns the coordinates of the field below, if there is a field and
@@ -683,7 +681,7 @@ function GameProblemSolver(game) {
      */
     this.getMoveDownCoords = function(z, y, x, field) {
         if (x == 1) {
-            if (y == 0) {
+            if (y === 0) {
                 if ((z < 2) && !field[z + 1][y][x]) {
                     return {
                         x: x,
@@ -709,7 +707,7 @@ function GameProblemSolver(game) {
             };
         }
         return null;
-    }
+    };
 
     /**
      * Returns the coordinates of the field to the left, if there is a field and
@@ -723,7 +721,7 @@ function GameProblemSolver(game) {
      */
     this.getMoveRightCoords = function(z, y, x, field) {
         if (y == 1) {
-            if (x == 0) {
+            if (x === 0) {
                 if ((z < 2) && !field[z + 1][y][x]) {
                     return {
                         x: x,
@@ -749,7 +747,7 @@ function GameProblemSolver(game) {
             };
         }
         return null;
-    }
+    };
 
     /**
      * Returns the coordinates of the field to the right, if there is a field and
@@ -764,7 +762,7 @@ function GameProblemSolver(game) {
     this.getMoveLeftCoords = function(z, y, x, field) {
         if (y == 1) {
             // left side
-            if (x == 0) {
+            if (x === 0) {
                 if ((z > 0) && !field[z - 1][y][x]) {
                     return {
                         x: x,
@@ -789,5 +787,5 @@ function GameProblemSolver(game) {
             };
         }
         return null;
-    }
+    };
 }
