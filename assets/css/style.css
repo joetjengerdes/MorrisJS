@@ -11,6 +11,15 @@ div#wrapper {
     height: 100%;
     width: 100%;
 }
+nav> div> a.brand-logo img {
+    margin-top: 6px;
+    margin-left: 10px;
+}
+nav> div> a.brand-logo span {
+    position: absolute;
+    top: 2px;
+    padding-left: 10px;
+}
 #gamefield {
     width: 100%;
     height: 100%;
