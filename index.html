@@ -90,6 +90,10 @@
          </div>
       </div>
 
+      <div id="statusbox">
+         &copy; Jannis Ötjengerdes & Timo Stüber
+      </div>
+
       <!-- Modal Structure -->
       <div id="infomodal" class="modal modal-fixed-footer">
          <div class="modal-content">
@@ -128,7 +132,7 @@
 
          </div>
          <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Agree</a>
+            <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat ">Agree</a>
          </div>
       </div>
 
@@ -146,40 +150,6 @@
       <source src="assets/sounds/click-off.mp3" type="audio/mpeg" />
    </audio>
 
-   <!--
-   <div class="music">
-      <label>Music</label>
-      <div id="music-switch" class="onoffswitch">
-         <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-         <label class="onoffswitch-label" for="myonoffswitch">
-            <span class="onoffswitch-inner"></span>
-            <span class="onoffswitch-switch"></span>
-         </label>
-      </div>
-   </div>-->
-   <!--
-   <div id="statusbar">
-      <button id="newGameBtn" class="waves-effect waves-light btn">
-         New Game
-      </button>
-   </div>-->
-
-   <!--
-   <div id="newGameConfirm" class="row">
-      <div class="col s12 m6">
-         <div class="card blue-grey darken-1">
-            <div class="card-content white-text">
-               <span class="card-title">Card Title</span>
-               <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
-            </div>
-            <div class="card-action">
-               <a href="#">This is a link</a>
-               <a href="#">This is a link</a>
-            </div>
-         </div>
-      </div>
-   </div>-->
-
    <script>
       var musicOn;
       var menuOpen = false;
@@ -194,7 +164,7 @@
          doMusicControls();
 
 
-         var canvas = document.getElementById("game");
+         var canvas = ('#game');
 
          canvas.width = document.body.clientWidth; //document.width is obsolete
          canvas.height = Math.max(window.innerHeight, document.body.clientHeight);
@@ -219,22 +189,19 @@
 
          controller.setDrawController(drawController);
 
-         var newGameBtn = document.getElementById('newGameBtn');
-         newGameBtn.addEventListener("click", function() {
+         $('#newGameBtn').click(function() {
             game.newGame();
             drawController.redraw(true);
          });
 
-         var menutoggle = document.getElementById('menutoggle');
-
-         var sidebar = document.getElementById('sidebar');
-         menutoggle.addEventListener("click", function() {
+         $('#menutoggle').click(function() {
 
             if (!menuOpen) {
                openNav();
             } else {
                closeNav();
             }
+
             // timeout needed for css transition time
             setTimeout(function() {
                eventController.getSizeCalculationService().calculate();
@@ -242,38 +209,33 @@
             }, 500);
          });
 
-
-         var infoBtn = document.getElementById("infoBtn");
-         var modal = document.getElementById("infoModal");
-         var modalCtn = document.getElementById("modal-content");
-         var closeModalBtn = document.getElementById("closeModalBtn");
-
       });
 
       /* Set the width of the side navigation to 250px */
       function openNav() {
-         document.getElementById("sidebar").style.width = "250px";
-         document.getElementById("nav-right").style.paddingRight = "250px";
-         document.getElementById("infoBtn").style.marginRight = "250px";
-         document.getElementById("newGameBtn").style.marginRight = "250px";
+         $('#statusbox').width($('#game').width() - 250);
+         $('#sidebar').width("250px");
+         $('#nav-right').css('padding-right', '250px');
+         $('#infoBtn').css('margin-right', '250px');
+         $('#newGameBtn').css('margin-right', '250px');
 
          menuOpen = true;
       }
 
       /* Set the width of the side navigation to 0 */
       function closeNav() {
-         document.getElementById("sidebar").style.width;
-         document.getElementById("sidebar").style.width = "0";
-         document.getElementById("nav-right").style.paddingRight = "0";
-         document.getElementById("infoBtn").style.marginRight = "24px";
-         document.getElementById("newGameBtn").style.marginRight = "24px";
+         $('#statusbox').width($('#game').width() + 250);
+         $('#sidebar').width('0');
+         $('#nav-right').css('padding-right', '0');
+         $('#infoBtn').css('margin-right', '24px');
+         $('#newGameBtn').css('margin-right', '24px');
 
          menuOpen = false;
       }
 
       function doMusicControls() {
-         var musicSwitch = document.getElementById("myonoffswitch");
-         var songplayer = document.getElementById("songplayer");
+         var musicSwitch = $('#myonoffswitch');
+         var songplayer = $('songplayer');
 
          if (!musicOn) {
             songplayer.pause();

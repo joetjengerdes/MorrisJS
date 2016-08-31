@@ -50,6 +50,8 @@ function EventController(canvas, gamefield) {
             mResizeTimeout = setTimeout(function() {
                 mSizeCalculationService.calculate();
                 mDrawController.redraw(true);
+                // resizes the statusbox at the bottom
+                $('#statusbox').width($('#game').width());
             }, 200);
         }
 
