@@ -29,7 +29,7 @@ function EventController(canvas, gamefield) {
      */
     this.setGameController = function(controller) {
         mGameController = controller;
-    }
+    };
 
 
     /**
@@ -38,7 +38,7 @@ function EventController(canvas, gamefield) {
      */
     this.getGameController = function() {
         return mGameController;
-    }
+    };
 
     /**
      * Sets a drawcontroller
@@ -46,7 +46,7 @@ function EventController(canvas, gamefield) {
      */
     this.setDrawController = function(drawc) {
         mDrawController = drawc;
-    }
+    };
 
     /**
      * Gets the drawcontroller
@@ -54,7 +54,7 @@ function EventController(canvas, gamefield) {
      */
     this.getDrawController = function() {
         return mDrawController;
-    }
+    };
 
     /**
      * Gets the service for gamefield calculations
@@ -62,7 +62,7 @@ function EventController(canvas, gamefield) {
      */
     this.getSizeCalculationService = function() {
         return mSizeCalculationService;
-    }
+    };
 
     /**
      * initializes the controller, in this function all
@@ -83,7 +83,7 @@ function EventController(canvas, gamefield) {
         });
 
         $(window).resize(function() {
-            if (mResizeTimeout != null) {
+            if (mResizeTimeout !== null) {
                 clearTimeout(mResizeTimeout);
             }
             mResizeTimeout = setTimeout(function() {
@@ -95,7 +95,7 @@ function EventController(canvas, gamefield) {
         });
 
         $('#game').mousemove(function(e) {
-            if (mMouseMoveTimeout != null) {
+            if (mMouseMoveTimeout !== null) {
                 clearTimeout(mMouseMoveTimeout);
             }
             mMouseMoveTimeout = setTimeout(function() {
@@ -115,7 +115,7 @@ function EventController(canvas, gamefield) {
                 }
 
                 //console.log(markedVertex);
-                if (markedVertex != null) {
+                if (markedVertex !== null) {
                     if (!beforeCursorinRange) {
                         mDrawController.redraw(true);
                         mDrawController.drawVertex(markedVertex.getX(), markedVertex.getY(), 'rgba(0,0,0,0.2)');
@@ -156,7 +156,7 @@ function EventController(canvas, gamefield) {
         var mouseClick = {
             x: x,
             y: y
-        }
+        };
         return mouseClick;
     }
     initController();
