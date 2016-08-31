@@ -6,7 +6,7 @@ function Game(gsb, player1, player2) {
     var mGamefield;
     var mPlayer1;
     var mPlayer2;
-    var mCurrentTurn = null;
+    var mCurrentPlayer = null;
     var mStartingPlayer = null;
     var mTokensPlaced = 0;
     var mGameProblemSolver;
@@ -51,14 +51,14 @@ function Game(gsb, player1, player2) {
         mGamefield.setToDefault();
 
         if (mStartingPlayer == null || mStartingPlayer === mPlayer2) {
-            mCurrentTurn = mPlayer1;
+            mCurrentPlayer = mPlayer1;
             mStartingPlayer = mPlayer1;
         } else {
-            mCurrentTurn = mPlayer2;
+            mCurrentPlayer = mPlayer2;
             mStartingPlayer = mPlayer2;
         }
 
-        if (mCurrentTurn.isCPU()) {
+        if (mCurrentPlayer.isCPU()) {
             this.doTurnCPU();
         }
         mGameStatusBar.setText("New game started!", true);
@@ -98,15 +98,15 @@ function Game(gsb, player1, player2) {
      */
     this.isPlayerOneTurn = function() {
         //console.log(currentTurn);
-        return mCurrentTurn !== 'undefinied' && mCurrentTurn === mPlayer1;
+        return mCurrentPlayer !== 'undefinied' && mCurrentPlayer === mPlayer1;
     }
 
     this.getCurrentPlayer = function() {
-        return mCurrentTurn;
+        return mCurrentPlayer;
     }
 
     this.getOpponentPlayer = function() {
-        return mCurrentTurn === mPlayer1 ? mPlayer2 : mPlayer1;
+        return mCurrentPlayer === mPlayer1 ? mPlayer2 : mPlayer1;
     }
 
     /**
@@ -131,7 +131,7 @@ function Game(gsb, player1, player2) {
             }
             mGameStatusBar.setText("Select token which you want to move.", false, this.getOpponentPlayer());
         }
-        mCurrentTurn = mCurrentTurn === mPlayer1 ? mPlayer2 : mPlayer1;
+        mCurrentPlayer = mCurrentPlayer === mPlayer1 ? mPlayer2 : mPlayer1;
     }
 
     function wait(ms) {
@@ -144,7 +144,7 @@ function Game(gsb, player1, player2) {
 
     function currentPlayerWonGame() {
         mMode = 0;
-        mGameStatusBar.setText(mCurrentTurn.getName() + " won!", false, mCurrentTurn);
+        mGameStatusBar.setText(mCurrentPlayer.getName() + " won!", false, mCurrentPlayer);
         mGameStatusBar.setText("Game ended!", true);
     }
 
@@ -156,7 +156,7 @@ function Game(gsb, player1, player2) {
     }
 
     this.doTurnCPU = function() {
-        if (!mCurrentTurn.isCPU()) return;
+        if (!mCurrentPlayer.isCPU()) return;
 
 
         var move = mArtificialIntelligenceService.getBestMove(mGamefield);
@@ -174,9 +174,9 @@ function Game(gsb, player1, player2) {
                             break;
                         }
                     }
-                    mGameStatusBar.setText(mCurrentTurn.getName() +
+                    mGameStatusBar.setText(mCurrentPlayer.getName() +
                         " removed a token of " + this.getOpponentPlayer().getName(),
-                        false, mCurrentTurn, this.getOpponentPlayer());
+                        false, mCurrentPlayer, this.getOpponentPlayer());
 
                     //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
                 }
@@ -276,7 +276,7 @@ function Game(gsb, player1, player2) {
      * because it has been moved. Default is false.
      */
     this.createToken = function(pos, placed = false) {
-        var token = new PlayerToken(mCurrentTurn);
+        var token = new PlayerToken(mCurrentPlayer);
         token.setVertexIndex(pos);
         var obj = this.convertVertexPosToArrayPos(pos);
 
@@ -285,7 +285,7 @@ function Game(gsb, player1, player2) {
             mWaitForRemoveToken = true;
         }
         if (placed) {
-            mCurrentTurn.placeToken();
+            mCurrentPlayer.placeToken();
         }
         mSoundController.playMoveSound();
     }
@@ -294,9 +294,9 @@ function Game(gsb, player1, player2) {
         // player has a morris
         if (mWaitForRemoveToken) {
             if (this.removeToken(selectedVertex)) {
-                mGameStatusBar.setText(mCurrentTurn.getName() +
+                mGameStatusBar.setText(mCurrentPlayer.getName() +
                     " removed a token of " + this.getOpponentPlayer().getName(),
-                    false, mCurrentTurn, this.getOpponentPlayer());
+                    false, mCurrentPlayer, this.getOpponentPlayer());
                 this.changeTurn();
             }
         } else {
@@ -308,8 +308,8 @@ function Game(gsb, player1, player2) {
                     if (!mWaitForRemoveToken) {
                         this.changeTurn();
                     } else {
-                        mGameStatusBar.setText("It's " + mCurrentTurn.getName() +
-                            "'s turn. Click the token you want to remove", false, mCurrentTurn);
+                        mGameStatusBar.setText("It's " + mCurrentPlayer.getName() +
+                            "'s turn. Click the token you want to remove", false, mCurrentPlayer);
                     }
                 }
             } else if (this.isNormalPhase()) {
@@ -328,7 +328,7 @@ function Game(gsb, player1, player2) {
                         if (!mWaitForRemoveToken) {
                             this.changeTurn();
                         } else {
-                            mGameStatusBar.setText("It's " + mCurrentTurn.getName() +
+                            mGameStatusBar.setText("It's " + mCurrentPlayer.getName() +
                                 "'s turn. Click the token you want to remove");
                         }
                     }
@@ -444,7 +444,7 @@ function Game(gsb, player1, player2) {
         var token = mGamefield.getField()[obj.z][obj.y][obj.x];
 
         // player selected his own token to remove: not allowed
-        if (token && token.getPlayer() === mCurrentTurn) return false;
+        if (token && token.getPlayer() === mCurrentPlayer) return false;
 
         // get the enemy
         var enemy = this.getOpponentPlayer();
@@ -481,7 +481,7 @@ function Game(gsb, player1, player2) {
      */
     this.moveToken = function(posFrom, posTo) {
         // player cannot move the token to the selected field
-        if (!mCurrentTurn.canJump() && mGameProblemSolver.getPossibleMoves(posFrom).indexOf(posTo) < 0) {
+        if (!mCurrentPlayer.canJump() && mGameProblemSolver.getPossibleMoves(posFrom).indexOf(posTo) < 0) {
             return false;
         }
 
@@ -490,7 +490,7 @@ function Game(gsb, player1, player2) {
 
         var field = mGamefield.getField();
 
-        if (field[objFrom.z][objFrom.y][objFrom.x].getPlayer() === mCurrentTurn &&
+        if (field[objFrom.z][objFrom.y][objFrom.x].getPlayer() === mCurrentPlayer &&
             !(field[objTo.z][objTo.y][objTo.x])) {
             field[objFrom.z][objFrom.y][objFrom.x] = null;
             this.createToken(posTo);
