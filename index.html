@@ -71,9 +71,15 @@
             <h1>To play this game Javascript must be activated!</h1>
          </canvas>
 
-         <div class="fixed-action-btn" style="bottom: 120px; right: 24px;">
+         <div class="fixed-action-btn" style="bottom: 195px; right: 24px;">
             <a id="newGameBtn" class="btn-floating btn-large red tooltipped" data-position="left" data-delay="50" data-tooltip="Start a new game!">
                <i class="large material-icons">replay</i>
+            </a>
+         </div>
+
+         <div class="fixed-action-btn" style="bottom: 120px; right: 24px;">
+            <a href="#settingsModal" id="settingsBtn" class="btn-floating btn-large indigo modal-trigger tooltipped" data-position="left" data-delay="50" data-tooltip="Too hard? Too easy? Change here!">
+               <i class="large material-icons">settings</i>
             </a>
          </div>
 
@@ -82,6 +88,8 @@
                <i class="large material-icons">info</i>
             </a>
          </div>
+
+
       </div>
 
       <div id="statusbox">
@@ -297,6 +305,7 @@
          $('#sidebar').width("250px");
          $('#nav-right').css('padding-right', '250px');
          $('#infoBtn').css('margin-right', '250px');
+         $('#settingsBtn').css('margin-right', '250px');
          $('#newGameBtn').css('margin-right', '250px');
 
          menuOpen = true;
@@ -308,6 +317,7 @@
          $('#sidebar').width('0');
          $('#nav-right').css('padding-right', '0');
          $('#infoBtn').css('margin-right', '24px');
+         $('#settingsBtn').css('margin-right', '24px');
          $('#newGameBtn').css('margin-right', '24px');
 
          menuOpen = false;
