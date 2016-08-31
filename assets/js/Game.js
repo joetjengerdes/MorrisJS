@@ -193,7 +193,7 @@ function Game(gsb, player1, player2) {
             }
         }
         if (mMode == 2) { // movephase
-            if (checkIfEnemyCannotMove()) {
+            if (checkIfEnemyCannotMove() && !this.getOpponentPlayer().canJump()) {
                 currentPlayerWonGame();
                 return;
             }
