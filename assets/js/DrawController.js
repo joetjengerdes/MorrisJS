@@ -1,4 +1,10 @@
-function DrawController(canvas, gf, stbar) {
+/**
+ * The draw controller is used to draw on the canvas. It draws the gamefield
+ * and all tokens on in
+ * @param {HTMLElement} canvas the canvas to draw on
+ * @param {Gamefield} gf     the gamefield where the tokens are on
+ */
+function DrawController(canvas, gf) {
     // the canvas on which is drawn
     var mCanvas = canvas;
     // the gamefield where the vertices and tokens are on
