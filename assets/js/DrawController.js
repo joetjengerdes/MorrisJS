@@ -30,7 +30,7 @@ function DrawController(canvas, gf) {
             ctx.arc(this.getX(), this.getY(), this.getCircleSize(), 0, Math.PI * 2, true);
             ctx.closePath();
             ctx.fill();
-        }
+        };
     }
 
     /**
@@ -44,7 +44,7 @@ function DrawController(canvas, gf) {
         var v = new Vertex(x, y, mGamefield.getCircleSize() * 2.5);
         v.setFill(color);
         v.draw(mCtx);
-    }
+    };
 
     /**
      * Redraws the gamefield, if the parameter is applied
@@ -60,7 +60,7 @@ function DrawController(canvas, gf) {
         }
         drawField();
         drawTokens();
-    }
+    };
 
     /**
      * Draws all player tokens from both players.
@@ -78,7 +78,7 @@ function DrawController(canvas, gf) {
 
                         if (pToken.isSelected()) {
                             self.drawVertex(v.getX(), v.getY(),
-                                pToken.getPlayer().getHighlightingColor())
+                                pToken.getPlayer().getHighlightingColor());
                         }
                         // draw not selected token
                         else {
@@ -120,27 +120,6 @@ function DrawController(canvas, gf) {
         }
     }
 
-    /*function drawStatusBar() {
-        //console.log(gameStatusBar);
-        mCtx.beginPath();
-        mCtx.rect(0, mGamefield.getHeight() - mGameStatusBar.getHeight(), mCanvas.width, mGamefield.getHeight() - mGameStatusBar.getHeight());
-        mCtx.fillStyle = mGameStatusBar.getBackgroundColor();
-        mCtx.fill();
-        mCtx.closePath();
-        drawStatusBarText();
-    }*/
-
-    /*
-    function drawStatusBarText() {
-        mCtx.beginPath();
-        mCtx.font = "\"" + mGameStatusBar.getFontSize() + " " +
-            mGameStatusBar.getFontFamily() + "\"";
-        mCtx.fillStyle = mGameStatusBar.getFontColor();
-        mCtx.fillText(mGameStatusBar.getText(), mGamefield.getLeftOffset(),
-            mGamefield.getHeight() - (mGameStatusBar.getHeight() / 3));
-        mCtx.closePath();
-    }*/
-
     /**
      * Draws a part of the field, a part is a "ring".
      * @param  {Context} ctx         the context to draw on
@@ -154,7 +133,7 @@ function DrawController(canvas, gf) {
 
         var leftOffset = mGamefield.getLeftOffset();
         var circleSize = Math.round(mGamefield.getCircleSize());
-        var lineWidth = mGamefield.getLineWidth();
+        //var lineWidth = mGamefield.getLineWidth();
 
         if (mRedrawAll) {
             // vertices from top left to bottom right

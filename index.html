@@ -262,22 +262,29 @@
 
       });
 
+      /**
+       * Function for adding the listners used
+       * for validation
+       */
       function doValidation() {
          $('#username').keyup(function() {
             if ($(this).val().trim().length > 3) {
                $(this).removeClass('invalid');
                $(this).addClass('valid');
-               $('#inputError').html('')
+               $('#inputError').html('');
                $('#settingsConfirmBtn').removeClass('disabled');
             } else {
                $(this).removeClass('valid');
                $(this).addClass('invalid');
-               $('#inputError').html('username too short!')
+               $('#inputError').html('username too short!');
                $('#settingsConfirmBtn').addClass('disabled');
             }
          });
       }
 
+      /**
+       * Initialzes the buttons used to start a new game
+       */
       function doStartButtons() {
          $('#newGameBtn').click(function() {
             $('#newGameBtn').addClass('disabled');
@@ -327,6 +334,9 @@
          menuOpen = false;
       }
 
+      /**
+       * Initialzes the component for music controlling
+       */
       function doMusicControls() {
          var musicSwitch = $('#myonoffswitch');
          var songplayer = $('#songplayer');
@@ -345,8 +355,13 @@
             }
             writeCookie("musicOn", musicOn);
          });
-      };
+      }
 
+      /**
+       * Function to read a cookie value by a given key
+       * @param  {String} key key to serach for
+       * @return {Boolean}     value if found
+       */
       function readCookie(key) {
          if (document.cookie) {
             var start = document.cookie.indexOf(key + "=") + key.length + 1;
@@ -359,6 +374,11 @@
          return true;
       }
 
+      /**
+       * Function used to write a value by the given key
+       * @param  {String} key   key to write cookie
+       * @param  {[type]} value its value
+       */
       function writeCookie(key, value) {
          var expireDate = new Date(new Date() + 1000 * 60 * 60 * 24 * 365);
          document.cookie = key + "=" + value + ", expires=" +
