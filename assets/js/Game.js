@@ -16,6 +16,17 @@ function Game(gsb, player1, player2) {
     var mArtificialIntelligenceService;
     var mError;
 
+
+    /**
+     * getNumberTokenPlaced - this function return the number of placed token.
+     * this is important for the placing phase.    
+     *
+     * @return {type}  description
+     */
+    this.getNumberTokenPlaced = function() {
+        return mTokensPlaced;
+    }
+
     /**
      * initGame - This function initializes a the game object and sets member.
      *

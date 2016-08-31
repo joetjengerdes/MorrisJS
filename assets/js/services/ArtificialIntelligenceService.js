@@ -4,6 +4,7 @@ function ArtificialIntelligenceService(game) {
     var mDepth = 4;
     var mBestMove;
     var mCurrentPlayer; // is neccessary because we are simulating the turns
+    var mCounterTokenPlaced = 0;
 
     //TODO: PROBLEM: welcher SPIELER ist an der reihe
     //
@@ -38,8 +39,8 @@ function ArtificialIntelligenceService(game) {
         var gameProblemSolver = mGame.getGameProblemSolver();
         var opponentPlayer = getOtherPlayer();
 
-        var numberOfTokenCurrentPlayer = gameProblemSolver.getNumberOfToken(mCurrentPlayer, mField);
-        var numberOfTokenOpponentPlayer = gameProblemSolver.getNumberOfToken(opponentPlayer, mField);
+        var numberOfTokenCurrentPlayer = gameProblemSolver.numberOfToken(mCurrentPlayer, mField);
+        var numberOfTokenOpponentPlayer = gameProblemSolver.numberOfToken(opponentPlayer, mField);
 
         /**
 
@@ -86,7 +87,8 @@ function ArtificialIntelligenceService(game) {
         /**
          * evaluate the number of morris of each player
          */
-        var numberOfMorrisWeight = [0.00, 0.01, 0.02];
+        var numberOfMorrisWeight = [0.00, 1, 2];
+        //var numberOfMorrisWeight = [0.00, 0.01, 0.02];
         var numberOfMorrisCurrentPlayer = gameProblemSolver.numberOfMorris(mCurrentPlayer, mField);
         var numberOfMorrisOpponentPlayer = gameProblemSolver.numberOfMorris(opponentPlayer, mField);
 
@@ -110,6 +112,7 @@ function ArtificialIntelligenceService(game) {
         var numberOfOpenMorrisWeight = [0.00, 0.02, 0.04];
         var numberOfOpenMorrisCurrentPlayer = gameProblemSolver.numberOfOpenMorris(mCurrentPlayer, mField);
         var numberOfOpenMorrisOpponentPlayer = gameProblemSolver.numberOfOpenMorris(opponentPlayer, mField);
+
         if (numberOfOpenMorrisCurrentPlayer >= 2) {
             result += numberOfOpenMorrisWeight[2];
         } else {
@@ -132,7 +135,7 @@ function ArtificialIntelligenceService(game) {
         var difference = numberOfPossibleMovesCurrentPlayer - numberOfPossibleMovesOpponentPlayer;
 
         // check the sign of the difference
-        var sign = difference > 0 ? 1 : (-1);
+        var sign = difference >= 0 ? 1 : (-1);
 
         // difference is more than 7
         if ((difference * sign) >= 7) {
@@ -149,6 +152,24 @@ function ArtificialIntelligenceService(game) {
 
 
     /**
+     * causeMorris - this function helps to simulate the next move and checks
+     * if this move causes a Morris.
+     *
+     * @param  {obj} destination coordinates for the next move
+     * @return {Boolean}  true if the move cause a Morris.
+     */
+    function causeMorris(destination) {
+        var token = new PlayerToken(mCurrentPlayer);
+        var result = false;
+        mField[destination.z][destination.y][destination.x] = token;
+        if (mGame.getGameProblemSolver().hasMorrisAtCoords(destination, mField)) {
+            result = true;
+        }
+        mField[destination.z][destination.y][destination.x] = null;
+        return result;
+    }
+
+    /**
      * addMoves - creates the list for the move for given by parameter. check the case if a
      * move makes a morris and create a moves for every token the opponent owns.
      * it is neccessary to evaluate and remove the best token.
@@ -161,17 +182,17 @@ function ArtificialIntelligenceService(game) {
     function addMoves(source, destination) {
         var moves = [];
         if (destination) {
-            if (mGame.getGameProblemSolver().hasMorrisAtCoords(destination, mField)) {
+            if (causeMorris(destination)) {
                 // add a move for every token that can be removed
                 for (var z = 0; z < mField.length; z++) {
                     for (var y = 0; y < mField[0].length; y++) {
                         for (var x = 0; x < mField[0][0].length; x++) {
                             var token = mField[z][y][x];
                             if (token && (token.getPlayer() === getOtherPlayer())) {
+                                // rm: {} is the remove token
                                 moves.push({
                                     src: source,
                                     dst: destination,
-                                    // remove token
                                     rm: {
                                         x: x,
                                         y: y,
@@ -203,26 +224,29 @@ function ArtificialIntelligenceService(game) {
         var gamefield = mGame.getGamefield();
         var moves = [];
         //TODO: Was ist wenn der nächste zug nicht mehr placing phase ist. mGame ändert sihc nicht!
-        if (mGame.isPlacingPhase()) {
-            var vertices = gamefield.getVertices();
-            for (var z = 0; z < vertices.length; z++) {
-                if (!problemSolver.isTokenOnField(z, mField)) {
-                    var destination = mGame.convertVertexPosToArrayPos(z);
-                    // placing -> no source
-                    moves = moves.concat(addMoves(null, destination));
-                }
-            }
-        } else {
-            for (var z = 0; z < mField.length; z++) {
-                for (var y = 0; y < mField[0].length; y++) {
-                    for (var x = 0; x < mField[0][0].length; x++) {
-                        var token = mField[z][y][x];
-                        var source = {
+
+        for (var z = 0; z < mField.length; z++) {
+            for (var y = 0; y < mField[0].length; y++) {
+                for (var x = 0; x < mField[0][0].length; x++) {
+                    // this field is not used
+                    if (x == 1 && y == 1) {
+                        continue;
+                    }
+                    var token = mField[z][y][x];
+                    if (!token && mGame.isPlacingPhase()) {
+                        var destination = {
                             x: x,
                             y: y,
                             z: z
                         }
+                        moves = moves.concat(addMoves(null, destination));
+                    } else {
                         if (token && (token.getPlayer() === mCurrentPlayer)) {
+                            var source = {
+                                x: x,
+                                y: y,
+                                z: z
+                            }
                             var upCords = problemSolver.getMoveUpCoords(z, y, x, mField)
                             moves = moves.concat(addMoves(source, upCords));
 
@@ -240,6 +264,7 @@ function ArtificialIntelligenceService(game) {
                 }
             }
         }
+
         return moves;
     }
 
@@ -259,6 +284,9 @@ function ArtificialIntelligenceService(game) {
             // is not visible. x,y is not neccessary
             var token = new PlayerToken(mCurrentPlayer);
             mField[move.dst.z][move.dst.y][move.dst.x] = token;
+            if (mGame.isPlacingPhase()) {
+                mCounterTokenPlaced++;
+            }
         }
         if (move.rm) {
             mField[move.rm.z][move.rm.y][move.rm.x] = null;
@@ -280,39 +308,44 @@ function ArtificialIntelligenceService(game) {
         }
         if (move.dst) {
             mField[move.dst.z][move.dst.y][move.dst.x] = null;
+            if (mGame.isPlacingPhase()) {
+                mCounterTokenPlaced--;
+            }
         }
         if (move.rm) {
             var token = new PlayerToken(getOtherPlayer());
             mField[move.rm.z][move.rm.y][move.rm.x] = token;
         }
     }
-    /*
-    int miniMax(int spieler, int tiefe,
-                int alpha, int beta) {
-       if (tiefe == 0 or keineZuegeMehr(spieler))
-          return bewerten(spieler);
-       int maxWert = alpha;
-       generiereMoeglicheZuege(spieler);
-       while (noch Zug da) {
-          fuehreNaechstenZugAus();
-          int wert = -miniMax(-spieler, tiefe-1,
-                              -beta, -maxWert);
-          macheZugRueckgaengig();
-          if (wert > maxWert) {
-             maxWert = wert;
-             if (maxWert >= beta)
-                break;
-             if (tiefe == anfangstiefe)
-                gespeicherterZug = Zug;
-          }
-       }
-       return maxWert;
+
+    function miniMax(tiefe,
+        alpha, beta) {
+        var spieler = mCurrentPlayer;
+        if (tiefe == 0)
+            return evaluate();
+        var maxWert = alpha;
+        var moves = initMoves();
+        while (moves.length > 0) {
+            var currentMove = moves.pop();
+            doNextMove(currentMove);
+            var wert = -miniMax(tiefe - 1, -beta, -maxWert);
+
+            undoMove(currentMove);
+            if (wert > maxWert) {
+                maxWert = wert;
+                if (maxWert >= beta)
+                    break;
+                if (tiefe == mDepth)
+                    mBestMove = currentMove;
+            }
+        }
+        return maxWert;
     }
 
-    */
+
 
     function alphaBeta(depth, alpha, beta) {
-        if (depth == 0) {
+        if (depth == 0 || (mGame.isPlacingPhase() && (mGame.getNumberTokenPlaced() + mCounterTokenPlaced))) {
             return evaluate();
         }
 
@@ -322,18 +355,20 @@ function ArtificialIntelligenceService(game) {
         var moves = initMoves();
         while (moves.length > 0) {
             var currentMove = moves.pop();
+            //  console.log("alpha player: " + mCurrentPlayer.getName() + "   depth " + depth);
             doNextMove(currentMove);
-
             if (PVfound) {
                 var val = -alphaBeta(depth - 1, -alpha - 1, -alpha);
-                if (val > alpha && val < beta)
+                //  var val = -alphaBeta(depth - 1, -alpha - 1, -alpha);
+                if (val > alpha && val < beta) {
                     val = -alphaBeta(depth - 1, -beta, -val);
+
+                    //val = -alphaBeta(depth - 1, -beta, -val);
+                }
             } else {
+                //val = -alphaBeta(depth - 1, -beta, -alpha);
                 val = -alphaBeta(depth - 1, -beta, -alpha);
             }
-
-
-
 
             //var val = -alphaBeta(depth - 1, -beta, -max);
             undoMove(currentMove);
@@ -347,9 +382,10 @@ function ArtificialIntelligenceService(game) {
                 if (depth == mDepth) {
 
                     mBestMove = currentMove;
-                    console.log("VAL: " + val);
+                    console.log("VAL: " + val + " eval " + evaluate());
                     console.log("currentMove: (z y x) " + currentMove.dst.z + " " +
                         currentMove.dst.y + " " + currentMove.dst.x);
+
                 }
                 if (val > alpha) {
                     alpha = val;
@@ -369,9 +405,11 @@ function ArtificialIntelligenceService(game) {
      * @return {obj}           obj with coordinates for the move
      */
     this.getBestMove = function(gameField) {
+        console.log(MAX_TOKEN_TO_PLACE);
         mField = gameField.cloneField();
         mCurrentPlayer = mGame.getCurrentPlayer();
-        var val = alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+        //var val = alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+        var val = miniMax(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
         console.log("VAL: " + val);
         return mBestMove;
     }

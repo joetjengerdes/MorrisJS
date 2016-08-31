@@ -11,8 +11,23 @@ function GameProblemSolver(game) {
         if (!field) {
             field = mField;
         }
+        /*
         console.log("NUM OPEN MORRIS " + mGame.getCurrentPlayer().getName() +
             " - " + this.numberOfOpenMorris(mGame.getCurrentPlayer()));
+        console.log("NUM Moves " + mGame.getCurrentPlayer().getName() +
+            " - " + this.numberOfMoves(mGame.getCurrentPlayer()));
+
+        console.log("NUM MORRIS " + mGame.getCurrentPlayer().getName() +
+            " - " + this.numberOfMorris(mGame.getCurrentPlayer()));
+
+        console.log("NUM TOKEN " + mGame.getCurrentPlayer().getName() +
+            " - " + this.numberOfToken(mGame.getCurrentPlayer()));
+
+        var clonedField = mGame.getGamefield().cloneField();
+        console.log("NUM possible MOVES " + mGame.getCurrentPlayer().getName() +
+            " - " + this.numberOfPossibleMoves(mGame.getCurrentPlayer(), clonedField));
+
+            */
         //console.log("NUM OPEN MORRIS"+ numberOfOpenMorris(mCurrentPlayer));
         var vertexId = token.getVertexIndex();
         var coords = mGame.convertVertexPosToArrayPos(vertexId);
@@ -80,6 +95,7 @@ function GameProblemSolver(game) {
     function hasSamePlayer(firstToken, secondToken, thirdToken) {
         if (firstToken && secondToken && thirdToken) {
             if (firstToken.getPlayer() === secondToken.getPlayer() && firstToken.getPlayer() === thirdToken.getPlayer()) {
+                //console.log(firstToken.getPlayer().getName() + " " + secondToken.getPlayer().getName() + " " + thirdToken.getPlayer().getName());
                 return true;
             }
         }
