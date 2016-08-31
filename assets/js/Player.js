@@ -11,10 +11,28 @@ function Player(playerName) {
     var mPlayerName = playerName;
     // the color of the tokens
     var mColor = "hsla(0, 100%, 50%, 1)";
+    // the color if a stone is selected (highlighted)
+    var mHighlightingColor = "hsla(0, 100%, 70%, 1)";
     // counter for the tokens the player currently has on the field
     var mTokenCount = 0;
     // reference of the game
     var mGame;
+
+    /**
+     * Returns the highlighted color
+     * @return {String} the highlighting color
+     */
+    this.getHighlightingColor = function() {
+        return mHighlightingColor;
+    }
+
+    /**
+     * Sets the highlighting color
+     * @param {String} c the highlighting color to be set
+     */
+    this.setHightlightingColor = function(c) {
+        mHighlightingColor = c;
+    }
 
     /**
      * Return the name of the player

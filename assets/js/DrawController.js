@@ -77,13 +77,8 @@ function DrawController(canvas, gf) {
                         var v = verts[pToken.getVertexIndex()];
 
                         if (pToken.isSelected()) {
-                            // TODO: fix hardcoded colors
-                            if (pToken.getColor() == "hsla(120, 100%, 50%, 1)") {
-                                self.drawVertex(v.getX(), v.getY(), "hsla(120, 100%, 70%, 1)");
-                            } else {
-                                self.drawVertex(v.getX(), v.getY(), "hsla(0, 100%, 70%, 1)")
-                            }
-
+                            self.drawVertex(v.getX(), v.getY(),
+                                pToken.getPlayer().getHighlightingColor())
                         }
                         // draw not selected token
                         else {

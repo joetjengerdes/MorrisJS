@@ -105,6 +105,7 @@ function Game(gsb, player1, player2) {
         mPlayer2.resetTokenCount();
         mPlayer2.setCpu();
         mPlayer2.setColor("hsla(120, 100%, 50%, 1)");
+        mPlayer2.setHightlightingColor("hsla(120, 100%, 70%, 1)");
         mPlayer2.setGame(this);
         mGamefield.setToDefault();
 
