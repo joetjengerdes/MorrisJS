@@ -72,7 +72,7 @@ function GameField() {
         mField[0] = [new Array(3), new Array(3), new Array(3)];
         mField[1] = [new Array(3), new Array(3), new Array(3)];
         mField[2] = [new Array(3), new Array(3), new Array(3)];
-        mVertices = [];
+        //mVertices = [];
     }
 
 
@@ -80,7 +80,7 @@ function GameField() {
      * cloneField - clones the Field of GameField or clones the field in the parameter.
      *
      * @param  {type} field field to clone or undefinded
-     * @return {type}       cloned field.     
+     * @return {type}       cloned field.
      */
     this.cloneField = function(field) {
         if (!field) {

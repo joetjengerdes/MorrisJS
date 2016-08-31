@@ -7,6 +7,7 @@ function Game(gsb, player1, player2) {
     var mPlayer1;
     var mPlayer2;
     var mCurrentTurn = null;
+    var mStartingPlayer = null;
     var mTokensPlaced = 0;
     var mGameProblemSolver;
     var mSoundController;
@@ -40,6 +41,7 @@ function Game(gsb, player1, player2) {
      */
     this.newGame = function() {
         mMode = 1;
+        mTokensPlaced = 0;
         mPlayer1.setGame(this);
         mPlayer1.resetTokenCount();
         mPlayer2.resetTokenCount();
@@ -47,12 +49,14 @@ function Game(gsb, player1, player2) {
         mPlayer2.setColor("hsla(120, 100%, 50%, 1)");
         mPlayer2.setGame(this);
         mGamefield.setToDefault();
-        if (mCurrentTurn == null || mCurrentTurn == mPlayer2) {
+
+        if (mStartingPlayer == null || mStartingPlayer === mPlayer2) {
             mCurrentTurn = mPlayer1;
+            mStartingPlayer = mPlayer1;
         } else {
             mCurrentTurn = mPlayer2;
+            mStartingPlayer = mPlayer2;
         }
-        console.log(mCurrentTurn.isCPU());
 
         if (mCurrentTurn.isCPU()) {
             this.doTurnCPU();
@@ -151,8 +155,8 @@ function Game(gsb, player1, player2) {
     this.doTurnCPU = function() {
         if (!mCurrentTurn.isCPU()) return;
 
-        var move = mArtificialIntelligenceService.getBestMove(mGamefield);
-        console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
+        //var move = mArtificialIntelligenceService.getBestMove(mGamefield);
+        //console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
         if (self.isPlacingPhase()) {
             var vertices = mGamefield.getVertices();
             for (var i = 0; i < vertices.length; i++) {
@@ -391,7 +395,7 @@ function Game(gsb, player1, player2) {
         var token = mGamefield.getField()[obj.z][obj.y][obj.x];
 
         // player selected his own token to remove: not allowed
-        if (token.getPlayer() === mCurrentTurn) return false;
+        if (token && token.getPlayer() === mCurrentTurn) return false;
 
         // get the enemy
         var enemy = this.getOpponentPlayer();
