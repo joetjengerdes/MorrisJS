@@ -1,3 +1,7 @@
+/**
+ * The GameStatusBar holds a bunch of values which is used
+ * by the drawers and the game
+ */
 function GameStatusBar() {
     var mHeight = "20";
     var mText = "Place a stone!";
@@ -5,11 +9,23 @@ function GameStatusBar() {
     var mFontColor = "black";
     var mFontSize = "16px";
     var mFontFamily = "Arial";
-    var mTextChangedListener;
+    // a general event is "win", "lose", etc.
     var mGeneralEvent = false;
-    var mPlayerActionFrom;
+    // the listener which should be notified by change
+    var mTextChangedListener;
+    // the player which did the action
+    var mPlayerActionFrom
+        // the player wihch is affected by the action
     var mPlayerActionAffected;
 
+    /**
+     * Sets the text and notfies the listener about the change
+     * @param {String} newText text which should be printed
+     * @param {Boolean} general true if it is a general event like "win"
+     * @param {Player} player1 player which did the action, undefinied if it is general
+     * @param {Player} player2 player which is affected by the action, undefinied
+     * if there is none affected
+     */
     this.setText = function(newText, general, player1, player2) {
         mText = newText;
         mGeneralEvent = general;
