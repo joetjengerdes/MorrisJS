@@ -1,3 +1,8 @@
+/**
+ * ArtificialIntelligenceService - class for searching the best move.
+ *
+ * @param  {Game} game game with all informations.
+ */
 function ArtificialIntelligenceService(game) {
     var mGame = game;
     var mField = mGame.getGamefield().cloneField();
@@ -377,11 +382,8 @@ function ArtificialIntelligenceService(game) {
                 //  var val = -alphaBeta(depth - 1, -alpha - 1, -alpha);
                 if (val > alpha && val < beta) {
                     val = -alphaBeta(depth - 1, -beta, -val);
-
-                    //val = -alphaBeta(depth - 1, -beta, -val);
                 }
             } else {
-                //val = -alphaBeta(depth - 1, -beta, -alpha);
                 val = -alphaBeta(depth - 1, -beta, -alpha);
             }
 
@@ -389,18 +391,12 @@ function ArtificialIntelligenceService(game) {
             undoMove(currentMove);
             if (val > max) {
                 if (val >= beta) {
-                    if (depth == mDepth) console.log("val >= beta");
                     return val;
                 }
                 max = val;
                 // start depth
                 if (depth == mDepth) {
-
                     mBestMove = currentMove;
-                    console.log("VAL: " + val + " eval " + evaluate());
-                    console.log("currentMove: (z y x) " + currentMove.dst.z + " " +
-                        currentMove.dst.y + " " + currentMove.dst.x);
-
                 }
                 if (val > alpha) {
                     alpha = val;
@@ -416,15 +412,15 @@ function ArtificialIntelligenceService(game) {
     /**
      * getBestMove - calculate the best Opportunity and return the move.
      *
-     * @param  {type} gameField needs the gamefield to calculate the moves.
+     * @param  {PlayerToken[][][]} gameField needs the gamefield to calculate the moves.
      * @return {obj}           obj with coordinates for the move
      */
     this.getBestMove = function(gameField) {
+
         mField = gameField.cloneField();
         mCurrentPlayer = mGame.getCurrentPlayer();
-        //var val = alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+
         var val = alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
-        console.log("VAL: " + val);
         return mBestMove;
     }
 

@@ -1,3 +1,8 @@
+/**
+ * GameProblemSolver - description
+ *
+ * @param  {Game} game game with all informations.
+ */
 function GameProblemSolver(game) {
     var mGame = game;
     var mField = game.getGamefield().getField();
@@ -11,30 +16,21 @@ function GameProblemSolver(game) {
         if (!field) {
             field = mField;
         }
-        /*
-        console.log("NUM OPEN MORRIS " + mGame.getCurrentPlayer().getName() +
-            " - " + this.numberOfOpenMorris(mGame.getCurrentPlayer()));
-        console.log("NUM Moves " + mGame.getCurrentPlayer().getName() +
-            " - " + this.numberOfMoves(mGame.getCurrentPlayer()));
 
-        console.log("NUM MORRIS " + mGame.getCurrentPlayer().getName() +
-            " - " + this.numberOfMorris(mGame.getCurrentPlayer()));
-
-        console.log("NUM TOKEN " + mGame.getCurrentPlayer().getName() +
-            " - " + this.numberOfToken(mGame.getCurrentPlayer()));
-
-        var clonedField = mGame.getGamefield().cloneField();
-        console.log("NUM possible MOVES " + mGame.getCurrentPlayer().getName() +
-            " - " + this.numberOfPossibleMoves(mGame.getCurrentPlayer(), clonedField));
-
-            */
-        //console.log("NUM OPEN MORRIS"+ numberOfOpenMorris(mCurrentPlayer));
         var vertexId = token.getVertexIndex();
         var coords = mGame.convertVertexPosToArrayPos(vertexId);
         return this.hasMorrisAtCoords(coords, field);
 
     }
 
+
+    /**
+     * hasMorrisAtCoords - checks if token at the coordiantes is part of a Morris.
+     *
+     * @param  {obj} coords coordiantes for the field
+     * @param  {PlayerToken[][][]} field  field with playerToken
+     * @return {Boolean}        true if there is morris.
+     */
     this.hasMorrisAtCoords = function(coords, field) {
         if (!field) {
             field = mField;
@@ -70,6 +66,12 @@ function GameProblemSolver(game) {
 
 
 
+    /**
+     * getAllTokenNotInMorris - returns a list with token which are not part of a morris.
+     *
+     * @param  {Player} player owner of the token
+     * @return {PlayerToken[]}        list with token
+     */
     this.getAllTokenNotInMorris = function(player) {
         var tokensNotInMorris = [];
         var allTokens = this.getAllTokenOfPlayer(player);
@@ -223,6 +225,14 @@ function GameProblemSolver(game) {
         return this.numberOfMoves(player, clonedField);
     }
 
+
+    /**
+     * numberOfMorris - counts the morris for a player.
+     *
+     * @param  {Player} player player who owns the morris.
+     * @param  {PlayerToken[][][]} field  field to search
+     * @return {int}        amount of morris
+     */
     this.numberOfMorris = function(player, field) {
         if (!field) {
             field = mField;
@@ -286,6 +296,16 @@ function GameProblemSolver(game) {
         return num;
     }
 
+
+    /**
+     * numberOfOpenMorris - counts the open morris of a player.
+     * open morris is definded as follow: 2 token and 1 unset place in a row.
+     * there have to be 1 token of the player next that unset place.
+     *
+     * @param  {Player} player player with the open morris
+     * @param  {PlayerToken[][][]} field  field to search
+     * @return {int}        amount of open morris.
+     */
     this.numberOfOpenMorris = function(player, field) {
         if (!field) {
             field = mField;
@@ -360,6 +380,19 @@ function GameProblemSolver(game) {
         return num;
     }
 
+    /**
+     * checkNeighbours - checks if the neighbour of token at
+     * the coordinates has the same owner.
+     *
+     * @param  {Player} player        the player
+     * @param  {function} callback      the function that is neccessary for the specific position
+     * @param  {int} z             coordinate
+     * @param  {int} y             coordinate
+     * @param  {int} x             coordinate
+     * @param  {Boolean} undefinedFlag flag that shows if there was a undefinded place in the row.
+     * @param  {PlayerToken[][][]} field         field with the PlayerToken
+     * @return {Boolean[]}          return 2 Flag. is a open Morris and undefinded flag.
+     */
     function checkNeighbours(player, callback, z, y, x, undefinedFlag, field) {
 
         var token = field[z][y][x];
@@ -378,6 +411,17 @@ function GameProblemSolver(game) {
         return [openMorrisFlag, undefinedFlag];
     }
 
+
+    /**
+     * checkNeighboursX - function to check the neighbour for the x row
+     *
+     * @param  {Player} player the player
+     * @param  {int} z      coordinates
+     * @param  {int} y      coordinates
+     * @param  {int} x      coordinates
+     * @param  {PlayerToken[][][]} field  field with the token
+     * @return {Boolean[]}               return 2 Flag. is a open Morris and undefinded flag.
+     */
     function checkNeighboursX(player, z, y, x, field) {
         // x is in the middle
         if (x == 1) {
@@ -405,6 +449,16 @@ function GameProblemSolver(game) {
         return true;
     }
 
+    /**
+     * checkNeighboursY - function to check the neighbour for the y row
+     *
+     * @param  {Player} player the player
+     * @param  {int} z      coordinates
+     * @param  {int} y      coordinates
+     * @param  {int} x      coordinates
+     * @param  {PlayerToken[][][]} field  field with the token
+     * @return {Boolean[]}               return 2 Flag. is a open Morris and undefinded flag.
+     */
     function checkNeighboursY(player, z, y, x, field) {
         //is y in the middle
         if (y == 1) {
@@ -432,6 +486,17 @@ function GameProblemSolver(game) {
         return true;
     }
 
+
+    /**
+     * checkNeighboursZ - function to check the neighbour for the z row
+     *
+     * @param  {Player} player the player
+     * @param  {int} z      coordinates
+     * @param  {int} y      coordinates
+     * @param  {int} x      coordinates
+     * @param  {PlayerToken[][][]} field  field with the token
+     * @return {Boolean[]}               return 2 Flag. is a open Morris and undefinded flag.
+     */
     function checkNeighboursZ(player, z, y, x, field) {
         //is y
         if (y == 1) {
@@ -455,10 +520,19 @@ function GameProblemSolver(game) {
         return true;
     }
 
+
+    /**
+     * isTokenOnField - is the place at the vertexId already taken.
+     *
+     * @param  {int} vertIndex place of the vertex
+     * @param  {PlayerToken[][][]} field     field with PlayerToken
+     * @return {type}           description
+     */
     this.isTokenOnField = function(vertIndex, field) {
         if (!field) {
             field = mField;
         }
+        // convert vertexId to coordiantes of the field.
         var coord = mGame.convertVertexPosToArrayPos(vertIndex);
 
         if (field[coord.z][coord.y][coord.x]) {
