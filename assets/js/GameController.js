@@ -81,11 +81,8 @@ function GameController(game, stbar) {
         }
 
         setTimeout(function() {
-
             mGame.doTurnCPU();
             mDrawController.redraw();
-
-
 
             if (mGame.isPlacingPhase()) {
                 if (mGame.hasPlayerToRemoveToken()) {
@@ -98,7 +95,7 @@ function GameController(game, stbar) {
                     mGameStatusBar.setText('Move the token or select another', 'doAction');
                 }
             }
-        }, 300);
+        }, 1);
 
 
     }

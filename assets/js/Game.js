@@ -233,9 +233,7 @@ function Game(gsb, player1, player2) {
     this.doTurnCPU = function() {
         if (!mCurrentPlayer.isCPU()) return;
 
-
         var move = mArtificialIntelligenceService.getBestMove(mGamefield);
-        console.log("BESTMOVE( z y x ): " + move.dst.z + " " + move.dst.y + " " + move.dst.x);
         var i = this.convertArrayPosToVertexPos(move.dst.z, move.dst.y, move.dst.x);
         if (self.isPlacingPhase()) {
             if (!mGameProblemSolver.isTokenOnField(i)) {
@@ -253,7 +251,6 @@ function Game(gsb, player1, player2) {
                         " removed a token of " + this.getOpponentPlayer().getName(),
                         'actionDone', mCurrentPlayer, this.getOpponentPlayer());
 
-                    //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
                 }
                 self.changeTurn();
             }
@@ -262,8 +259,6 @@ function Game(gsb, player1, player2) {
 
             var src = this.convertArrayPosToVertexPos(move.src.z, move.src.y, move.src.x);
 
-            console.log("AUFRUG MOVE CPU");
-            //console.log("from " + i + " to " + moves[0]);
             if (self.moveToken(src, i)) {
                 if (mWaitForRemoveToken) {
                     var vertices = mGamefield.getVertices();
@@ -272,7 +267,6 @@ function Game(gsb, player1, player2) {
                             break;
                         }
                     }
-                    //TODO: auch oben: was tun falls nur mühlen. und redundanzen entfernen!
                 }
                 self.changeTurn();
             }
