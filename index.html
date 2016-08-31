@@ -194,7 +194,9 @@
       $(document).ready(function(event) {
 
          $('.modal-trigger').leanModal();
-         $('#settingsModal').openModal();
+         $('#settingsModal').openModal({
+            dismissible: false
+         });
 
 
          musicOn = readCookie("musicOn");
