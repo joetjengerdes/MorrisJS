@@ -1,15 +1,23 @@
 function DrawController(canvas, gf, stbar) {
+    // the canvas on which is drawn
     var mCanvas = canvas;
+    // the gamefield where the vertices and tokens are on
     var mGamefield = gf;
+    // context to draw
     var mCtx = mCanvas.getContext("2d");
-    // BUGFIX self reference
+    // self reference
     var self = this;
+    // flag if everything should be redrawn, full redraw
+    // includes the vertices (points), where players place
+    // their tokens on
     var mRedrawAll = false;
     //var mGameStatusBar = stbar;
 
+    /**
+     * initializes the controller, vertices get an draw function
+     * so that they can get painted
+     */
     function initDrawController() {
-        //mGameStatusBar.setTextChangedListener(self);
-
         Vertex.prototype.draw = function(ctx) {
             ctx.fillStyle = this.getFill();
             ctx.beginPath();
@@ -19,12 +27,25 @@ function DrawController(canvas, gf, stbar) {
         }
     }
 
+    /**
+     * Draws a vertex on the given coordiantes with the
+     * given color
+     * @param  {Integer} x     x coordinate of the vertex
+     * @param  {Integer} y     y coordinate of the vertex
+     * @param  {String} color color of the vertex
+     */
     this.drawVertex = function(x, y, color) {
         var v = new Vertex(x, y, mGamefield.getCircleSize() * 2.5);
         v.setFill(color);
         v.draw(mCtx);
     }
 
+    /**
+     * Redraws the gamefield, if the parameter is applied
+     * with true, a full redraw is done. Full redraw redraws
+     * all points and lines.
+     * @param  {Boolean} [redrawA=false] true if a full redraw, otherwise false
+     */
     this.redraw = function(redrawA = false) {
         mRedrawAll = redrawA;
         mCtx.clearRect(0, 0, mCanvas.width, mCanvas.height);
@@ -33,13 +54,11 @@ function DrawController(canvas, gf, stbar) {
         }
         drawField();
         drawTokens();
-        //drawStatusBar();
     }
 
-    this.statusBarTextChanged = function() {
-        drawStatusBar();
-    }
-
+    /**
+     * Draws all player tokens from both players.
+     */
     function drawTokens() {
         var field = mGamefield.getField();
         for (var z = 0; z < field.length; z++) {
@@ -70,6 +89,9 @@ function DrawController(canvas, gf, stbar) {
         }
     }
 
+    /**
+     * Draws the gamefield, this includes lines and points
+     */
     function drawField() {
         var h = mGamefield.getHeight();
         var w = mGamefield.getWidth();
@@ -117,6 +139,15 @@ function DrawController(canvas, gf, stbar) {
         mCtx.closePath();
     }*/
 
+    /**
+     * Draws a part of the field, a part is a "ring".
+     * @param  {Context} ctx         the context to draw on
+     * @param  {Integer} hFrom       ring from
+     * @param  {Integer} wFrom       ring from
+     * @param  {Integer} hTo         ring to
+     * @param  {Integer} wTo         ring to
+     * @param  {Number} [offset=50] Offset between the other "rings"
+     */
     function drawFieldPart(ctx, hFrom, wFrom, hTo, wTo, offset = 50) {
 
         var leftOffset = mGamefield.getLeftOffset();
@@ -147,6 +178,14 @@ function DrawController(canvas, gf, stbar) {
 
     }
 
+    /**
+     * Draws a line
+     * @param  {Context} ctx         the context to draw on
+     * @param  {Integer} xFrom       line from
+     * @param  {Integer} yFrom       line from
+     * @param  {Integer} xTo         line to
+     * @param  {Integer} yTo         line to
+     */
     function drawLine(ctx, xFrom, yFrom, xTo, yTo) {
         ctx.beginPath();
         ctx.moveTo(xFrom, yFrom);
@@ -155,8 +194,10 @@ function DrawController(canvas, gf, stbar) {
         ctx.stroke();
     }
 
+    // initliazes the controller by calling the function
     initDrawController();
 
+    // do a full redraw after initialization
     this.redraw(true);
 
 }
