@@ -14,6 +14,7 @@ function Game(gsb, player1, player2) {
     var mGameStatusBar = gsb;
     var mSelectedPlayerToken;
     var mArtificialIntelligenceService;
+    var mError;
 
     /**
      * initGame - This function initializes a the game object and sets member.
@@ -300,7 +301,12 @@ function Game(gsb, player1, player2) {
         return mSelectedPlayerToken;
     }
 
+    this.getError = function() {
+        return mError;
+    }
+
     this.doAction = function(selectedVertex) {
+        mError = null;
         // player has a morris
         if (mWaitForRemoveToken) {
             if (this.removeToken(selectedVertex)) {
@@ -308,6 +314,8 @@ function Game(gsb, player1, player2) {
                     " removed a token of " + this.getOpponentPlayer().getName(),
                     'actionDone', mCurrentPlayer, this.getOpponentPlayer());
                 this.changeTurn();
+            } else {
+                mError = 'You cannot remove your own, none or the enemies token in a morris if he has free ones. Select another!';
             }
         } else {
             if (this.isPlacingPhase()) {
@@ -318,9 +326,10 @@ function Game(gsb, player1, player2) {
                     if (!mWaitForRemoveToken) {
                         this.changeTurn();
                     } else {
-                        mGameStatusBar.setText("It's " + mCurrentPlayer.getName() +
-                            "'s turn. Click the token you want to remove", false, mCurrentPlayer);
+                        mGameStatusBar.setText("Click the token you want to remove", 'doAction', mCurrentPlayer);
                     }
+                } else {
+                    mError = 'There is already a token on the field. Place on a free spot';
                 }
             } else if (this.isNormalPhase()) {
                 if (mGameProblemSolver.isTokenOnField(selectedVertex)) {
@@ -332,7 +341,10 @@ function Game(gsb, player1, player2) {
                 // player clicked on a free spot, so he wants to move the selected
                 else {
                     // player did not select any token to move
-                    if (!mSelectedPlayerToken) return;
+                    if (!mSelectedPlayerToken) {
+                        mError = 'You have to select a token before you can move one';
+                        return;
+                    }
 
                     if (this.moveToken(mSelectedPlayerToken.getVertexIndex(), selectedVertex)) {
                         if (!mWaitForRemoveToken) {

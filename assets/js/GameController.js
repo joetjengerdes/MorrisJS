@@ -45,14 +45,21 @@ function GameController(game, stbar) {
             mGameStatusBar.setText('It\'s CPU\'s turn!', 'doAction');
         }
 
+        if (mGame.getError()) {
+            mGameStatusBar.setText(mGame.getError(), 'error');
+            return;
+        }
+
         setTimeout(function() {
 
             mGame.doTurnCPU();
             mDrawController.redraw();
 
+
+
             if (mGame.isPlacingPhase()) {
                 if (mGame.hasPlayerToRemoveToken()) {
-                    mGameStatusBar.setText('You have to remove a token!', 'doAction');
+                    //mGameStatusBar.setText('You have to remove a token!', 'doAction');
                 } else {
                     mGameStatusBar.setText('It\'s your turn. Place a token!', 'doAction');
                 }
