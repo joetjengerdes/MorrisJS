@@ -13,7 +13,7 @@ function GameProblemSolver(game) {
         }
         var vertexId = token.getVertexIndex();
         var coords = mGame.convertVertexPosToArrayPos(vertexId);
-        return hasMorrisAtCoords(coords, field);
+        return this.hasMorrisAtCoords(coords, field);
 
     }
 

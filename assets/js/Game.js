@@ -115,22 +115,23 @@ function Game(gsb, player1, player2) {
      * count will count up to determine if the next phase of the game starts.
      */
     this.changeTurn = function() {
-        if (checkIfEnemyCannotMove()) {
-            currentPlayerWonGame();
-            return;
-        }
 
-        mCurrentTurn = mCurrentTurn === mPlayer1 ? mPlayer2 : mPlayer1;
+        // is placingphase
         if (mMode == 1) {
             mTokensPlaced++;
-            mGameStatusBar.setText("Placed a token", false, this.getOpponentPlayer());
+            mGameStatusBar.setText("Placed a token", false, mCurrentPlayer);
             if (mTokensPlaced >= MAX_TOKEN_TO_PLACE) {
                 mMode = 2;
             }
         }
-        if (mMode == 2) {
-            mGameStatusBar.setText("Select token which you want to move.", false, mCurrentTurn);
+        if (mMode == 2) { // movephase
+            if (checkIfEnemyCannotMove()) {
+                currentPlayerWonGame();
+                return;
+            }
+            mGameStatusBar.setText("Select token which you want to move.", false, this.getOpponentPlayer());
         }
+        mCurrentTurn = mCurrentTurn === mPlayer1 ? mPlayer2 : mPlayer1;
     }
 
     function wait(ms) {
@@ -148,7 +149,7 @@ function Game(gsb, player1, player2) {
     }
 
     function checkIfEnemyCannotMove() {
-        if (mGameProblemSolver.numberOfMoves(this.getOpponentPlayer()) == 0) {
+        if (mGameProblemSolver.numberOfMoves(self.getOpponentPlayer()) == 0) {
             return true;
         }
         return false;
