@@ -409,7 +409,6 @@ function ArtificialIntelligenceService(game) {
      * @return {obj}           obj with coordinates for the move
      */
     this.getBestMove = function(gameField) {
-        console.log(MAX_TOKEN_TO_PLACE);
         mField = gameField.cloneField();
         mCurrentPlayer = mGame.getCurrentPlayer();
         //var val = alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
