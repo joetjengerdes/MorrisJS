@@ -191,8 +191,12 @@
          controller.setDrawController(drawController);
 
          $('#newGameBtn').click(function() {
+            $('#newGameBtn').addClass('disabled');
             game.newGame();
             drawController.redraw(true);
+            setTimeout(function() {
+               $('#newGameBtn').removeClass('disabled');
+            }, 2000);
          });
 
          $('#menutoggle').click(function() {
