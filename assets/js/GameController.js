@@ -1,11 +1,13 @@
-function GameController(game, stbar) {
+/**
+ * Gamecontroller is used to control the game
+ * @param {Game} game  the game controlled by the controller
+ */
+function GameController(game) {
+    // reference of the game
     var mGame = game;
     var mController = this;
     var mEventController = null;
     var mDrawController = null;
-    // flag if a player selected a token
-    var mSelectedPlayerToken = null;
-    var mGameStatusBar = stbar;
 
     this.getGame = function() {
         return mGame;
@@ -55,8 +57,4 @@ function GameController(game, stbar) {
         return -1;
     }
 
-    function doMovement(x, y) {
-        mGame.moveToken(mSelectedPlayerToken.getVertexIndex(),
-            getVerticeIndexOfCoords(x, y));
-    }
 }
