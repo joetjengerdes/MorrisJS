@@ -421,4 +421,60 @@ function ArtificialIntelligenceService(game) {
         alphaBeta(mDepth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
         return mBestMove;
     };
+	
+	
+	this.evalClose = function(){
+		// +1 mill close -1 opponent
+	}
+	
+	
+	this.evalMorris = function(gameField) {
+        mField = gameField.cloneField();
+        mCurrentPlayer = mGame.getCurrentPlayer();
+		var opponentPlayer = getOtherPlayer();
+		var numberOfMorrisCurrentPlayer = gameProblemSolver.numberOfMorris(mCurrentPlayer, mField);
+        var numberOfMorrisOpponentPlayer = gameProblemSolver.numberOfMorris(opponentPlayer, mField);	
+		return numberOfMorrisCurrentPlayer - numberOfMorrisOpponentPlayer;
+	}
+	
+	this.evalBlockedToken = function (gameField) {
+		mField = gameField.cloneField();
+		mCurrentPlayer = mGame.getCurrentPlayer();
+		var opponentPlayer = getOtherPlayer();
+		return getNumberOfBlockedToken(mCurrentPlayer) - getNumberOfBlockedToken(opponentPlayer);
+	}
+	
+	this.evalNumToken = function(gameField) {
+		mField = gameField.cloneField();
+        mCurrentPlayer = mGame.getCurrentPlayer();
+		var opponentPlayer = getOtherPlayer();
+
+        var numberOfTokenCurrentPlayer = gameProblemSolver.numberOfToken(mCurrentPlayer, mField);
+        var numberOfTokenOpponentPlayer = gameProblemSolver.numberOfToken(opponentPlayer, mField);
+		
+		return numberOfMorrisCurrentPlayer - numberOfMorrisOpponentPlayer;
+	}
+	
+	this.evalNumTwoToken = function() {
+		
+	}
+	
+	this.evalNumThreeToken = function() {
+		
+	}	
+	
+	this.evalDoubleMorris = function() {
+		
+	}	
+	
+	this.evalWinning = function() {
+		
+	}
+	
+//Evaluation function for Phase 1 = 18 * (1) + 26 * (2) + 1 * (3) + 9 * (4) + 10 * (5) + 7 * (6)
+
+//Evaluation function for Phase 2 = 14 * (1) + 43 * (2) + 10 * (3) + 11 * (4) + 8 * (7) + 1086 * (8)
+
+//Evaluation function for Phase 3 = 16 * (1) + 10 * (5) + 1 * (6) + 1190 * (8)
+	
 }

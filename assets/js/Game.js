@@ -143,6 +143,16 @@ function Game(gsb, player1, player2) {
     this.isNormalPhase = function() {
         return mMode == 2;
     };
+	
+	    /**
+     * This function returns if the current phase
+     * of the game is the phase where players are
+     * jumping their token
+     * @return {Boolean} true if it's the jumping phase, otherwise false
+     */
+    this.isJumpingPhase = function() {
+        return mMode == 3;
+    };
 
     /**
      * This function returns if the game already ended
@@ -192,7 +202,10 @@ function Game(gsb, player1, player2) {
                 mMode = 2;
             }
         }
-        if (mMode == 2) { // movephase
+        if (mMode == 2 || mMode == 3) { // movephase or jumping phase
+			if (this.getOpponentPlayer().canJump()) {
+				mMode = 3;
+			}
             if (checkIfEnemyCannotMove() && !this.getOpponentPlayer().canJump()) {
                 currentPlayerWonGame();
                 return;

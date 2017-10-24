@@ -576,6 +576,39 @@ function GameProblemSolver(game) {
 
         return moves;
     };
+	
+	 /**
+     * The functions returns true if the token can not be moved.
+     * @param  {int} vertIndex vertex index of the token which should be check
+     * @return {boolean} True if the token is blocked
+     */
+	this.isVertBlocked = function (vertIndex) {
+		return this.getPossibleMoves(vertIndex).length == 0;
+	}
+	
+	
+	 /**
+     * getNumberOfToken - count the blocked token of the specified player
+     *
+     * @param  {Player} player description
+     * @return {int}        number of blocked token
+     */
+    this.getNumberOfBlockedToken = function(player) {
+		var tokens = 0;
+		for (var z = 0; z < mField.length; z++) {
+			for (var y = 0; y < mField[0].length; y++) {
+				for (var x = 0; x < mField[0][0].length; x++) {
+					var token = mField[z][y][x];
+					var vertPos = mGame.convertArrayPosToVertexPos(z, y, x)
+					if(token.getPlayer() === player && this.isVertBlocked(vertPos)) {
+						token = token + 1;
+					}				 
+				}
+			}
+		}
+		return tokens;
+    };	
+	
 
     /**
      * Returns if a token can move up from the given coordinates. It can only
